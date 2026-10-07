@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+<title>ASG Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <strong>ASG Assistant</strong>
+  <span id="badge" class="badge">…</span>
+  <span id="info" class="info"></span>
+  <span class="spacer"></span>
+  <button id="clear">New chat</button>
+  <button id="openSettings">Settings</button>
+</header>
+<main id="log"></main>
+<div id="confirm" hidden>
+  <p id="confirmText"></p>
+  <button id="yes">Approve</button><button id="no">Decline</button>
+</div>
+<form id="form">
+  <textarea id="input" rows="2" placeholder="Ask about inquiries, quotations, LPOs… or tell me what to do"></textarea>
+  <button type="submit">Send</button>
+</form>
+<dialog id="settings">
+  <h3>Settings</h3>
+  <label>Mode
+    <select id="mode"><option value="auto">Auto (online, fallback offline)</option><option value="online">Online only</option><option value="offline">Offline only</option></select>
+  </label>
+  <label>Claude API key <input id="anthropicKey" type="password" placeholder="(unchanged)"></label>
+  <label>Claude model <input id="anthropicModel"></label>
+  <label>Ollama URL <input id="ollamaUrl"></label>
+  <label>Ollama model <input id="ollamaModel"></label>
+  <label>ASG server URL <input id="asgUrl" placeholder="http://192.168.1.10:3000  (empty = demo data)"></label>
+  <label>ASG access token <input id="asgToken" type="password" placeholder="(unchanged)"></label>
+  <div><button id="save">Save</button><button id="closeSettings" type="button">Close</button></div>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>

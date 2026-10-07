@@ -1,0 +1,21 @@
+{
+  "name": "asg-assistant",
+  "version": "0.1.0",
+  "description": "ASG AI Assistant - online/offline AI chat desktop app that plugs into the ASG server system",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/*.test.js\"",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.alsiraj.asgassistant",
+    "productName": "ASG Assistant",
+    "files": ["src/**/*", "package.json"],
+    "win": { "target": "nsis" }
+  }
+}
