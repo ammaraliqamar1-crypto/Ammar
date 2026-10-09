@@ -885,8 +885,11 @@ for i, (sheet, title, r) in enumerate(DB_ROWS, start=3):
     for j, col in SRC.items():
         db.cell(i, j, f'=IF({q}$C${r}="","",{q}{col}{r})')
     db.cell(i, 13, (f'=IF(D{i}="","",IF(AND(OR(Search!$C$6="All Categories",A{i}=Search!$C$6),'
-                    f'OR(Search!$P$5="",ISNUMBER(SEARCH(Search!$P$5,N{i}))),OR(Search!$P$6="",ISNUMBER(SEARCH(Search!$P$6,N{i}))),OR(Search!$P$7="",ISNUMBER(SEARCH(Search!$P$7,N{i}))),OR(Search!$P$8="",ISNUMBER(SEARCH(Search!$P$8,N{i}))),OR(Search!$P$9="",ISNUMBER(SEARCH(Search!$P$9,N{i}))),OR(Search!$P$10="",ISNUMBER(SEARCH(Search!$P$10,N{i})))),ROW(),""))'))
-    db.cell(i, 14, f'=IF(D{i}="","",A{i}&" "&B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i}&" "&H{i})')
+                    f'OR(Search!$P$5="",ISNUMBER(SEARCH(" "&Search!$P$5,N{i}))),OR(Search!$P$6="",ISNUMBER(SEARCH(" "&Search!$P$6,N{i}))),OR(Search!$P$7="",ISNUMBER(SEARCH(" "&Search!$P$7,N{i}))),OR(Search!$P$8="",ISNUMBER(SEARCH(" "&Search!$P$8,N{i}))),OR(Search!$P$9="",ISNUMBER(SEARCH(" "&Search!$P$9,N{i}))),OR(Search!$P$10="",ISNUMBER(SEARCH(" "&Search!$P$10,N{i})))),ROW(),""))'))
+    raw = f'B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i}&" "&H{i}'
+    for ch in ("(", ")", "/", "-", ","):
+        raw = f'SUBSTITUTE({raw},"{ch}"," ")'
+    db.cell(i, 14, f'=IF(D{i}="",""," "&{raw}&" ")')
     for j in range(1, 14):
         cell = db.cell(i, j)
         cell.font = F(size=9, color="008000" if j < 13 else "808080")
@@ -915,7 +918,7 @@ sr["B2"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
 sr.row_dimensions[2].height = 36
 sr.merge_cells("B3:L3")
 sr["B3"] = ("Type one or more words in any order (e.g. aluminium sheet, 12 tempered, floor spring, 316 tube, "
-            "DGU low-e) - every word must match. Pick a category if needed. Results update instantly.")
+            "DGU low e) - every word must match the start of a word. Pick a category if needed. Results update instantly.")
 sr["B3"].font = F(italic=True, size=9, color="404040")
 for r, lbl in ((5, "Search keyword:"), (6, "Category:"), (7, "Items found:")):
     sr.merge_cells(f"A{r}:B{r}")
@@ -978,9 +981,19 @@ sr.conditional_formatting.add(f"I{HR + 1}:K{HR + N_RES}", FormulaRule(
 for j, w in enumerate([5, 10, 28, 40, 30, 18, 24, 7, 12, 12, 13, 11, 2, 6], start=1):
     sr.column_dimensions[get_column_letter(j)].width = w
 sr.column_dimensions["N"].hidden = True
-for n in range(6):  # keyword split into words: every word must match (any order)
-    sr[f"P{5 + n}"] = f'=TRIM(MID(SUBSTITUTE(TRIM($C$5)," ",REPT(" ",100)),{n * 100 + 1},100))'
+# keyword split into words (P = word, Q = remaining text): every word must match, any order
+sr["Q4"] = '=TRIM($C$5)&" "'
+for r in range(5, 11):
+    sr[f"P{r}"] = f'=IFERROR(LEFT(Q{r - 1},FIND(" ",Q{r - 1})-1),"")'
+    sr[f"Q{r}"] = f'=IFERROR(MID(Q{r - 1},FIND(" ",Q{r - 1})+1,999),"")'
 sr.column_dimensions["P"].hidden = True
+sr.column_dimensions["Q"].hidden = True
+sr.merge_cells("A8:B8")
+sr["A8"] = "Words matched:"
+sr["A8"].font = F(size=9, italic=True, color="595959")
+sr["A8"].alignment = Alignment(horizontal="right")
+sr["C8"] = '=IF(P5="","(none - showing all)",P5&IF(P6="",""," + "&P6)&IF(P7="",""," + "&P7)&IF(P8="",""," + "&P8)&IF(P9="",""," + "&P9)&IF(P10="",""," + "&P10))'
+sr["C8"].font = F(size=9, italic=True, color="595959")
 sr.freeze_panes = f"A{HR + 1}"
 
 # ---------------------------------------------------------------- Suppliers
