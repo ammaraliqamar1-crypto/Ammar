@@ -685,6 +685,55 @@ SUPPLIERS = [
     ("Equipment Rental", "Local rental companies", "Boom lifts, cranes, scaffolding"),
 ]
 
+# ---------------------------------------------------------------- search tags
+import re
+
+SYNONYMS = [  # (text found in item, extra search words)
+    ("square hollow", "shs tube pipe box"), ("rectangular hollow", "rhs tube pipe box"),
+    ("circular hollow", "chs pipe round tube"), ("round tube", "pipe"), ("square tube", "pipe box"),
+    ("rectangular tube", "pipe box"), ("aluminium", "aluminum alu"), ("tempered", "toughened"),
+    ("double glazed", "dgu igu insulated"), ("triple glazed", "tgu insulated"), ("laminated", "lami"),
+    ("composite panel", "acp cladding"), ("powder coat", "pc"), ("galvaniz", "galvanised gi"),
+    ("silicone", "sealant"), ("sealant", "silicone"), ("floor spring", "door"), ("closer", "door"),
+    ("handle", "door"), ("balustrade", "railing handrail"), ("handrail", "railing balustrade"),
+    ("louver", "louvre"), ("pergola", "shade"), ("canopy", "shade"), ("gasket", "rubber epdm"),
+    ("anchor", "fixing fastener bolt"), ("screw", "fixing fastener"), ("bolt", "fixing fastener"),
+    ("low-e", "lowe low e"), ("low-iron", "extra clear ultra clear"), ("frosted", "sandblast"),
+    ("acid-etched", "frosted sandblast"), ("back-painted", "lacquered painted"),
+    ("polycarbonate", "pc sheet"), ("chequered", "checker anti slip"), ("i-beam", "ibeam beam"),
+    ("h-beam", "hbeam beam"), ("universal beam", "ub ibeam"), ("parallel flange channel", "pfc channel c"),
+    ("equal angle", "angle l"), ("flat bar", "patti strip"), ("linear", "drain"), ("drain", "linear shower"),
+    ("shower", "bathroom"), ("mirror", "glass"), ("hairline", "satin brushed"), ("mirror (#8)", "polished"),
+    ("fire-rated", "fire rated fire resistant"), ("fire rated", "fire-rated"), ("rockwool", "insulation"),
+    ("ss ", "stainless steel"), ("ms ", "mild steel"), ("gi ", "galvanized"),
+]
+
+
+def make_tags(sub, desc, spec, fin):
+    txt = f" {sub} {desc} {spec} {fin} ".lower()
+    tags = []
+    for m in re.finditer(r"(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)(?:\s*x\s*(\d+(?:\.\d+)?))?", txt):
+        a, b, c = m.groups()
+        tags.append(f"{a}x{b}")
+        if c:
+            tags += [f"{a}x{b}x{c}", f"{a}x{b}x{c[:-2] if c.endswith('.0') else c}"]
+    for m in re.finditer(r"(\d+(?:\.\d+)?)\s*mm", txt):
+        tags.append(f"{m.group(1)}mm")
+    for m in re.finditer(r"(\d+(?:\.\d+)?(?:\s*\+\s*[\w.]+)+)", txt):
+        tags.append(re.sub(r"\s+", "", m.group(1)))
+    for g in ("304", "316"):
+        if g in txt:
+            tags += [f"ss{g}", f"sus{g}"]
+    for key, extra in SYNONYMS:
+        if key in txt:
+            tags.append(extra)
+    out = []
+    for t in " ".join(tags).split():
+        if t not in out:
+            out.append(t)
+    return " ".join(out)
+
+
 # ---------------------------------------------------------------- helpers
 thin = Side(style="thin", color="BFC5D2")
 BORDER = Border(left=thin, right=thin, top=thin, bottom=thin)
@@ -754,8 +803,8 @@ st.sheet_view.showGridLines = False
 HEAD = ["Item Code", "Sub-Category", "Item Description", "Specification / Size", "Finish / Colour",
         "Brand / Origin", "Unit", "Basic Rate\n(AED)", "Wastage\n%", "Net Cost Rate\n(AED)",
         "Selling Rate\n(AED, +O&P)", "Selling Rate\nincl. VAT (AED)", "Rate Status", "Supplier",
-        "Quote Ref.", "Rate Date", "Remarks"]
-WIDTHS = [10, 22, 40, 32, 20, 26, 7, 12, 9, 13, 13, 14, 12, 20, 13, 12, 26]
+        "Quote Ref.", "Rate Date", "Remarks", "Search Tags (extra keywords)"]
+WIDTHS = [10, 22, 40, 32, 20, 26, 7, 12, 9, 13, 13, 14, 12, 20, 13, 12, 26, 34]
 FIRST = 5
 DB_ROWS = []  # (sheet, row) for consolidated sheet
 
@@ -763,13 +812,13 @@ for ci, c in enumerate(CATS, start=1):
     ws = wb.create_sheet(c["sheet"])
     ws.sheet_properties.tabColor = c["colour"]
     ws.sheet_view.showGridLines = False
-    ws.merge_cells("A1:Q1")
+    ws.merge_cells("A1:R1")
     ws["A1"] = f"{ci:02d}.  {c['title'].upper()}"
     ws["A1"].font = F(bold=True, size=15, color="FFFFFF")
     ws["A1"].fill = HDR_FILL
     ws["A1"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
     ws.row_dimensions[1].height = 30
-    ws.merge_cells("A2:Q2")
+    ws.merge_cells("A2:R2")
     ws["A2"] = f"Scope: {c['scope']}"
     ws["A2"].font = F(italic=True, size=9, color="404040")
     ws["A2"].fill = PatternFill("solid", fgColor=c["colour"])
@@ -807,16 +856,17 @@ for ci, c in enumerate(CATS, start=1):
             ws.cell(r, 8, rate)
             ws.cell(r, 9, wst)
             ws.cell(r, 13, "Indicative")
+            ws.cell(r, 18, make_tags(sub, desc, spec, fin))
         else:
             ws.cell(r, 1, f'=IF(C{r}="","","{c["prefix"]}-"&TEXT(ROW()-{FIRST - 1},"000"))')
         ws.cell(r, 10, f'=IF(H{r}="","",ROUND(H{r}*(1+I{r}),2))')
         ws.cell(r, 11, f'=IF(J{r}="","",ROUND(J{r}*(1+OHP),2))')
         ws.cell(r, 12, f'=IF(K{r}="","",ROUND(K{r}*(1+VAT),2))')
-        for j in range(1, 18):
+        for j in range(1, 19):
             cell = ws.cell(r, j)
             cell.border = BORDER
-            cell.alignment = LEFT if j in (2, 3, 4, 5, 6, 14, 17) else CENTER
-            blue = j in (2, 3, 4, 5, 6, 7, 9, 13, 14, 15, 16, 17) or (j == 8 and not str(cell.value or "").startswith("="))
+            cell.alignment = LEFT if j in (2, 3, 4, 5, 6, 14, 17, 18) else CENTER
+            blue = j in (2, 3, 4, 5, 6, 7, 9, 13, 14, 15, 16, 17, 18) or (j == 8 and not str(cell.value or "").startswith("="))
             cell.font = F(size=10, color="0000FF" if blue else "000000", bold=(j == 3 and not spare))
             if j in (8, 10, 11, 12):
                 cell.number_format = NUM
@@ -830,7 +880,9 @@ for ci, c in enumerate(CATS, start=1):
             ws.cell(r, 8).font = F(size=10, color="008000")  # linked to Settings
         DB_ROWS.append((c["sheet"], c["title"], r))
 
-    rng = f"A{FIRST}:Q{end}"
+    rng = f"A{FIRST}:R{end}"
+    for r in range(FIRST, end + 1):
+        ws.cell(r, 18).font = F(size=8, color="0000FF")
     ws.conditional_formatting.add(rng, FormulaRule(
         formula=[f'AND($C{FIRST}<>"",MOD(ROW(),2)=0,$M{FIRST}<>"Obsolete")'], fill=PatternFill("solid", fgColor=GREY)))
     for status, colour in (("Indicative", "FCE4D6"), ("Quoted", "DDEBF7"), ("Verified", "E2EFDA"), ("Obsolete", "D9D9D9")):
@@ -849,7 +901,7 @@ for ci, c in enumerate(CATS, start=1):
     for j, w in enumerate(WIDTHS, start=1):
         ws.column_dimensions[get_column_letter(j)].width = w
     ws.freeze_panes = "D5"
-    ws.auto_filter.ref = f"A4:Q{end}"
+    ws.auto_filter.ref = f"A4:R{end}"
     ws.print_title_rows = "4:4"
     ws.page_setup.orientation = "landscape"
     ws.page_setup.paperSize = ws.PAPERSIZE_A4
@@ -886,8 +938,8 @@ for i, (sheet, title, r) in enumerate(DB_ROWS, start=3):
         db.cell(i, j, f'=IF({q}$C${r}="","",{q}{col}{r})')
     db.cell(i, 13, (f'=IF(D{i}="","",IF(AND(OR(Search!$C$6="All Categories",A{i}=Search!$C$6),'
                     f'OR(Search!$P$5="",ISNUMBER(SEARCH(" "&Search!$P$5,N{i}))),OR(Search!$P$6="",ISNUMBER(SEARCH(" "&Search!$P$6,N{i}))),OR(Search!$P$7="",ISNUMBER(SEARCH(" "&Search!$P$7,N{i}))),OR(Search!$P$8="",ISNUMBER(SEARCH(" "&Search!$P$8,N{i}))),OR(Search!$P$9="",ISNUMBER(SEARCH(" "&Search!$P$9,N{i}))),OR(Search!$P$10="",ISNUMBER(SEARCH(" "&Search!$P$10,N{i})))),ROW(),""))'))
-    raw = f'B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i}&" "&H{i}'
-    for ch in ("(", ")", "/", "-", ","):
+    raw = f'B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i}&" "&H{i}&" "&{q}R{r}'
+    for ch in ("(", ")", "/", "-", ",", ";", ":"):
         raw = f'SUBSTITUTE({raw},"{ch}"," ")'
     db.cell(i, 14, f'=IF(D{i}="",""," "&{raw}&" ")')
     for j in range(1, 14):
@@ -942,6 +994,8 @@ sr.row_dimensions[6].height = 24
 sr["C7"] = f"=COUNT('ALL ITEMS'!M3:M{DB_END})"
 sr["C7"].font = F(bold=True, size=12, color="C00000")
 sr["C7"].alignment = Alignment(horizontal="left", indent=1)
+sr["D7"] = '=IF(C7=0,"No match - check spelling or try fewer words (e.g. 40x40 tube)","")'
+sr["D7"].font = F(size=9, italic=True, color="C00000")
 sr["G5"] = "Tip: clear the keyword to list a whole category."
 sr["G6"] = "Max 300 results shown - refine keyword if needed."
 for a in ("G5", "G6"):
@@ -982,12 +1036,17 @@ for j, w in enumerate([5, 10, 28, 40, 30, 18, 24, 7, 12, 12, 13, 11, 2, 6], star
     sr.column_dimensions[get_column_letter(j)].width = w
 sr.column_dimensions["N"].hidden = True
 # keyword split into words (P = word, Q = remaining text): every word must match, any order
-sr["Q4"] = '=TRIM($C$5)&" "'
+kw = "LOWER($C$5)"
+for a, b in (("*", "x"), ("?", " "), ("~", " "), ("(", " "), (")", " "), ("/", " "), ("-", " "), (",", " "), (";", " ")):
+    kw = f'SUBSTITUTE({kw},"{a}","{b}")'
+sr["Q4"] = f'=TRIM({kw})&" "'
 for r in range(5, 11):
-    sr[f"P{r}"] = f'=IFERROR(LEFT(Q{r - 1},FIND(" ",Q{r - 1})-1),"")'
+    # R = raw word, P = word used for matching (plural "s" removed, e.g. tubes -> tube), Q = rest of text
+    sr[f"R{r}"] = f'=IFERROR(LEFT(Q{r - 1},FIND(" ",Q{r - 1})-1),"")'
+    sr[f"P{r}"] = f'=IF(AND(LEN(R{r})>3,RIGHT(R{r},1)="s",RIGHT(R{r},2)<>"ss"),LEFT(R{r},LEN(R{r})-1),R{r})'
     sr[f"Q{r}"] = f'=IFERROR(MID(Q{r - 1},FIND(" ",Q{r - 1})+1,999),"")'
-sr.column_dimensions["P"].hidden = True
-sr.column_dimensions["Q"].hidden = True
+for col in "PQR":
+    sr.column_dimensions[col].hidden = True
 sr.merge_cells("A8:B8")
 sr["A8"] = "Words matched:"
 sr["A8"].font = F(size=9, italic=True, color="595959")
