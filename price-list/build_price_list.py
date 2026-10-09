@@ -6,6 +6,8 @@ from openpyxl.formatting.rule import FormulaRule
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.comments import Comment
 
 OUT = "ASG_Material_Price_List.xlsx"
 FONT = "Arial"
@@ -29,6 +31,11 @@ SETTINGS = [
     ("SS304", "SS 304 tubes / sheets (hairline)", 17.00, "AED/kg", "Grade 304, #4 hairline"),
     ("SS316", "SS 316 tubes / sheets (hairline)", 24.00, "AED/kg", "Grade 316/316L, marine/external"),
     ("SS_MIRROR", "Add for SS mirror finish (#8)", 3.00, "AED/kg", "Over hairline rate"),
+    ("DEN_AL", "Density - aluminium", 2.70, "g/cm3", "Used by the weight calculator"),
+    ("DEN_MS", "Density - mild steel / GI", 7.85, "g/cm3", "Used by the weight calculator"),
+    ("DEN_SS", "Density - stainless steel", 7.93, "g/cm3", "Used by the weight calculator"),
+    ("GLASS_MIN", "Glass minimum chargeable area per pane", 0.50, "m2", "Small panes are charged at this area"),
+    ("SQFT", "Square feet per square metre", 10.7639, "sq.ft", "Unit converter"),
 ]
 
 # Rate formulas below may use the names above, e.g. "=ROUND(MS_KG*4.25,2)".
@@ -780,7 +787,9 @@ for i, (name, label, val, unit, note) in enumerate(SETTINGS, start=6):
     wb.defined_names[name] = DefinedName(name, attr_text=f"Settings!$C${i}")
 last = 6 + len(SETTINGS)
 st[f"B{last + 1}"] = "Rate validity / last reviewed"
-st[f"C{last + 1}"] = "09-Oct-2026"
+import datetime
+st[f"C{last + 1}"] = datetime.date(2026, 10, 9)
+st[f"C{last + 1}"].number_format = "dd-mmm-yyyy"
 st[f"C{last + 1}"].font = F(color="0000FF", bold=True)
 st[f"C{last + 1}"].fill = INPUT_FILL
 st[f"B{last + 2}"] = "Currency"
@@ -801,8 +810,8 @@ st.sheet_view.showGridLines = False
 
 # ---------------------------------------------------------------- category sheets
 HEAD = ["Item Code", "Sub-Category", "Item Description", "Specification / Size", "Finish / Colour",
-        "Brand / Origin", "Unit", "Basic Rate\n(AED)", "Wastage\n%", "Net Cost Rate\n(AED)",
-        "Selling Rate\n(AED, +O&P)", "Selling Rate\nincl. VAT (AED)", "Rate Status", "Supplier",
+        "Brand / Origin", "Unit", "Basic Rate (AED)", "Wastage %", "Net Cost Rate (AED)",
+        "Selling Rate (AED, +O&P)", "Selling incl. VAT (AED)", "Rate Status", "Supplier",
         "Quote Ref.", "Rate Date", "Remarks", "Search Tags (extra keywords)"]
 WIDTHS = [10, 22, 40, 32, 20, 26, 7, 12, 9, 13, 13, 14, 12, 20, 13, 12, 26, 34]
 FIRST = 5
@@ -823,8 +832,12 @@ for ci, c in enumerate(CATS, start=1):
     ws["A2"].font = F(italic=True, size=9, color="404040")
     ws["A2"].fill = PatternFill("solid", fgColor=c["colour"])
     ws["A2"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
-    ws["A3"] = '=HYPERLINK("#Index!A1","<< Back to Index")'
-    ws["A3"].font = F(size=9, color="0563C1", underline="single")
+    for k_, (lab_, tgt_) in enumerate([("< Home", "Home!A1"), ("Search", "Search!C5"), ("Quote", "Quote!C13")], start=1):
+        ws.cell(3, k_, f'=HYPERLINK("#{tgt_}","{lab_}")')
+        ws.cell(3, k_).font = F(size=9, bold=True, color="FFFFFF")
+        ws.cell(3, k_).fill = PatternFill("solid", fgColor="0F766E")
+        ws.cell(3, k_).alignment = CENTER
+    ws.row_dimensions[3].height = 18
     ws["D3"] = "Items:"
     ws["D3"].font = F(size=9, bold=True)
     ws["D3"].alignment = Alignment(horizontal="right")
@@ -883,8 +896,6 @@ for ci, c in enumerate(CATS, start=1):
     rng = f"A{FIRST}:R{end}"
     for r in range(FIRST, end + 1):
         ws.cell(r, 18).font = F(size=8, color="0000FF")
-    ws.conditional_formatting.add(rng, FormulaRule(
-        formula=[f'AND($C{FIRST}<>"",MOD(ROW(),2)=0,$M{FIRST}<>"Obsolete")'], fill=PatternFill("solid", fgColor=GREY)))
     for status, colour in (("Indicative", "FCE4D6"), ("Quoted", "DDEBF7"), ("Verified", "E2EFDA"), ("Obsolete", "D9D9D9")):
         ws.conditional_formatting.add(f"M{FIRST}:M{end}", FormulaRule(
             formula=[f'$M{FIRST}="{status}"'], fill=PatternFill("solid", fgColor=colour)))
@@ -901,7 +912,15 @@ for ci, c in enumerate(CATS, start=1):
     for j, w in enumerate(WIDTHS, start=1):
         ws.column_dimensions[get_column_letter(j)].width = w
     ws.freeze_panes = "D5"
-    ws.auto_filter.ref = f"A4:R{end}"
+    tb = Table(displayName=f"T_{c['prefix']}", ref=f"A4:R{end}")
+    tb.tableStyleInfo = TableStyleInfo(name="TableStyleLight9", showRowStripes=True)
+    ws.add_table(tb)
+    for j_, note_ in ((8, "Supplier / market rate before wastage. Blue = typed, green = linked to Settings (per-kg rate x weight)."),
+                      (9, "Cutting / breakage allowance, e.g. 5%."),
+                      (10, "Basic Rate x (1 + Wastage %)"), (11, "Net Cost x (1 + O&P from Settings)"),
+                      (12, "Selling x (1 + VAT)"), (13, "Indicative / Quoted / Verified / Obsolete"),
+                      (18, "Extra words that should find this item in Search (local names, supplier codes).")):
+        ws.cell(4, j_).comment = Comment(note_, "Estimator")
     ws.print_title_rows = "4:4"
     ws.page_setup.orientation = "landscape"
     ws.page_setup.paperSize = ws.PAPERSIZE_A4
@@ -917,7 +936,8 @@ db = wb.create_sheet("ALL ITEMS", 1)
 db.sheet_properties.tabColor = NAVY
 db.sheet_view.showGridLines = False
 DBH = ["Category", "Item Code", "Sub-Category", "Item Description", "Specification / Size", "Finish / Colour",
-       "Brand / Origin", "Unit", "Net Cost (AED)", "Selling (AED)", "Selling incl. VAT", "Rate Status", "Search key"]
+       "Brand / Origin", "Unit", "Net Cost (AED)", "Selling (AED)", "Selling incl. VAT", "Rate Status", "Match row",
+       "Search key", "Pick label"]
 db.merge_cells("A1:L1")
 db["A1"] = "ALL ITEMS - MASTER LIST (auto-linked from category sheets; do not edit here)"
 db["A1"].font = F(bold=True, size=14, color="FFFFFF")
@@ -942,6 +962,7 @@ for i, (sheet, title, r) in enumerate(DB_ROWS, start=3):
     for ch in ("(", ")", "/", "-", ",", ";", ":"):
         raw = f'SUBSTITUTE({raw},"{ch}"," ")'
     db.cell(i, 14, f'=IF(D{i}="",""," "&{raw}&" ")')
+    db.cell(i, 15, f'=IF(D{i}="","",B{i}&" | "&D{i}&" | "&E{i})')
     for j in range(1, 14):
         cell = db.cell(i, j)
         cell.font = F(size=9, color="008000" if j < 13 else "808080")
@@ -949,14 +970,15 @@ for i, (sheet, title, r) in enumerate(DB_ROWS, start=3):
         if j in (9, 10, 11):
             cell.number_format = NUM
 DB_END = 2 + len(DB_ROWS)
-db.conditional_formatting.add(f"A3:L{DB_END}", FormulaRule(
-    formula=['AND($D3<>"",MOD(ROW(),2)=0)'], fill=PatternFill("solid", fgColor=GREY)))
 for j, w in enumerate([30, 10, 22, 40, 30, 18, 24, 7, 12, 12, 13, 11, 9], start=1):
     db.column_dimensions[get_column_letter(j)].width = w
 db.column_dimensions["M"].hidden = True
 db.column_dimensions["N"].hidden = True
+db.column_dimensions["O"].hidden = True
 db.freeze_panes = "E3"
-db.auto_filter.ref = f"A2:L{DB_END}"
+tbd = Table(displayName="T_ALL", ref=f"A2:O{DB_END}")
+tbd.tableStyleInfo = TableStyleInfo(name="TableStyleLight9", showRowStripes=True)
+db.add_table(tbd)
 
 # ---------------------------------------------------------------- Search
 sr = wb.create_sheet("Search", 1)
@@ -1000,7 +1022,7 @@ sr["G5"] = "Tip: clear the keyword to list a whole category."
 sr["G6"] = "Max 300 results shown - refine keyword if needed."
 for a in ("G5", "G6"):
     sr[a].font = F(italic=True, size=9, color="595959")
-sr["G7"] = '=HYPERLINK("#Index!A1","<< Back to Index")'
+sr["G7"] = '=HYPERLINK("#Home!A1","< Back to Home")'
 sr["G7"].font = F(size=9, color="0563C1", underline="single")
 
 SH = ["#", "Item Code", "Category", "Item Description", "Specification / Size", "Finish / Colour",
@@ -1136,147 +1158,611 @@ for j, w in enumerate([11, 10, 40, 13, 13, 10, 22, 13, 30, 14, 14], start=1):
     lg.column_dimensions[get_column_letter(j)].width = w
 lg.freeze_panes = "A4"
 
-# ---------------------------------------------------------------- Index (dashboard)
+# ---------------------------------------------------------------- shared UI helpers
+from openpyxl.chart import BarChart, DoughnutChart, Reference
+from openpyxl.chart.label import DataLabelList
+from openpyxl.comments import Comment
+
+TEAL, TEAL_LT, INK, MUTED, CARD = "0F766E", "CCFBF1", "1E293B", "64748B", "F1F5F9"
+NAV = [("Home", "Home!A1"), ("Search", "Search!C5"), ("Quote Builder", "Quote!C13"),
+       ("Calculators", "Calculators!B6"), ("All Items", "'ALL ITEMS'!A1"), ("Settings", "Settings!C6")]
+
+
+def nav_bar(ws, row, first_col=1, skip=None):
+    """Clickable navigation links on one row."""
+    col = first_col
+    for label, target in NAV:
+        if label == skip:
+            continue
+        c = ws.cell(row, col, f'=HYPERLINK("#{target}","{label}  >")')
+        c.font = F(size=9, bold=True, color="FFFFFF")
+        c.fill = PatternFill("solid", fgColor=TEAL)
+        c.alignment = CENTER
+        c.border = Border(left=Side(style="thin", color="FFFFFF"), right=Side(style="thin", color="FFFFFF"))
+        col += 1
+
+
+def banner(ws, rng, text, size=18, fill=NAVY, color="FFFFFF", height=36):
+    ws.merge_cells(rng)
+    a = ws[rng.split(":")[0]]
+    a.value = text
+    a.font = F(bold=True, size=size, color=color)
+    a.fill = PatternFill("solid", fgColor=fill)
+    a.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    ws.row_dimensions[a.row].height = height
+
+
+def input_cell(c, fmt=None, bold=False):
+    c.font = F(size=10, color="0000FF", bold=bold)
+    c.fill = INPUT_FILL
+    c.border = BORDER
+    c.alignment = CENTER
+    if fmt:
+        c.number_format = fmt
+
+
+def calc_cell(c, fmt=None, bold=False):
+    c.font = F(size=10, color="000000", bold=bold)
+    c.border = BORDER
+    c.alignment = CENTER
+    if fmt:
+        c.number_format = fmt
+
+
+def head_row(ws, row, labels, start=1, height=30):
+    for j, h in enumerate(labels, start=start):
+        c = ws.cell(row, j, h)
+        c.font = F(bold=True, color="FFFFFF", size=10)
+        c.fill = HDR_FILL
+        c.alignment = CENTER
+        c.border = BORDER
+    ws.row_dimensions[row].height = height
+
+
+# ---------------------------------------------------------------- Quote Builder
+qt = wb.create_sheet("Quote")
+qt.sheet_properties.tabColor = TEAL
+qt.sheet_view.showGridLines = False
+banner(qt, "B2:K2", "QUOTATION BUILDER", size=18)
+qt.merge_cells("B3:K3")
+qt["B3"] = ("Pick an item from the dropdown in column C (or just type its code, e.g. GL-010), enter the quantity - "
+            "description, unit, rate and amount fill in automatically. Use 'Rate Override' to apply a special rate.")
+qt["B3"].font = F(italic=True, size=9, color=MUTED)
+qt["B3"].alignment = LEFT
+qt.row_dimensions[3].height = 26
+for col_, (lab_, tgt_) in zip("CEHJK", [n for n in NAV if n[0] != "Quote Builder"]):
+    c_ = qt[f"{col_}4"]
+    c_.value = f'=HYPERLINK("#{tgt_}","{lab_}  >")'
+    c_.font = F(size=9, bold=True, color="FFFFFF")
+    c_.fill = PatternFill("solid", fgColor=TEAL)
+    c_.alignment = CENTER
+
+hdr_l = [("Client", "M/s. Example Developers LLC"), ("Project", "Example Villa - Al Barsha"),
+         ("Attention", "Mr. Example (Project Manager)"), ("Subject", "Supply & installation of aluminium & glass works")]
+hdr_r = [("Quotation No.", "ASG/Q/2026/0001"), ("Date", "=TODAY()"), ("Revision", "R0"), ("Prepared By", "Estimation Dept.")]
+for i, ((kl, vl), (kr, vr)) in enumerate(zip(hdr_l, hdr_r), start=6):
+    qt[f"C{i}"] = kl
+    qt.merge_cells(f"D{i}:E{i}")
+    qt[f"D{i}"] = vl
+    qt.merge_cells(f"G{i}:H{i}")
+    qt[f"G{i}"] = kr
+    qt.merge_cells(f"I{i}:K{i}")
+    qt[f"I{i}"] = vr
+    for a in (f"C{i}", f"G{i}"):
+        qt[a].font = F(bold=True, size=10, color=INK)
+        qt[a].alignment = Alignment(horizontal="right", vertical="center", indent=1)
+    for a in (f"D{i}", f"I{i}"):
+        qt[a].font = F(size=10, color="0000FF")
+        qt[a].fill = INPUT_FILL
+        qt[a].alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    for col in "DEIJK":
+        qt[f"{col}{i}"].border = BORDER
+qt["I7"].number_format = "dd-mmm-yyyy"
+qt["C10"] = "Rate basis"
+qt["C10"].font = F(bold=True, size=10, color=INK)
+qt["C10"].alignment = Alignment(horizontal="right", vertical="center", indent=1)
+qt.merge_cells("D10:E10")
+qt["D10"] = "Selling Rate (with O&P)"
+input_cell(qt["D10"], bold=True)
+qt["D10"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
+qt["E10"].border = BORDER
+dvb = DataValidation(type="list", formula1='"Selling Rate (with O&P),Net Cost (internal)"', allow_blank=False)
+dvb.add("D10")
+qt.add_data_validation(dvb)
+qt["G10"] = '=IF(D10="Net Cost (internal)","INTERNAL COST SHEET - do not send to client","Client rates include overhead & profit")'
+qt["G10"].font = F(size=9, italic=True, bold=True, color="C00000")
+
+QH = 12
+head_row(qt, QH, ["Sr.", "Item  (pick from list or type code)", "Code", "Description & Specification", "Unit",
+                  "Qty", "Unit Rate (AED)", "Rate Override", "Amount (AED)", "Remarks"], start=2, height=32)
+Q1, QN = QH + 1, QH + 50
+examples = {Q1: ("GL-010", 24.5), Q1 + 1: ("GF-007", 12), Q1 + 2: ("SI-024", 36)}
+for r in range(Q1, QN + 1):
+    qt[f"B{r}"] = f'=IF(C{r}="","",ROWS($C${Q1}:C{r}))'
+    qt[f"D{r}"] = f'=IF(C{r}="","",IF(ISNUMBER(FIND(" | ",C{r})),LEFT(C{r},FIND(" | ",C{r})-1),UPPER(TRIM(C{r}))))'
+    qt[f"M{r}"] = f"=IF(D{r}=\"\",\"\",IFERROR(MATCH(D{r},'ALL ITEMS'!$B$1:$B${DB_END},0),0))"
+    qt[f"E{r}"] = (f"=IF(D{r}=\"\",\"\",IF(M{r}=0,\"Code not found - check the code\","
+                   f"INDEX('ALL ITEMS'!$D$1:$D${DB_END},M{r})&\" - \"&INDEX('ALL ITEMS'!$E$1:$E${DB_END},M{r})"
+                   f"&IF(OR(INDEX('ALL ITEMS'!$F$1:$F${DB_END},M{r})=\"-\",INDEX('ALL ITEMS'!$F$1:$F${DB_END},M{r})=\"\"),\"\","
+                   f"\", \"&INDEX('ALL ITEMS'!$F$1:$F${DB_END},M{r}))))")
+    qt[f"F{r}"] = f"=IF(OR(D{r}=\"\",M{r}=0),\"\",INDEX('ALL ITEMS'!$H$1:$H${DB_END},M{r}))"
+    qt[f"H{r}"] = (f"=IF(OR(D{r}=\"\",M{r}=0),\"\",IF($D$10=\"Net Cost (internal)\","
+                   f"INDEX('ALL ITEMS'!$I$1:$I${DB_END},M{r}),INDEX('ALL ITEMS'!$J$1:$J${DB_END},M{r})))")
+    qt[f"J{r}"] = f'=IF(OR(G{r}="",AND(H{r}="",I{r}="")),"",ROUND(G{r}*IF(I{r}<>"",I{r},H{r}),2))'
+    if r in examples:
+        qt[f"C{r}"], qt[f"G{r}"] = examples[r]
+        qt[f"K{r}"] = "Example - replace"
+    for col in "BCDEFGHIJK":
+        c = qt[f"{col}{r}"]
+        c.border = BORDER
+        c.font = F(size=10, color="0000FF" if col in "CGIK" else "000000")
+        c.alignment = LEFT if col in "CEK" else CENTER
+        if col in "CGIK":
+            c.fill = INPUT_FILL
+        if col in "HIJ":
+            c.number_format = NUM
+        if col == "G":
+            c.number_format = '#,##0.00;-#,##0.00;""'
+    qt.row_dimensions[r].height = 30
+    qt[f"E{r}"].font = F(size=9)
+dvi = DataValidation(type="list", formula1=f"='ALL ITEMS'!$O$3:$O${DB_END}", allow_blank=True,
+                     showErrorMessage=False)
+dvi.add(f"C{Q1}:C{QN}")
+qt.add_data_validation(dvi)
+qt.conditional_formatting.add(f"E{Q1}:E{QN}", FormulaRule(formula=[f'LEFT(E{Q1},9)="Code not "'],
+                                                          font=Font(bold=True, color="C00000")))
+qt.conditional_formatting.add(f"J{Q1}:J{QN}", FormulaRule(formula=[f'J{Q1}<>""'], font=Font(bold=True, color=NAVY)))
+qt.column_dimensions["M"].hidden = True
+
+T = QN + 2
+tot = [("Sub-Total", f"=SUM(J{Q1}:J{QN})", False),
+       ("Discount %", 0, True),
+       ("Discount Amount", f"=ROUND(J{T}*J{T + 1},2)", False),
+       ("Net Amount", f"=J{T}-J{T + 2}", False),
+       ("VAT", f"=ROUND(J{T + 3}*VAT,2)", False),
+       ("GRAND TOTAL (AED)", f"=J{T + 3}+J{T + 4}", False)]
+for k, (lbl, val, is_in) in enumerate(tot):
+    r = T + k
+    qt.merge_cells(f"G{r}:I{r}")
+    qt[f"G{r}"] = lbl if lbl != "VAT" else '="VAT @ "&TEXT(VAT,"0%")'
+    qt[f"G{r}"].font = F(bold=True, size=10, color=INK)
+    qt[f"G{r}"].alignment = Alignment(horizontal="right", vertical="center", indent=1)
+    qt[f"J{r}"] = val
+    if is_in:
+        input_cell(qt[f"J{r}"], fmt="0.0%")
+    else:
+        calc_cell(qt[f"J{r}"], fmt=NUM, bold=True)
+    for col in "GHI":
+        qt[f"{col}{r}"].border = BORDER
+last_tot = T + len(tot) - 1
+for col in "GHIJ":
+    qt[f"{col}{last_tot}"].fill = HDR_FILL
+qt[f"G{last_tot}"].font = F(bold=True, size=12, color="FFFFFF")
+qt[f"J{last_tot}"].font = F(bold=True, size=12, color="FFFFFF")
+qt.row_dimensions[last_tot].height = 26
+qt[f"B{T}"] = "Lines used:"
+qt[f"C{T}"] = f'=COUNTIF(J{Q1}:J{QN},">0")&" of 50"'
+qt[f"B{T}"].font = qt[f"C{T}"].font = F(size=9, color=MUTED)
+
+TC = last_tot + 2
+qt[f"B{TC}"] = "TERMS & CONDITIONS"
+qt[f"B{TC}"].font = F(bold=True, size=11, color=NAVY)
+terms = [
+    "1.  Prices are in UAE Dirhams (AED). VAT is shown separately as above.",
+    "2.  Validity: 30 days from the quotation date.",
+    "3.  Payment: 30% advance with LPO, 60% against delivery / progress, 10% on completion & handover.",
+    "4.  Delivery: 3-4 weeks from approval of shop drawings, samples and receipt of advance.",
+    "5.  Quantities are approximate and will be re-measured on site; billing as per actual executed quantity.",
+    "6.  Exclusions: civil works, scaffolding by others, electrical works, cleaning of other trades' damage, permits unless stated.",
+    "7.  Any variation in scope, size or specification will be treated as a variation order.",
+]
+for k, t in enumerate(terms, start=TC + 1):
+    qt.merge_cells(f"B{k}:K{k}")
+    qt[f"B{k}"] = t
+    qt[f"B{k}"].font = F(size=9, color="0000FF")
+    qt[f"B{k}"].alignment = LEFT
+SIG = TC + len(terms) + 2
+qt[f"B{SIG}"] = "For Saeed Al Siraj Glass & Aluminium Works L.L.C."
+qt[f"H{SIG}"] = "Client Acceptance (Sign & Stamp)"
+qt[f"B{SIG}"].font = qt[f"H{SIG}"].font = F(bold=True, size=10, color=INK)
+for col, w in zip("ABCDEFGHIJKL", [2, 6, 36, 9, 52, 7, 9, 13, 12, 15, 20, 2]):
+    qt.column_dimensions[col].width = w
+qt.freeze_panes = f"A{Q1}"
+qt.print_area = f"B2:K{SIG + 2}"
+qt.print_title_rows = f"{QH}:{QH}"
+qt.page_setup.orientation = "portrait"
+qt.page_setup.paperSize = qt.PAPERSIZE_A4
+qt.page_setup.fitToWidth = 1
+qt.page_setup.fitToHeight = 0
+qt.sheet_properties.pageSetUpPr.fitToPage = True
+qt.oddFooter.center.text = "&8Page &P of &N"
+qt["C" + str(Q1)].comment = Comment("Click the arrow to pick an item, or type a code such as AL-010.", "Estimator")
+
+# ---------------------------------------------------------------- Calculators
+cl = wb.create_sheet("Calculators")
+cl.sheet_properties.tabColor = "7C3AED"
+cl.sheet_view.showGridLines = False
+banner(cl, "B2:M2", "ESTIMATION CALCULATORS", size=18)
+cl.merge_cells("B3:M3")
+cl["B3"] = "Yellow cells are inputs. Weights use real section geometry and densities from Settings; rates per kg come from Settings."
+cl["B3"].font = F(italic=True, size=9, color=MUTED)
+nav_bar(cl, 4, first_col=2, skip="Calculators")
+
+# 1. Section weight & cost
+W0 = 6
+cl[f"B{W0}"] = "1.  SECTION WEIGHT & COST  (aluminium, MS, GI, stainless steel)"
+cl[f"B{W0}"].font = F(bold=True, size=12, color=NAVY)
+head_row(cl, W0 + 1, ["Material", "Shape", "Width / Dia (mm)", "Height / Leg 2 (mm)", "Thickness (mm)",
+                      "Length (m) / Area (m2)", "Qty", "kg per m (or m2)", "Total kg", "Rate / kg (AED)",
+                      "Cost (AED)", "Remarks"], start=2, height=34)
+MATS = ["Aluminium - Mill", "Aluminium - Powder Coated", "Aluminium - Anodized", "Aluminium - PVDF",
+        "Mild Steel", "GI", "SS 304", "SS 316"]
+SHAPES = ["Square / Rect. Tube", "Round Tube", "Flat Bar", "Round Bar", "Equal / Unequal Angle", "Plate / Sheet"]
+cl["P5"] = "Materials"
+cl["Q5"] = "Shapes"
+for k, m in enumerate(MATS, start=6):
+    cl[f"P{k}"] = m
+for k, s_ in enumerate(SHAPES, start=6):
+    cl[f"Q{k}"] = s_
+cl.column_dimensions["P"].hidden = True
+cl.column_dimensions["Q"].hidden = True
+w_ex = [("Aluminium - Powder Coated", "Square / Rect. Tube", 40, 40, 2, 6, 10, "Example: 40x40x2 tube"),
+        ("Mild Steel", "Square / Rect. Tube", 50, 50, 3, 6, 8, "Example: SHS 50x50x3"),
+        ("SS 304", "Round Tube", 50.8, None, 1.5, 6, 4, "Example: handrail tube"),
+        ("Mild Steel", "Plate / Sheet", None, None, 10, 2.5, 1, "Example: 10 mm plate, 2.5 m2"),
+        ("Aluminium - Mill", "Flat Bar", 50, None, 5, 6, 5, "Example: flat bar 50x5")]
+W1, WN = W0 + 2, W0 + 13
+for r in range(W1, WN + 1):
+    i = r - W1
+    if i < len(w_ex):
+        for col, v in zip("BCDEFGHM", w_ex[i]):
+            cl[f"{col}{r}"] = v
+    area = (f'IF(C{r}="Square / Rect. Tube",D{r}*E{r}-(D{r}-2*F{r})*(E{r}-2*F{r}),'
+            f'IF(C{r}="Round Tube",PI()*(D{r}^2-(D{r}-2*F{r})^2)/4,'
+            f'IF(C{r}="Flat Bar",D{r}*F{r},'
+            f'IF(C{r}="Round Bar",PI()*D{r}^2/4,'
+            f'IF(C{r}="Equal / Unequal Angle",(D{r}+IF(E{r}="",D{r},E{r})-F{r})*F{r},'
+            f'IF(C{r}="Plate / Sheet",F{r}*1000,0))))))')
+    dens = f'IF(LEFT(B{r},3)="Alu",DEN_AL,IF(LEFT(B{r},2)="SS",DEN_SS,DEN_MS))'
+    cl[f"I{r}"] = f'=IF(OR(B{r}="",C{r}=""),"",ROUND({area}*{dens}/1000,3))'
+    cl[f"J{r}"] = f'=IF(OR(I{r}="",G{r}="",H{r}=""),"",ROUND(I{r}*G{r}*H{r},2))'
+    cl[f"K{r}"] = (f'=IF(B{r}="","",IF(B{r}="Aluminium - Mill",AL_MILL,IF(B{r}="Aluminium - Powder Coated",AL_MILL+AL_PC,'
+                   f'IF(B{r}="Aluminium - Anodized",AL_MILL+AL_ANOD,IF(B{r}="Aluminium - PVDF",AL_MILL+AL_PVDF,'
+                   f'IF(B{r}="Mild Steel",MS_KG,IF(B{r}="GI",GI_KG,IF(B{r}="SS 304",SS304,SS316))))))))')
+    cl[f"L{r}"] = f'=IF(OR(J{r}="",K{r}=""),"",ROUND(J{r}*K{r},2))'
+    for col in "BCDEFGHM":
+        input_cell(cl[f"{col}{r}"])
+    for col in "IJKL":
+        calc_cell(cl[f"{col}{r}"], fmt="#,##0.000" if col == "I" else NUM, bold=(col == "L"))
+    cl[f"M{r}"].alignment = LEFT
+    cl[f"B{r}"].alignment = cl[f"C{r}"].alignment = LEFT
+dvm = DataValidation(type="list", formula1=f"=$P$6:$P${5 + len(MATS)}", allow_blank=True)
+dvm.add(f"B{W1}:B{WN}")
+dvs = DataValidation(type="list", formula1=f"=$Q$6:$Q${5 + len(SHAPES)}", allow_blank=True)
+dvs.add(f"C{W1}:C{WN}")
+cl.add_data_validation(dvm)
+cl.add_data_validation(dvs)
+cl[f"I{WN + 1}"] = "TOTAL"
+cl[f"J{WN + 1}"] = f"=SUM(J{W1}:J{WN})"
+cl[f"L{WN + 1}"] = f"=SUM(L{W1}:L{WN})"
+for col in "IJKL":
+    c = cl[f"{col}{WN + 1}"]
+    c.fill = HDR_FILL
+    c.font = F(bold=True, color="FFFFFF")
+    c.alignment = CENTER
+    c.number_format = NUM
+cl[f"B{WN + 2}"] = ("Shapes: Tube = W x H x t | Round tube = Dia x t | Flat bar = W x t | Round bar = Dia | "
+                    "Angle = Leg1 x Leg2 x t | Plate = thickness only, enter AREA (m2) in Length column.")
+cl[f"B{WN + 2}"].font = F(size=8, italic=True, color=MUTED)
+
+# 2. Glass area & cost
+G0 = WN + 4
+cl[f"B{G0}"] = "2.  GLASS AREA, EDGE & COST"
+cl[f"B{G0}"].font = F(bold=True, size=12, color=NAVY)
+head_row(cl, G0 + 1, ["Glass item (pick or type code)", "Code", "Width (mm)", "Height (mm)", "Qty",
+                      "Area / pane (m2)", "Chargeable / pane (m2)", "Total m2", "Edge perimeter (lm)",
+                      "Net rate / m2 (AED)", "Amount (AED)", "Remarks"], start=2, height=34)
+g_ex = [("GL-010", 1200, 2400, 6, "Example: shower / partition panel"),
+        ("GL-034", 1500, 1800, 10, "Example: DGU window glass"),
+        ("MR-003", 600, 400, 4, "Example: small mirror (min. charge applies)")]
+G1, GN = G0 + 2, G0 + 11
+for r in range(G1, GN + 1):
+    i = r - G1
+    if i < len(g_ex):
+        cl[f"B{r}"], cl[f"D{r}"], cl[f"E{r}"], cl[f"F{r}"], cl[f"M{r}"] = g_ex[i]
+    cl[f"C{r}"] = f'=IF(B{r}="","",IF(ISNUMBER(FIND(" | ",B{r})),LEFT(B{r},FIND(" | ",B{r})-1),UPPER(TRIM(B{r}))))'
+    cl[f"N{r}"] = f"=IF(C{r}=\"\",\"\",IFERROR(MATCH(C{r},'ALL ITEMS'!$B$1:$B${DB_END},0),0))"
+    cl[f"G{r}"] = f'=IF(OR(D{r}="",E{r}=""),"",ROUND(D{r}*E{r}/1000000,3))'
+    cl[f"H{r}"] = f'=IF(G{r}="","",MAX(G{r},GLASS_MIN))'
+    cl[f"I{r}"] = f'=IF(OR(H{r}="",F{r}=""),"",ROUND(H{r}*F{r},3))'
+    cl[f"J{r}"] = f'=IF(OR(D{r}="",E{r}="",F{r}=""),"",ROUND(2*(D{r}+E{r})/1000*F{r},2))'
+    cl[f"K{r}"] = f"=IF(OR(C{r}=\"\",N{r}=0),\"\",INDEX('ALL ITEMS'!$I$1:$I${DB_END},N{r}))"
+    cl[f"L{r}"] = f'=IF(OR(I{r}="",K{r}=""),"",ROUND(I{r}*K{r},2))'
+    for col in "BDEFM":
+        input_cell(cl[f"{col}{r}"])
+    for col in "CGHIJKL":
+        calc_cell(cl[f"{col}{r}"], fmt="#,##0.000" if col in "GHI" else NUM, bold=(col == "L"))
+    cl[f"C{r}"].number_format = "General"
+    cl[f"B{r}"].alignment = cl[f"M{r}"].alignment = LEFT
+dvg = DataValidation(type="list", formula1=f"='ALL ITEMS'!$O$3:$O${DB_END}", allow_blank=True, showErrorMessage=False)
+dvg.add(f"B{G1}:B{GN}")
+cl.add_data_validation(dvg)
+cl.column_dimensions["N"].hidden = True
+cl[f"H{GN + 1}"] = "TOTAL"
+cl[f"I{GN + 1}"] = f"=SUM(I{G1}:I{GN})"
+cl[f"J{GN + 1}"] = f"=SUM(J{G1}:J{GN})"
+cl[f"L{GN + 1}"] = f"=SUM(L{G1}:L{GN})"
+for col in "HIJKL":
+    c = cl[f"{col}{GN + 1}"]
+    c.fill = HDR_FILL
+    c.font = F(bold=True, color="FFFFFF")
+    c.alignment = CENTER
+    c.number_format = NUM
+cl[f"B{GN + 2}"] = '="Minimum chargeable area per pane = "&TEXT(GLASS_MIN,"0.00")&" m2 (change in Settings). Rate = Net Cost incl. wastage."'
+cl[f"B{GN + 2}"].font = F(size=8, italic=True, color=MUTED)
+
+# 3. Unit converter
+U0 = GN + 4
+cl[f"B{U0}"] = "3.  UNIT CONVERTER"
+cl[f"B{U0}"].font = F(bold=True, size=12, color=NAVY)
+head_row(cl, U0 + 1, ["Convert", "Enter value", "Result", "Unit"], start=2, height=24)
+conv = [("m2  ->  sq.ft", 10, "=IF(C{r}=\"\",\"\",C{r}*SQFT)", "sq.ft"),
+        ("sq.ft  ->  m2", 100, "=IF(C{r}=\"\",\"\",C{r}/SQFT)", "m2"),
+        ("Rate per m2  ->  per sq.ft", 450, "=IF(C{r}=\"\",\"\",C{r}/SQFT)", "AED / sq.ft"),
+        ("Rate per sq.ft  ->  per m2", 40, "=IF(C{r}=\"\",\"\",C{r}*SQFT)", "AED / m2"),
+        ("Metre  ->  feet", 3, "=IF(C{r}=\"\",\"\",C{r}*3.28084)", "ft"),
+        ("Feet  ->  metre", 10, "=IF(C{r}=\"\",\"\",C{r}/3.28084)", "m"),
+        ("mm  ->  inch", 50.8, "=IF(C{r}=\"\",\"\",C{r}/25.4)", "inch"),
+        ("Inch  ->  mm", 2, "=IF(C{r}=\"\",\"\",C{r}*25.4)", "mm"),
+        ("kg  ->  lb", 100, "=IF(C{r}=\"\",\"\",C{r}*2.20462)", "lb")]
+for k, (lbl, v, f, u) in enumerate(conv, start=U0 + 2):
+    cl[f"B{k}"] = lbl
+    cl[f"C{k}"] = v
+    cl[f"D{k}"] = f.format(r=k)
+    cl[f"E{k}"] = u
+    cl[f"B{k}"].font = F(size=10, bold=True, color=INK)
+    cl[f"B{k}"].border = BORDER
+    input_cell(cl[f"C{k}"], fmt="#,##0.00")
+    calc_cell(cl[f"D{k}"], fmt="#,##0.000", bold=True)
+    cl[f"E{k}"].font = F(size=9, color=MUTED)
+    cl[f"E{k}"].border = BORDER
+for col, w in zip("ABCDEFGHIJKLM", [2, 28, 24, 13, 13, 12, 13, 14, 12, 14, 14, 14, 30]):
+    cl.column_dimensions[col].width = w
+cl.freeze_panes = "A5"
+cl.page_setup.orientation = "landscape"
+cl.page_setup.paperSize = cl.PAPERSIZE_A4
+cl.page_setup.fitToWidth = 1
+cl.page_setup.fitToHeight = 0
+cl.sheet_properties.pageSetUpPr.fitToPage = True
+
+# ---------------------------------------------------------------- Home (dashboard)
 ix = ws0
+ix.title = "Home"
 ix.sheet_properties.tabColor = NAVY
 ix.sheet_view.showGridLines = False
-ix.merge_cells("B2:H2")
-ix["B2"] = "MATERIAL PRICE LIST & RATE DATABASE"
-ix["B2"].font = F(bold=True, size=20, color="FFFFFF")
-ix["B2"].fill = HDR_FILL
-ix["B2"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
-ix.row_dimensions[2].height = 42
-ix.merge_cells("B3:H3")
-ix["B3"] = "Saeed Al Siraj Glass & Aluminium Works L.L.C.  |  Estimation Department  |  Aluminium, Glass, MS & SS Works"
+ix.sheet_view.showRowColHeaders = False
+for col in "BCDEFGHIJKLM":
+    ix.column_dimensions[col].width = 11.5
+ix.column_dimensions["A"].width = 2
+ix.column_dimensions["N"].width = 2
+banner(ix, "B2:M2", "MATERIAL PRICE LIST & RATE DATABASE", size=22, height=48)
+ix.merge_cells("B3:M3")
+ix["B3"] = "Saeed Al Siraj Glass & Aluminium Works L.L.C.   |   Estimation Department   |   Aluminium  -  Glass  -  MS  -  SS"
 ix["B3"].font = F(bold=True, size=10, color=NAVY)
 ix["B3"].fill = PatternFill("solid", fgColor=GOLD)
 ix["B3"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
 ix.row_dimensions[3].height = 22
 
-info = [("Rate validity / last reviewed:", "=Settings!C%d" % (last + 1)),
-        ("VAT:", "=VAT"), ("Default O&P:", "=OHP"),
-        ("Total items:", f"=COUNTA('ALL ITEMS'!D3:D{DB_END})-COUNTBLANK('ALL ITEMS'!D3:D{DB_END})")]
-for i, (k, v) in enumerate(info, start=5):
-    ix[f"B{i}"] = k
-    ix[f"B{i}"].font = F(bold=True, size=10, color="404040")
-    ix[f"D{i}"] = v
-    ix[f"D{i}"].font = F(bold=True, size=10, color=NAVY)
-    ix[f"D{i}"].alignment = Alignment(horizontal="left")
-ix["D6"].number_format = ix["D7"].number_format = "0%"
-ix["F5"] = '=HYPERLINK("#Search!C5",">>  SEARCH MATERIAL  <<")'
-ix["F5"].font = F(bold=True, size=12, color="FFFFFF")
-ix["F5"].fill = PatternFill("solid", fgColor="C00000")
-ix["F5"].alignment = CENTER
-ix.merge_cells("F5:G6")
-ix["F7"] = '=HYPERLINK("#Settings!C6","Edit base rates / VAT / O&P")'
-ix["F7"].font = F(size=9, color="0563C1", underline="single")
-ix["F8"] = '=HYPERLINK("#\'ALL ITEMS\'!A1","View master list (all items)")'
-ix["F8"].font = F(size=9, color="0563C1", underline="single")
+# status counts for KPI + chart (hidden columns P:R)
+ix["P5"], ix["Q5"] = "Rate Status", "Items"
+for k, sname in enumerate(["Indicative", "Quoted", "Verified", "Obsolete"], start=6):
+    ix[f"P{k}"] = sname
+    ix[f"Q{k}"] = f"=COUNTIF('ALL ITEMS'!$L$3:$L${DB_END},P{k})"
 
-R0 = 10
-for j, h in enumerate(["No.", "Category", "Code", "Scope / Contents", "Items", "Open", "Sheet"], start=2):
-    cell = ix.cell(R0, j, h)
-    cell.font = F(bold=True, color="FFFFFF", size=10)
-    cell.fill = HDR_FILL
-    cell.alignment = CENTER
-    cell.border = BORDER
-for i, c in enumerate(CATS, start=1):
-    r = R0 + i
-    ix.cell(r, 2, i)
-    ix.cell(r, 3, c["title"])
-    ix.cell(r, 4, c["prefix"])
-    ix.cell(r, 5, c["scope"])
-    ix.cell(r, 6, f"=COUNTA('{c['sheet']}'!C5:C{c['end']})")
-    ix.cell(r, 7, f'=HYPERLINK("#\'{c["sheet"]}\'!A1","Open  >")')
-    ix.cell(r, 8, c["sheet"])
-    for j in range(2, 9):
-        cell = ix.cell(r, j)
-        cell.border = BORDER
-        cell.font = F(size=10, bold=(j == 3))
-        cell.alignment = LEFT if j in (3, 5) else CENTER
-    ix.cell(r, 2).fill = PatternFill("solid", fgColor=c["colour"])
-    ix.cell(r, 7).font = F(size=10, bold=True, color="0563C1", underline="single")
-    ix.cell(r, 8).font = F(size=8, color="808080")
-rt = R0 + len(CATS) + 1
-ix.cell(rt, 3, "TOTAL")
-ix.cell(rt, 6, f"=SUM(F{R0 + 1}:F{rt - 1})")
-for j in range(2, 9):
-    cell = ix.cell(rt, j)
-    cell.font = F(bold=True, color="FFFFFF")
-    cell.fill = HDR_FILL
-    cell.alignment = CENTER if j != 3 else LEFT
-    cell.border = BORDER
+TOTAL_F = f"=SUMPRODUCT(--('ALL ITEMS'!$D$3:$D${DB_END}<>\"\"))"
+kpis = [("B", "D", "TOTAL ITEMS", TOTAL_F, "#,##0", NAVY),
+        ("E", "G", "CATEGORIES", len(CATS), "0", TEAL),
+        ("H", "J", "RATES CONFIRMED", "=IFERROR((Q7+Q8)/(Q6+Q7+Q8),0)", "0%", "B45309"),
+        ("K", "M", "LAST REVIEWED", f"=Settings!C{last + 1}", "dd-mmm-yy", "475569")]
+for c1, c2, label, val, fmt, colr in kpis:
+    ix.merge_cells(f"{c1}5:{c2}5")
+    ix.merge_cells(f"{c1}6:{c2}7")
+    ix[f"{c1}5"] = label
+    ix[f"{c1}5"].font = F(bold=True, size=9, color="FFFFFF")
+    ix[f"{c1}6"] = val
+    ix[f"{c1}6"].font = F(bold=True, size=24, color="FFFFFF")
+    ix[f"{c1}6"].number_format = fmt
+    ix[f"{c1}5"].alignment = Alignment(horizontal="left", vertical="bottom", indent=1)
+    ix[f"{c1}6"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    for rr in (5, 6, 7):
+        for cc in range(ord(c1), ord(c2) + 1):
+            ix[f"{chr(cc)}{rr}"].fill = PatternFill("solid", fgColor=colr)
+ix.row_dimensions[5].height = 20
+ix.row_dimensions[6].height = 22
+ix.row_dimensions[7].height = 22
 
-# category list for Search dropdown (column K, hidden)
-ix["K10"] = "All Categories"
-for i, c in enumerate(CATS, start=1):
-    ix[f"K{10 + i}"] = c["title"]
-ix.column_dimensions["K"].hidden = True
-dvc = DataValidation(type="list", formula1=f"=Index!$K$10:$K${10 + len(CATS)}", allow_blank=False)
+ix["B9"] = "QUICK ACTIONS"
+ix["B9"].font = F(bold=True, size=11, color=NAVY)
+actions = [("B", "C", "SEARCH MATERIAL", "Search!C5", "C2410C"),
+           ("D", "E", "NEW QUOTATION", "Quote!C13", TEAL),
+           ("F", "G", "CALCULATORS", "Calculators!B6", "7C3AED"),
+           ("H", "I", "ALL ITEMS", "'ALL ITEMS'!A1", NAVY),
+           ("J", "K", "UPDATE RATES", "Settings!C6", "B45309"),
+           ("L", "M", "RATE LOG", "'Rate Log'!A4", "475569")]
+for c1, c2, label, target, colr in actions:
+    ix.merge_cells(f"{c1}10:{c2}11")
+    ix[f"{c1}10"] = f'=HYPERLINK("#{target}","{label}")'
+    ix[f"{c1}10"].font = F(bold=True, size=10, color="FFFFFF")
+    ix[f"{c1}10"].alignment = CENTER
+    for rr in (10, 11):
+        for cc in (c1, c2):
+            ix[f"{cc}{rr}"].fill = PatternFill("solid", fgColor=colr)
+            ix[f"{cc}{rr}"].border = Border(left=Side(style="medium", color="FFFFFF"),
+                                            right=Side(style="medium", color="FFFFFF"))
+
+ix["B13"] = "CATEGORIES  -  click a tile to open"
+ix["B13"].font = F(bold=True, size=11, color=NAVY)
+TILE0 = 14
+for i, c in enumerate(CATS):
+    row = TILE0 + (i // 3) * 3
+    c1 = 2 + (i % 3) * 4
+    L1, L2, L3, L4 = (get_column_letter(c1 + k) for k in range(4))
+    ix.merge_cells(f"{L2}{row}:{L4}{row}")
+    ix.merge_cells(f"{L2}{row + 1}:{L4}{row + 1}")
+    ix.merge_cells(f"{L1}{row}:{L1}{row + 1}")
+    ix[f"{L1}{row}"] = c["prefix"]
+    ix[f"{L1}{row}"].font = F(bold=True, size=14, color=NAVY)
+    ix[f"{L1}{row}"].alignment = CENTER
+    ix[f"{L1}{row}"].fill = PatternFill("solid", fgColor=c["colour"])
+    ix[f"{L2}{row}"] = f'=HYPERLINK("#\'{c["sheet"]}\'!A5","{c["title"]}")'
+    ix[f"{L2}{row}"].font = F(bold=True, size=10, color=INK, underline="single")
+    ix[f"{L2}{row}"].alignment = Alignment(horizontal="left", vertical="bottom", indent=1, wrap_text=True)
+    ix[f"{L2}{row + 1}"] = f"=COUNTA('{c['sheet']}'!C5:C{c['end']})&\" items\""
+    ix[f"{L2}{row + 1}"].font = F(size=9, color=MUTED)
+    ix[f"{L2}{row + 1}"].alignment = Alignment(horizontal="left", vertical="top", indent=1)
+    for rr in (row, row + 1):
+        for L in (L2, L3, L4):
+            ix[f"{L}{rr}"].fill = PatternFill("solid", fgColor=CARD)
+    ix.row_dimensions[row].height = 30
+    ix.row_dimensions[row + 1].height = 18
+    ix.row_dimensions[row + 2].height = 6
+TILE_END = TILE0 + ((len(CATS) - 1) // 3) * 3 + 2
+
+# chart data (hidden S:T)
+ix["S5"], ix["T5"] = "Category", "Items"
+for k, c in enumerate(CATS, start=6):
+    ix[f"S{k}"] = c["title"].split(" - ")[0].split(",")[0]
+    ix[f"T{k}"] = f"=COUNTA('{c['sheet']}'!C5:C{c['end']})"
+for col in "OPQRST":
+    ix.column_dimensions[col].hidden = True
+
+CH = TILE_END + 2
+ix[f"B{CH}"] = "OVERVIEW"
+ix[f"B{CH}"].font = F(bold=True, size=11, color=NAVY)
+bar = BarChart()
+bar.type = "bar"
+bar.style = 10
+bar.title = "Items per category"
+bar.y_axis.title = None
+bar.x_axis.title = None
+bar.legend = None
+bar.add_data(Reference(ix, min_col=20, min_row=5, max_row=5 + len(CATS)), titles_from_data=True)
+bar.set_categories(Reference(ix, min_col=19, min_row=6, max_row=5 + len(CATS)))
+bar.series[0].graphicalProperties.solidFill = TEAL
+bar.series[0].graphicalProperties.line.solidFill = TEAL
+bar.dataLabels = DataLabelList()
+bar.dataLabels.showVal = True
+bar.dataLabels.showSerName = False
+bar.dataLabels.showCatName = False
+bar.dataLabels.showLegendKey = False
+bar.dataLabels.showPercent = False
+bar.x_axis.scaling.orientation = "maxMin"
+bar.x_axis.delete = False
+bar.y_axis.delete = True
+bar.gapWidth = 40
+bar.y_axis.scaling.min = 0
+bar.y_axis.scaling.max = 75
+bar.visible_cells_only = False  # chart data sits in hidden columns
+bar.height, bar.width = 10, 17
+ix.add_chart(bar, f"B{CH + 1}")
+dn = DoughnutChart()
+dn.title = "Rate status"
+dn.style = 10
+dn.add_data(Reference(ix, min_col=17, min_row=5, max_row=9), titles_from_data=True)
+dn.set_categories(Reference(ix, min_col=16, min_row=6, max_row=9))
+dn.holeSize = 55
+dn.visible_cells_only = False
+dn.dataLabels = DataLabelList()
+dn.dataLabels.showVal = True
+dn.dataLabels.showSerName = False
+dn.dataLabels.showCatName = False
+dn.dataLabels.showLegendKey = False
+dn.dataLabels.showPercent = False
+from openpyxl.chart.series import DataPoint
+for idx, colr in enumerate(["F59E0B", "3B82F6", "10B981", "9CA3AF"]):
+    pt = DataPoint(idx=idx)
+    pt.graphicalProperties.solidFill = colr
+    dn.series[0].dPt.append(pt)
+dn.height, dn.width = 10, 10.5
+ix.add_chart(dn, f"I{CH + 1}")
+
+HU = CH + 22
+ix[f"B{HU}"] = "HOW TO USE"
+ix[f"B{HU}"].font = F(bold=True, size=11, color=NAVY)
+steps = [
+    "FIND  -  'Search Material': type any words in any order (40x40 tube, 12mm toughened, floor spring). Results appear instantly.",
+    "QUOTE  -  'New Quotation': pick items from the dropdown (or type the code), enter quantities. Totals, discount and VAT are automatic.",
+    "CALCULATE  -  'Calculators': section weights (tube, angle, flat, plate), glass area with minimum charge, m2 / sq.ft converter.",
+    "UPDATE A RATE  -  open the category, type the new Basic Rate (blue), set Status = Quoted / Verified, add supplier & quote ref, log it in 'Rate Log'.",
+    "ADD AN ITEM  -  use the yellow spare rows at the bottom of each category. Code, net, selling and VAT rates fill in automatically.",
+    "MARKET CHANGE  -  change aluminium / steel / SS rate per kg, VAT or O&P in 'Settings'; every linked rate (green) updates.",
+]
+for k, s_ in enumerate(steps, start=HU + 1):
+    ix.merge_cells(f"B{k}:M{k}")
+    ix[f"B{k}"] = s_
+    ix[f"B{k}"].font = F(size=10, color=INK)
+    ix[f"B{k}"].alignment = LEFT
+    ix.row_dimensions[k].height = 20
+LG = HU + len(steps) + 2
+ix[f"B{LG}"] = "COLOUR CODE"
+ix[f"B{LG}"].font = F(bold=True, size=11, color=NAVY)
+legend = [("Blue text", "you can type / edit", Font(name=FONT, color="0000FF", bold=True), "FFF2CC"),
+          ("Black text", "formula - automatic", Font(name=FONT, color="000000", bold=True), None),
+          ("Green text", "linked to Settings", Font(name=FONT, color="008000", bold=True), None),
+          ("Indicative", "budget rate - confirm", Font(name=FONT, bold=True, size=9), "FCE4D6"),
+          ("Quoted", "from supplier quote", Font(name=FONT, bold=True, size=9), "DDEBF7"),
+          ("Verified", "confirmed by LPO", Font(name=FONT, bold=True, size=9), "E2EFDA")]
+for k, (lab, txt, fnt, fill) in enumerate(legend):
+    r = LG + 1 + k // 3
+    c1 = 2 + (k % 3) * 4
+    a, b = get_column_letter(c1), get_column_letter(c1 + 1)
+    ix[f"{a}{r}"] = lab
+    ix[f"{a}{r}"].font = fnt
+    ix[f"{a}{r}"].alignment = CENTER
+    ix[f"{a}{r}"].border = BORDER
+    if fill:
+        ix[f"{a}{r}"].fill = PatternFill("solid", fgColor=fill)
+    ix.merge_cells(f"{b}{r}:{get_column_letter(c1 + 3)}{r}")
+    ix[f"{b}{r}"] = txt
+    ix[f"{b}{r}"].font = F(size=9, color=MUTED)
+    ix[f"{b}{r}"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
+UN = LG + 4
+ix.merge_cells(f"B{UN}:M{UN}")
+ix[f"B{UN}"] = ("Units:  m2 = square metre  |  lm = linear metre  |  kg  |  nos = numbers  |  set / pair / pkt / box / roll  |  "
+                "ltr  |  day / hr / month / trip  |  ls = lump sum")
+ix[f"B{UN}"].font = F(size=8, color=MUTED)
+ix.merge_cells(f"B{UN + 1}:M{UN + 2}")
+ix[f"B{UN + 1}"] = ("Rates are indicative UAE market budget rates (Oct-2026) for estimation reference. Confirm with current "
+                    "supplier quotations, project specification and quantities before submitting a final quotation.")
+ix[f"B{UN + 1}"].font = F(italic=True, size=8, color="C00000")
+ix[f"B{UN + 1}"].alignment = LEFT
+
+# category list for the Search dropdown (Settings, column H)
+st["H5"] = "Category list (Search dropdown)"
+st["H5"].font = F(bold=True, size=9, color=MUTED)
+st["H6"] = "All Categories"
+for i, c in enumerate(CATS, start=7):
+    st[f"H{i}"] = c["title"]
+for i in range(6, 7 + len(CATS)):
+    st[f"H{i}"].font = F(size=9, color=MUTED)
+st.column_dimensions["H"].width = 44
+dvc = DataValidation(type="list", formula1=f"=Settings!$H$6:$H${6 + len(CATS)}", allow_blank=False)
 dvc.add("C6")
 sr.add_data_validation(dvc)
 
-# How to use + legend
-hu = rt + 2
-ix[f"B{hu}"] = "HOW TO USE"
-ix[f"B{hu}"].font = F(bold=True, size=12, color=NAVY)
-steps = [
-    "1.  FIND: Go to 'Search' - type any keyword (size, brand, item) - results with rates appear instantly.",
-    "2.  BROWSE: Click 'Open' above to go to a category sheet. Use the filter arrows on the header row.",
-    "3.  UPDATE RATE: Type the new Basic Rate (blue) in the category sheet, set Rate Status, Supplier, Quote Ref & Date, then log it in 'Rate Log'.",
-    "4.  ADD ITEM: Use the yellow spare rows at the bottom of each category sheet - the code, net, selling & VAT rates fill in automatically.",
-    "5.  MARKET CHANGE: Change aluminium / steel / SS rate per kg, VAT or O&P in 'Settings' - all linked rates (green) update automatically.",
-    "6.  NET COST RATE = Basic Rate x (1 + Wastage %).  SELLING = Net Cost x (1 + O&P).  SELLING incl. VAT = Selling x (1 + VAT).",
-]
-for i, s in enumerate(steps, start=hu + 1):
-    ix.merge_cells(f"B{i}:H{i}")
-    ix[f"B{i}"] = s
-    ix[f"B{i}"].font = F(size=10)
-    ix[f"B{i}"].alignment = LEFT
-    ix.row_dimensions[i].height = 18
+# navigation bars on the other sheets
+nav_bar(sr, 1, first_col=1, skip="Search")
+sr.row_dimensions[1].height = 18
+nav_bar(st, 1, first_col=2, skip="Settings")
+nav_bar(sp, 2, first_col=1)
+nav_bar(lg, 2, first_col=1)
 
-lgd = hu + len(steps) + 2
-ix[f"B{lgd}"] = "LEGEND"
-ix[f"B{lgd}"].font = F(bold=True, size=12, color=NAVY)
-legend = [
-    ("Blue text", "Input / editable value", Font(name=FONT, color="0000FF", bold=True), None),
-    ("Black text", "Formula - do not overwrite", Font(name=FONT, color="000000", bold=True), None),
-    ("Green text", "Linked to Settings / another sheet", Font(name=FONT, color="008000", bold=True), None),
-    ("Indicative", "Budget market rate - confirm before final quote", None, "FCE4D6"),
-    ("Quoted", "Rate taken from a supplier quotation", None, "DDEBF7"),
-    ("Verified", "Rate confirmed by recent purchase / LPO", None, "E2EFDA"),
-    ("Obsolete", "Item no longer used (shown struck-through)", None, "D9D9D9"),
-]
-for i, (k, v, fnt, fill) in enumerate(legend, start=lgd + 1):
-    ix[f"C{i}"] = k
-    ix[f"C{i}"].font = fnt or F(size=10, bold=True)
-    if fill:
-        ix[f"C{i}"].fill = PatternFill("solid", fgColor=fill)
-    ix[f"C{i}"].border = BORDER
-    ix[f"C{i}"].alignment = CENTER
-    ix[f"D{i}"] = v
-    ix[f"D{i}"].font = F(size=10)
-    ix.merge_cells(f"D{i}:F{i}")
-
-un = lgd + len(legend) + 2
-ix[f"B{un}"] = "UNITS"
-ix[f"B{un}"].font = F(bold=True, size=12, color=NAVY)
-units = "m2 = square metre  |  lm = linear metre  |  kg = kilogram  |  nos = numbers  |  set / pair / pkt / box / roll  |  ltr = litre  |  day / hr / month / trip  |  ls = lump sum  |  % = percentage"
-ix.merge_cells(f"B{un + 1}:H{un + 1}")
-ix[f"B{un + 1}"] = units
-ix[f"B{un + 1}"].font = F(size=9)
-ix[f"B{un + 1}"].alignment = LEFT
-
-dis = un + 3
-ix.merge_cells(f"B{dis}:H{dis + 1}")
-ix[f"B{dis}"] = ("DISCLAIMER: Rates are indicative UAE market budget rates (Oct-2026) for estimation reference. "
-                 "Always confirm with current supplier quotations, project specification and quantities before "
-                 "submitting a final quotation.")
-ix[f"B{dis}"].font = F(italic=True, size=9, color="C00000")
-ix[f"B{dis}"].alignment = LEFT
-
-for col, w in zip("ABCDEFGH", [2, 6, 44, 8, 70, 9, 12, 20]):
-    ix.column_dimensions[col].width = w
+# sheet order
+order = ["Home", "Search", "Quote", "Calculators", "ALL ITEMS", "Settings"] + [c["sheet"] for c in CATS] + ["Suppliers", "Rate Log"]
+wb._sheets = [wb[n] for n in order]
+wb.active = 0
+for w in wb.worksheets:
+    w.sheet_view.tabSelected = (w.title == "Home")
 
 for w in (ix, sr, db, sp, lg, st):
     w.page_setup.orientation = "landscape"
@@ -1284,8 +1770,9 @@ for w in (ix, sr, db, sp, lg, st):
     w.page_setup.fitToWidth = 1
     w.page_setup.fitToHeight = 0
     w.sheet_properties.pageSetUpPr.fitToPage = True
+ix.page_setup.orientation = "portrait"
 sr.print_area = f"A1:L{HR + N_RES}"
-ix.print_area = f"A1:H{dis + 1}"
+ix.print_area = f"A1:N{UN + 2}"
 
 wb.calculation.fullCalcOnLoad = True
 wb.save(OUT)
