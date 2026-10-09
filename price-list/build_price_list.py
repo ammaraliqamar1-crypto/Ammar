@@ -885,7 +885,8 @@ for i, (sheet, title, r) in enumerate(DB_ROWS, start=3):
     for j, col in SRC.items():
         db.cell(i, j, f'=IF({q}$C${r}="","",{q}{col}{r})')
     db.cell(i, 13, (f'=IF(D{i}="","",IF(AND(OR(Search!$C$6="All Categories",A{i}=Search!$C$6),'
-                    f'OR(Search!$C$5="",ISNUMBER(SEARCH(Search!$C$5,B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i})))),ROW(),""))'))
+                    f'OR(Search!$P$5="",ISNUMBER(SEARCH(Search!$P$5,N{i}))),OR(Search!$P$6="",ISNUMBER(SEARCH(Search!$P$6,N{i}))),OR(Search!$P$7="",ISNUMBER(SEARCH(Search!$P$7,N{i}))),OR(Search!$P$8="",ISNUMBER(SEARCH(Search!$P$8,N{i}))),OR(Search!$P$9="",ISNUMBER(SEARCH(Search!$P$9,N{i}))),OR(Search!$P$10="",ISNUMBER(SEARCH(Search!$P$10,N{i})))),ROW(),""))'))
+    db.cell(i, 14, f'=IF(D{i}="","",A{i}&" "&B{i}&" "&C{i}&" "&D{i}&" "&E{i}&" "&F{i}&" "&G{i}&" "&H{i})')
     for j in range(1, 14):
         cell = db.cell(i, j)
         cell.font = F(size=9, color="008000" if j < 13 else "808080")
@@ -898,6 +899,7 @@ db.conditional_formatting.add(f"A3:L{DB_END}", FormulaRule(
 for j, w in enumerate([30, 10, 22, 40, 30, 18, 24, 7, 12, 12, 13, 11, 9], start=1):
     db.column_dimensions[get_column_letter(j)].width = w
 db.column_dimensions["M"].hidden = True
+db.column_dimensions["N"].hidden = True
 db.freeze_panes = "E3"
 db.auto_filter.ref = f"A2:L{DB_END}"
 
@@ -912,8 +914,8 @@ sr["B2"].fill = HDR_FILL
 sr["B2"].alignment = Alignment(horizontal="left", vertical="center", indent=1)
 sr.row_dimensions[2].height = 36
 sr.merge_cells("B3:L3")
-sr["B3"] = ("Type any word (e.g. 12 mm, floor spring, 316, DGU, shower, SHS 50) in the yellow box and "
-            "pick a category if needed. Results update instantly.")
+sr["B3"] = ("Type one or more words in any order (e.g. aluminium sheet, 12 tempered, floor spring, 316 tube, "
+            "DGU low-e) - every word must match. Pick a category if needed. Results update instantly.")
 sr["B3"].font = F(italic=True, size=9, color="404040")
 for r, lbl in ((5, "Search keyword:"), (6, "Category:"), (7, "Items found:")):
     sr.merge_cells(f"A{r}:B{r}")
@@ -922,7 +924,7 @@ for r, lbl in ((5, "Search keyword:"), (6, "Category:"), (7, "Items found:")):
     sr[f"A{r}"].alignment = Alignment(horizontal="right", vertical="center")
 sr.merge_cells("C5:E5")
 sr.merge_cells("C6:E6")
-sr["C5"] = "glass"
+sr["C5"] = "aluminium sheet"
 sr["C6"] = "All Categories"
 for a in ("C5", "C6"):
     sr[a].font = F(bold=True, size=12, color="0000FF")
@@ -976,6 +978,9 @@ sr.conditional_formatting.add(f"I{HR + 1}:K{HR + N_RES}", FormulaRule(
 for j, w in enumerate([5, 10, 28, 40, 30, 18, 24, 7, 12, 12, 13, 11, 2, 6], start=1):
     sr.column_dimensions[get_column_letter(j)].width = w
 sr.column_dimensions["N"].hidden = True
+for n in range(6):  # keyword split into words: every word must match (any order)
+    sr[f"P{5 + n}"] = f'=TRIM(MID(SUBSTITUTE(TRIM($C$5)," ",REPT(" ",100)),{n * 100 + 1},100))'
+sr.column_dimensions["P"].hidden = True
 sr.freeze_panes = f"A{HR + 1}"
 
 # ---------------------------------------------------------------- Suppliers
