@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Studio Designer Guide (Urdu)</title>
+<style>
+@font-face { font-family: "CPS Urdu"; src: url(../fonts/Nastaliq600.ttf); }
+@font-face { font-family: "CPS Sans"; src: url(../fonts/Jost500.ttf); }
+@font-face { font-family: "CPS Display"; src: url(../fonts/Marcellus.ttf); }
+:root { --surma: #26231F; --malai: #F4EDE0; --sona: #B08D57; --sona-ink: #8A6A3A; --ink-2: #5E574D; --line: #E3D9C8; --red: #C0392B; }
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "CPS Urdu", serif; color: var(--surma); background: #fff; }
+.page { width: 210mm; height: 297mm; padding: 16mm 16mm 14mm; position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; gap: 4mm; }
+.page:last-child { page-break-after: auto; }
+.foot { position: absolute; bottom: 7mm; left: 16mm; right: 16mm; display: flex; justify-content: space-between; font-family: "CPS Sans", sans-serif; font-size: 8.5pt; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 2.5mm; direction: ltr; }
+.en { font-family: "CPS Sans", sans-serif; direction: ltr; unicode-bidi: isolate; display: inline-block; white-space: nowrap; background: var(--surma); color: var(--malai); font-size: 9pt; padding: 0 2mm; border-radius: 1.5mm; line-height: 1.7; margin: 0 .5mm; }
+.en.plain { background: none; color: inherit; padding: 0; font-size: 10pt; }
+h1 { font-size: 30pt; font-weight: 600; margin: 0; line-height: 1.9; }
+h2 { font-size: 18pt; font-weight: 600; margin: 0; line-height: 2; display: flex; align-items: center; gap: 3mm; }
+h2 .n { font-family: "CPS Sans", sans-serif; background: var(--sona); color: #1E1B17; width: 9mm; height: 9mm; border-radius: 50%; display: inline-grid; place-items: center; font-size: 13pt; line-height: 1; flex: none; }
+p, li { font-size: 12pt; line-height: 2.25; margin: 0; }
+ol, ul { margin: 0; padding-inline-start: 7mm; }
+li::marker { font-family: "CPS Sans", sans-serif; color: var(--sona-ink); }
+.shot { border: 1px solid var(--line); border-radius: 2mm; display: block; width: 100%; height: auto; }
+.cap { font-size: 10pt; color: var(--ink-2); line-height: 2; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 6mm; }
+.legend div { font-size: 11.5pt; line-height: 2.1; display: flex; gap: 2mm; align-items: baseline; }
+.dot { font-family: "CPS Sans", sans-serif; background: var(--red); color: #fff; border-radius: 50%; width: 6mm; height: 6mm; display: inline-grid; place-items: center; font-size: 9pt; flex: none; line-height: 1; transform: translateY(1mm); }
+.box { border: 1px solid var(--line); background: #FBF8F2; border-radius: 2.5mm; padding: 3mm 5mm; }
+.box.tip { border-color: var(--sona); }
+.box h3 { margin: 0; font-size: 13pt; font-weight: 600; line-height: 2; color: var(--sona-ink); }
+table { border-collapse: collapse; width: 100%; }
+th, td { border-bottom: 1px solid var(--line); padding: 1.2mm 2.5mm; text-align: right; vertical-align: top; font-size: 11pt; line-height: 2.1; }
+th { background: var(--malai); font-weight: 600; font-size: 11pt; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; align-items: start; }
+/* cover */
+.cover { background: var(--surma); color: var(--malai); justify-content: space-between; }
+.cover .top { direction: ltr; display: flex; justify-content: space-between; align-items: center; }
+.cover .top img { height: 18mm; }
+.cover .top span { font-family: "CPS Sans", sans-serif; font-size: 9pt; letter-spacing: .2em; color: var(--sona); }
+.cover h1 { font-size: 40pt; color: var(--malai); line-height: 1.8; }
+.cover .sub { font-size: 18pt; color: var(--sona); line-height: 2; }
+.cover .en-title { font-family: "CPS Display", serif; direction: ltr; font-size: 15pt; letter-spacing: .04em; color: var(--malai); opacity: .85; }
+.cover .rule { height: 2px; background: var(--sona); width: 40mm; margin: 4mm 0; }
+.cover ul { padding-inline-start: 6mm; }
+.cover li { font-size: 13pt; }
+.cover li::marker { color: var(--sona); }
+.cover .toc { margin-bottom: 9mm; border-top: 1px solid rgba(176,141,87,.5); padding-top: 4mm; display: grid; grid-template-columns: 1fr 1fr; gap: 0 8mm; }
+.cover .toc div { font-size: 11.5pt; line-height: 2.2; display: flex; justify-content: space-between; }
+.cover .toc b { font-family: "CPS Sans", sans-serif; font-weight: 500; color: var(--sona); }
+.cover .foot { color: rgba(244,237,224,.7); border-top-color: rgba(176,141,87,.4); }
+</style>
+</head>
+<body>
+
+<!-- 1. Cover -->
+<section class="page cover">
+  <div class="top"><img src="logo-dark.svg" alt="Chakwal Photo Studio"><span>USER GUIDE · URDU</span></div>
+  <div>
+    <div class="en-title">Chakwal Studio Designer</div>
+    <h1>چکوال اسٹوڈیو ڈیزائنر</h1>
+    <div class="sub">استعمال کا آسان طریقہ</div>
+    <div class="rule"></div>
+    <p style="font-size:13pt">یہ ایپ چکوال فوٹو اسٹوڈیو کے تمام ڈیزائن ایک جگہ رکھتی ہے۔ اپنی تصویر لگائیں، نام اور تحریر بدلیں، اور تیار فائل واٹس ایپ، فیس بک یا پرنٹنگ پریس کو بھیج دیں۔</p>
+  </div>
+  <ul>
+    <li>اکیس تیار ڈیزائن: پوسٹس، اشتہار، البم کور، بزنس کارڈ، ڈی پی، سائن بورڈ، آرڈر سلپ</li>
+    <li>اپنی تصویر لگائیں، کھینچ کر جگہ اور سائز درست کریں</li>
+    <li>اردو اور انگریزی تحریر بدلیں</li>
+    <li>تصویر، پی ڈی ایف یا زِپ فائل بنائیں، یا سیدھا پرنٹ کریں</li>
+    <li>انٹرنیٹ کے بغیر بھی چلتی ہے</li>
+  </ul>
+  <div class="toc">
+    <div><span>ایپ کھولنا</span><b>1</b></div>
+    <div><span>تحریر بدلنا</span><b>4</b></div>
+    <div><span>ایپ کا تعارف</span><b>2</b></div>
+    <div><span>ڈاؤن لوڈ اور پرنٹ</span><b>5</b></div>
+    <div><span>تصویر لگانا</span><b>3</b></div>
+    <div><span>کام محفوظ کرنا اور مسائل کا حل</span><b>6</b></div>
+  </div>
+  <div class="foot"><span>Chakwal Photo Studio · Minhas Book Palace, Pindi Road, Chakwal</span><span>1</span></div>
+</section>
+
+<!-- 2. Open + overview -->
+<section class="page">
+  <h2><span class="n">1</span>ایپ کھولنا</h2>
+  <ol>
+    <li>فائل <span class="en">Chakwal-Studio-Designer.html</span> کمپیوٹر میں محفوظ کریں (مثلاً ڈیسک ٹاپ پر)۔</li>
+    <li>اس پر ڈبل کلک کریں۔ ایپ گوگل کروم یا مائیکروسافٹ ایج میں کھل جائے گی۔</li>
+    <li>اگر کوئی اور پروگرام کھل جائے تو فائل پر رائٹ کلک کریں، <span class="en">Open with</span> چنیں، پھر <span class="en">Google Chrome</span>۔</li>
+  </ol>
+  <p class="cap">انسٹال کرنے کی ضرورت نہیں۔ ڈیزائن بنانے کے لیے انٹرنیٹ بھی ضروری نہیں۔ کمپیوٹر پر یہ سب سے اچھی چلتی ہے۔</p>
+
+  <h2 style="margin-top:3mm"><span class="n">2</span>ایپ کا تعارف</h2>
+  <img class="shot" src="shots/overview.png" alt="">
+  <div class="legend">
+    <div><span class="dot">1</span><span><b>ڈیزائنوں کی فہرست:</b> جس ڈیزائن پر کام کرنا ہو اس پر کلک کریں</span></div>
+    <div><span class="dot">2</span><span><b>ڈیزائن:</b> جو بھی تبدیلی کریں یہاں فوراً نظر آتی ہے</span></div>
+    <div><span class="dot">3</span><span><b>کنٹرول:</b> تصویر، تحریر اور ڈاؤن لوڈ کے بٹن</span></div>
+    <div><span class="dot">4</span><span><b>پروجیکٹ:</b> کام کھولنا، محفوظ کرنا اور سب ایک ساتھ ڈاؤن لوڈ</span></div>
+  </div>
+  <p class="cap">جس ڈیزائن میں تبدیلی کی گئی ہو، فہرست میں اس کے نام کے ساتھ سنہری نقطہ آ جاتا ہے۔</p>
+  <div class="foot"><span>Chakwal Studio Designer · Urdu guide</span><span>2</span></div>
+</section>
+
+<!-- 3. Photo -->
+<section class="page">
+  <h2><span class="n">3</span>تصویر لگانا</h2>
+  <img class="shot" src="shots/adjust-photo.png" alt="" style="width:88%;margin:0 auto">
+  <div class="legend">
+    <div><span class="dot">1</span><span>تصویر کو ماؤس سے پکڑ کر کھینچیں</span></div>
+    <div><span class="dot">2</span><span>زوم: تصویر چھوٹی بڑی کریں</span></div>
+    <div><span class="dot">3</span><span>تصویر ہٹائیں</span></div>
+  </div>
+  <ol>
+    <li>بائیں طرف کی فہرست سے ڈیزائن چنیں، مثلاً <span class="en plain">Wedding</span>۔</li>
+    <li><span class="en">Add photo</span> دبائیں، یا ڈیزائن میں محراب (تصویر کی جگہ) پر کلک کریں۔</li>
+    <li>کمپیوٹر سے تصویر چنیں۔ تصویر محراب کے اندر لگ جائے گی۔</li>
+    <li><b>جگہ درست کریں:</b> ماؤس سے تصویر کو پکڑ کر اوپر، نیچے، دائیں یا بائیں کھینچیں۔</li>
+    <li><b>چھوٹا بڑا کریں:</b> <span class="en">Zoom</span> کی پٹی کو کھسکائیں، یا تصویر پر ماؤس کا پہیہ گھمائیں۔</li>
+    <li>دوسری تصویر لگانی ہو تو <span class="en">Change photo</span>، ہٹانی ہو تو <span class="en">Remove</span>۔</li>
+  </ol>
+  <div class="box tip">
+    <h3>اچھی تصویر کے لیے</h3>
+    <ul>
+      <li>سیدھی کھڑی (لمبائی والی) تصویر محراب میں سب سے اچھی لگتی ہے۔</li>
+      <li>صاف اور روشن تصویر چنیں۔ چہرہ محراب کے اوپر والے حصے میں رکھیں۔</li>
+      <li>گاہک کی تصویر، خاص طور پر خواتین اور بچوں کی، لگانے سے پہلے ان سے اجازت لیں۔</li>
+    </ul>
+  </div>
+  <div class="foot"><span>Chakwal Studio Designer · Urdu guide</span><span>3</span></div>
+</section>
+
+<!-- 4. Text + export -->
+<section class="page">
+  <h2><span class="n">4</span>تحریر بدلنا</h2>
+  <div class="two">
+    <img class="shot" src="shots/text.png" alt="">
+    <div>
+      <ol>
+        <li>دائیں طرف <span class="en">Text</span> کا حصہ دیکھیں۔ اگر بند ہو تو <span class="en plain">Edit … text lines</span> پر کلک کریں۔</li>
+        <li>ہر خانہ ڈیزائن کی ایک لائن ہے۔ اس میں نیا نام، تاریخ یا نمبر لکھیں۔</li>
+        <li>تبدیلی ڈیزائن پر فوراً نظر آتی ہے۔ لمبی تحریر خود چھوٹی ہو کر جگہ میں آ جاتی ہے۔</li>
+        <li>اردو لکھنے کے لیے کمپیوٹر میں اردو کی بورڈ استعمال کریں۔</li>
+      </ol>
+      <p class="cap">مثال: شادی البم پر دلہا دلہن کا نام اور شادی کی تاریخ لکھیں۔</p>
+    </div>
+  </div>
+
+  <h2 style="margin-top:2mm"><span class="n">5</span>ڈاؤن لوڈ اور پرنٹ</h2>
+  <div class="two">
+    <div>
+      <table>
+        <tr><th style="width:36%">بٹن</th><th>کب استعمال کریں</th></tr>
+        <tr><td><span class="en">PNG image</span></td><td>واٹس ایپ، فیس بک، انسٹاگرام۔ سب سے صاف تصویر</td></tr>
+        <tr><td><span class="en">JPG image</span></td><td>چھوٹی فائل، جلدی بھیجنے کے لیے</td></tr>
+        <tr><td><span class="en">PDF</span></td><td>پرنٹنگ پریس کے لیے۔ اصل سائز میں (البم، کارڈ، فلائر، سائن بورڈ)</td></tr>
+        <tr><td><span class="en">Print</span></td><td>اپنے پرنٹر پر سیدھا پرنٹ</td></tr>
+        <tr><td><span class="en">Export all (ZIP)</span></td><td>تمام اکیس ڈیزائن ایک فائل میں</td></tr>
+      </table>
+    </div>
+    <img class="shot" src="shots/export.png" alt="">
+  </div>
+  <p>ڈاؤن لوڈ کی گئی فائلیں کمپیوٹر کے <span class="en plain">Downloads</span> فولڈر میں ملیں گی۔</p>
+  <div class="box">
+    <h3>پرنٹ کرتے وقت</h3>
+    <p>پرنٹ کی کھڑکی میں <span class="en">Margins: None</span> اور <span class="en">Scale: 100</span> رکھیں، تاکہ ڈیزائن پورے سائز میں چھپے۔ البم کور اور سائن بورڈ کی پی ڈی ایف فائل پرنٹنگ پریس والے کو دیں۔</p>
+  </div>
+  <div class="foot"><span>Chakwal Studio Designer · Urdu guide</span><span>4</span></div>
+</section>
+
+<!-- 5. Save + help -->
+<section class="page">
+  <h2><span class="n">6</span>کام محفوظ کرنا</h2>
+  <img class="shot" src="shots/project.png" alt="" style="width:60%">
+  <ul>
+    <li><b>خود بخود:</b> ہر تبدیلی اسی کمپیوٹر کے اسی براؤزر میں خود محفوظ ہو جاتی ہے۔ ایپ دوبارہ کھولیں تو کام وہیں ملے گا۔</li>
+    <li><span class="dot">2</span> <span class="en">Save project</span>: سارا کام (تصویریں اور تحریر) ایک فائل میں محفوظ ہو جاتا ہے۔ یہ فائل بیک اپ کے طور پر رکھیں یا دوسرے کمپیوٹر پر لے جائیں۔</li>
+    <li><span class="dot">1</span> <span class="en">Open project</span>: محفوظ کی ہوئی فائل دوبارہ کھولیں۔</li>
+    <li><span class="dot">3</span> <span class="en">Export all (ZIP)</span>: تمام ڈیزائن ایک ساتھ ڈاؤن لوڈ۔</li>
+    <li><span class="en">Reset this design</span>: ڈیزائن کو پہلی حالت میں واپس لائیں (دو بار دبانا ہوتا ہے)۔</li>
+  </ul>
+
+  <h2 style="margin-top:2mm">مسئلہ اور حل</h2>
+  <table>
+    <tr><th style="width:42%">مسئلہ</th><th>حل</th></tr>
+    <tr><td>فائل کھولنے پر عجیب کوڈ نظر آتا ہے</td><td>فائل پر رائٹ کلک کریں، <span class="en">Open with</span>، پھر <span class="en">Google Chrome</span></td></tr>
+    <tr><td>تصویر نہیں لگ رہی</td><td>JPG یا PNG تصویر استعمال کریں۔ آئی فون کی تصویر پہلے واٹس ایپ پر بھیج کر دوبارہ محفوظ کریں</td></tr>
+    <tr><td>ڈاؤن لوڈ نہیں ہو رہا</td><td>براؤزر اوپر اجازت مانگے تو <span class="en">Allow</span> دبائیں</td></tr>
+    <tr><td>محفوظ کام غائب ہو گیا</td><td>براؤزر کی ہسٹری صاف کرنے سے مٹ جاتا ہے۔ ہمیشہ <span class="en">Save project</span> سے بیک اپ رکھیں</td></tr>
+    <tr><td>اردو کے حروف ٹھیک نظر نہیں آ رہے</td><td>چند سیکنڈ انتظار کریں یا ایپ دوبارہ کھولیں</td></tr>
+    <tr><td>بڑی فائل بنانے میں دیر لگتی ہے</td><td>سائن بورڈ اور «سب ڈاؤن لوڈ» میں وقت لگتا ہے۔ بٹن پر <span class="en plain">Working…</span> ختم ہونے تک انتظار کریں</td></tr>
+  </table>
+
+  <div class="box tip">
+    <h3>روزانہ کا آسان طریقہ</h3>
+    <p>روز ایک سروس کی پوسٹ اپنی نئی تصویر کے ساتھ بنائیں اور واٹس ایپ اسٹیٹس اور فیس بک پر لگائیں۔ ہر پوسٹ پر نمبر اور پتہ پہلے سے لکھا ہے، تاکہ دیکھنے والا سیدھا اسٹوڈیو آ سکے۔</p>
+  </div>
+  <div class="foot"><span>Chakwal Photo Studio · 0316-5549338 · 0336-9145512</span><span>5</span></div>
+</section>
+
+</body>
+</html>

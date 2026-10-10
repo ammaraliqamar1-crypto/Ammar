@@ -7,6 +7,7 @@ Logo system for Chakwal Photo Studio, Minhas Book Palace, Pindi Road, Chakwal. C
   computer or phone: pick a design, add your own photos (drag to position, zoom), edit names/text in English or Urdu,
   then export PNG / JPG / print-size PDF, print, export everything as a ZIP, or save/open a project file.
   Work is also kept automatically in that browser. Rebuild: `python3 studio_app.py templates && node app_thumbs.js && python3 studio_app.py html OUT`.
+- `app/Studio-Designer-Guide-Urdu.pdf` – Urdu user guide for the app (A4, 5 pages); `app/guide/` has the same pages as images for WhatsApp.
 - `Chakwal-Photo-Studio-Brand-Kit.zip` – everything below in one file, for sending on WhatsApp / to the printer.
 - `dp/` – round profile pictures: badges (charcoal, ivory, mehndi), WhatsApp icon, stamp.
 - `illustrations/` – six service illustrations (wedding, baby, family, passport, prints/frames/crystals, drone).
