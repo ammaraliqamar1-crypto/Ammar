@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#26231F"/><g transform="translate(71.7 71.7) scale(1.8432)" fill="none" stroke="#F4EDE0" stroke-linecap="round" stroke-linejoin="round">
+  <clipPath id="sunrise9"><polygon points="40 40 160 40 160 120 144 120 129 112 118 116 108 108 94 108 81 120 71 116 40 136"/></clipPath>
+  <path stroke-width="9" d="M16 50V16H50M150 16H184V50M184 150V184H150M50 184H16V150"/>
+  <path stroke-width="9" d="M56 162V98A44 44 0 0 1 144 98V162Z"/>
+  <path stroke-width="7.4" d="M56 133L71 123L81 127L94 115H108L118 123L129 119L144 127"/>
+  <path stroke-width="7.4" d="M56 149C75 141 93 147 110 144C123 142 133 139 144 141"/>
+  <circle cx="101" cy="107" r="19.5" fill="#B08D57" stroke="none" clip-path="url(#sunrise9)"/>
+</g></svg>

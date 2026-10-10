@@ -1,0 +1,494 @@
+<title>Chakwal Photo Studio Identity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@400;500&family=Noto+Nastaliq+Urdu:wght@500;600&display=swap">
+<style>
+/* Layout: a printed brand book — ivory pages, charcoal plates for dark applications, gold used only as the "sun". Single light theme by choice. */
+:root {
+  --surma: #26231F;   /* charcoal */
+  --malai: #F4EDE0;   /* ivory */
+  --sona: #B08D57;    /* muted gold */
+  --mehndi: #6E2B2A;  /* henna maroon */
+  --paper: #FBF8F2;
+  --ink: #26231F;
+  --ink-2: #5E574D;
+  --line: #E2D8C6;
+  --display: "Marcellus", "Trajan Pro", Georgia, serif;
+  --body: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; padding-inline: 20px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 80px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 88px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; }
+h2 { font-size: clamp(26px, 3.6vw, 34px); line-height: 1.15; }
+h3 { font-size: 21px; line-height: 1.25; }
+p { margin: 0; max-width: 64ch; }
+.eyebrow { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--sona); font-weight: 500; }
+.lead { font-size: 18px; color: var(--ink-2); }
+.urdu { font-family: var(--urdu); direction: rtl; line-height: 2.1; }
+.art { display: block; width: 100%; height: auto; }
+section { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.head { display: grid; gap: 10px; }
+.muted { color: var(--ink-2); }
+.small { font-size: 13.5px; }
+
+/* masthead */
+.mast { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+.mast .meta { font-size: 13px; color: var(--ink-2); text-align: right; }
+
+/* hero plate */
+.plate { background: #fff; border: 1px solid var(--line); padding: clamp(28px, 7vw, 96px) clamp(20px, 7vw, 110px); display: grid; place-items: center; }
+.plate .art { max-width: 760px; }
+.plate.dark { background: var(--surma); border-color: var(--surma); }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.duo .plate { padding: clamp(24px, 5vw, 56px); }
+.duo .plate .art { max-width: 340px; }
+
+/* idea */
+.idea { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 48px; align-items: center; }
+.idea-mark { background: #fff; border: 1px solid var(--line); padding: 28px; }
+.parts { display: grid; gap: 22px; margin: 0; padding: 0; list-style: none; }
+.parts li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; align-items: start; }
+.parts svg { width: 44px; height: 44px; }
+.parts b { font-family: var(--display); font-weight: 400; font-size: 19px; display: block; }
+.parts .ur { font-family: var(--urdu); font-size: 15px; color: var(--sona); margin-inline-start: 6px; }
+.quote { font-family: var(--display); font-size: 21px; line-height: 1.45; border-left: 2px solid var(--sona); padding-left: 18px; max-width: 58ch; }
+
+/* concepts */
+.concepts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.concept { border: 1px solid var(--line); background: #fff; display: grid; grid-template-rows: auto 1fr; }
+.concept .pic { padding: 32px 48px; border-bottom: 1px solid var(--line); }
+.concept .txt { padding: 20px 22px 24px; display: grid; gap: 10px; align-content: start; }
+.concept .tag { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); }
+.verdict { font-size: 14px; border-top: 1px dashed var(--line); padding-top: 10px; color: var(--ink-2); }
+.scores { overflow-x: auto; border: 1px solid var(--line); background: #fff; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14.5px; }
+th, td { padding: 11px 16px; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-weight: 500; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+td.n { font-variant-numeric: tabular-nums; text-align: center; }
+tr.total td { font-weight: 500; border-bottom: 0; }
+tr.win td { background: #F7F0E2; }
+.dots { letter-spacing: 2px; color: var(--sona); }
+.dots i { color: var(--line); font-style: normal; }
+
+/* lockups */
+.lockups { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; }
+.lock { border: 1px solid var(--line); background: #fff; display: grid; grid-template-rows: 1fr auto; }
+.lock .pic { padding: 32px; display: grid; place-items: center; min-height: 220px; }
+.lock .pic.dark { background: var(--surma); }
+.lock .cap { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13.5px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lock .cap span:last-child { color: var(--ink-2); }
+.w4 { grid-column: span 4; } .w2 { grid-column: span 2; } .w3 { grid-column: span 3; }
+.lock .pic .art { max-height: 300px; width: auto; max-width: 100%; }
+
+/* palette */
+.palette { display: grid; grid-template-columns: 2fr 1.4fr 1.2fr 1fr; gap: 0; border: 1px solid var(--line); }
+.sw { min-height: 190px; padding: 18px; display: flex; flex-direction: column; justify-content: end; gap: 2px; font-size: 13px; }
+.sw b { font-family: var(--display); font-weight: 400; font-size: 20px; }
+.sw .u { font-family: var(--urdu); font-size: 14px; line-height: 1.9; }
+.sw code { font-family: var(--body); font-variant-numeric: tabular-nums; opacity: .8; }
+.type { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.face { border: 1px solid var(--line); background: #fff; padding: 22px; display: grid; gap: 8px; align-content: start; }
+.face .spec { font-size: 40px; line-height: 1.15; overflow-wrap: anywhere; }
+
+/* mockups */
+.mock { display: grid; gap: 14px; }
+.mock figcaption { font-size: 14px; color: var(--ink-2); max-width: 70ch; }
+.mock figcaption b { color: var(--ink); font-weight: 500; }
+figure { margin: 0; }
+
+/* shop front */
+.street { background: linear-gradient(#9DB1BE 0%, #C7CDC7 38%, #D9CBB4 38.2%, #D3C2A6 100%); padding: clamp(14px, 4vw, 48px); overflow: hidden; }
+.shop { background: repeating-linear-gradient(90deg, #CDB894 0 3px, #D6C3A0 3px 7px); padding: clamp(10px, 2.5vw, 26px); box-shadow: 0 30px 40px -30px rgba(0,0,0,.45); }
+.board { background: var(--surma); border: 3px solid var(--sona); outline: 6px solid #1B1916; padding: clamp(14px, 3vw, 30px) clamp(14px, 3.5vw, 40px) clamp(10px, 2vw, 18px); display: grid; gap: clamp(8px, 1.6vw, 14px); position: relative; }
+.board::before { content: ""; position: absolute; inset: -40px 10% auto; height: 60px; background: radial-gradient(ellipse at 50% 100%, rgba(255,230,180,.25), transparent 70%); pointer-events: none; }
+.board .art { max-width: 900px; margin: 0 auto; }
+.board .strip { border-top: 1px solid rgba(176,141,87,.6); padding-top: clamp(6px, 1.2vw, 12px); display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; color: var(--malai); font-size: clamp(10px, 1.45vw, 15px); letter-spacing: .14em; text-transform: uppercase; }
+.board .strip span:last-child { color: var(--sona); }
+.storefront { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: clamp(6px, 1.4vw, 14px); margin-top: clamp(10px, 2vw, 20px); height: clamp(90px, 18vw, 200px); }
+.glass { background: linear-gradient(160deg, rgba(255,255,255,.55), rgba(140,160,170,.35) 40%, rgba(60,70,75,.55)); border: 5px solid #3A342C; display: grid; place-items: center; }
+.glass .art { width: 42%; opacity: .85; }
+.door { background: linear-gradient(160deg, rgba(255,255,255,.45), rgba(70,80,85,.6)); border: 5px solid #3A342C; position: relative; }
+.door::after { content: ""; position: absolute; right: 12%; top: 45%; width: 4px; height: 18%; background: var(--sona); border-radius: 2px; }
+
+/* album */
+.album-row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; align-items: stretch; }
+.table { background: radial-gradient(circle at 30% 20%, #EFE6D6, #D9CCB5); padding: clamp(24px, 5vw, 56px); display: grid; place-items: center; }
+.album { width: min(100%, 380px); aspect-ratio: 1 / 1.06; display: grid; grid-template-columns: 7% 1fr; box-shadow: 0 28px 38px -18px rgba(40,20,15,.55), 0 4px 0 #4A1B1A; }
+.spine { background: linear-gradient(90deg, #4E1D1C, #6A2A29 60%, #5A2221); }
+.cover { background: repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0 2px, rgba(0,0,0,.035) 2px 4px), linear-gradient(150deg, #7B3230, #5F2524); display: grid; grid-template-rows: 1fr auto; justify-items: center; padding: 14% 12% 9%; text-align: center; position: relative; }
+.cover::before { content: ""; position: absolute; inset: 5%; border: 1px solid rgba(227,197,140,.45); pointer-events: none; }
+.cover .center { display: grid; gap: 10px; justify-items: center; align-content: center; }
+.cover .center .art { width: 46%; }
+.cover .names { font-family: var(--display); font-size: clamp(20px, 3.2vw, 28px); color: #E8CC96; letter-spacing: .04em; }
+.cover .date { font-size: 11px; letter-spacing: .3em; color: #D8BB86; }
+.cover .foot { width: 72%; }
+.printed { background: #fff; padding: clamp(18px, 4vw, 40px); display: grid; place-items: center; }
+.print { background: #FFFDF8; padding: 5% 5% 3%; box-shadow: 0 16px 28px -14px rgba(0,0,0,.35); width: min(100%, 360px); transform: rotate(-1.5deg); display: grid; gap: 10px; }
+.print .ph { aspect-ratio: 4 / 3; overflow: hidden; }
+.print .ph svg { width: 100%; height: 100%; display: block; }
+.print .stamp { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.print .stamp .art { width: 52%; }
+.print .stamp small { font-size: 10px; letter-spacing: .14em; color: #6D665B; text-align: right; }
+
+/* watermark */
+.photo { position: relative; overflow: hidden; aspect-ratio: 3 / 2; }
+.photo > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.photo .wm { position: absolute; right: 3%; bottom: 4%; width: 26%; opacity: .72; }
+.photo .wm-center { position: absolute; left: 50%; top: 50%; width: 46%; transform: translate(-50%, -50%); opacity: .18; }
+.wm-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+
+/* social */
+.social { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 20px; }
+.phone { background: #111B21; border-radius: 26px; padding: 14px; color: #E9EDEF; font-size: 14px; display: grid; gap: 14px; }
+.wa-head { display: flex; gap: 12px; align-items: center; background: #202C33; padding: 10px 12px; border-radius: 14px; }
+.wa-head .av { width: 46px; flex: none; }
+.wa-head small { color: #8696A0; display: block; font-size: 12px; }
+.wa-profile { display: grid; justify-items: center; gap: 6px; padding: 18px 0 8px; }
+.wa-profile .av { width: 124px; }
+.wa-profile small { color: #8696A0; }
+.bubble { background: #005C4B; padding: 8px 10px; border-radius: 10px 10px 2px 10px; justify-self: end; max-width: 85%; font-size: 13.5px; }
+.fb { border: 1px solid var(--line); background: #fff; display: grid; grid-template-rows: auto auto 1fr; }
+.fb-cover { aspect-ratio: 820 / 312; position: relative; overflow: hidden; background: var(--surma); }
+.fb-cover > svg:first-child { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+.fb-cover .art { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: 46%; }
+.fb-id { display: flex; gap: 16px; align-items: end; padding: 0 20px; margin-top: -42px; position: relative; flex-wrap: wrap; }
+.fb-id .av { width: 104px; border: 4px solid #fff; border-radius: 50%; flex: none; }
+.fb-id div { padding-bottom: 6px; }
+.fb-id b { font-family: var(--display); font-weight: 400; font-size: 22px; display: block; line-height: 1.2; }
+.fb-body { padding: 16px 20px 20px; font-size: 14px; color: var(--ink-2); }
+
+/* cards */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; background: #E7DFD1; padding: clamp(20px, 5vw, 48px); }
+.card { aspect-ratio: 3.5 / 2; box-shadow: 0 12px 22px -12px rgba(0,0,0,.4); display: grid; }
+.card.front { background: var(--surma); place-items: center; padding: 10%; }
+.card.front .art { width: 86%; }
+.card.back { background: var(--malai); padding: 8% 9%; grid-template-columns: minmax(0, 1fr) auto; align-content: space-between; gap: 10px; color: var(--surma); }
+.card.back .nm { font-family: var(--display); font-size: clamp(14px, 2.2vw, 20px); line-height: 1.2; }
+.card.back .role { font-size: clamp(9px, 1.2vw, 11.5px); letter-spacing: .16em; text-transform: uppercase; color: var(--sona); }
+.card.back .info { font-size: clamp(9.5px, 1.25vw, 12.5px); line-height: 1.6; grid-column: 1 / -1; }
+.card.back .mk { width: clamp(34px, 6vw, 56px); }
+.card.back .ur { font-family: var(--urdu); font-size: clamp(10px, 1.3vw, 13px); line-height: 2; }
+
+/* bw */
+.bw { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); }
+.bw > div { padding: clamp(20px, 4vw, 40px); display: grid; gap: 22px; align-content: center; }
+.bw .k { background: #000; }
+.bw .w { background: #fff; }
+.sizes { display: flex; align-items: end; gap: 22px; flex-wrap: wrap; }
+.sizes .art { width: auto; }
+.sizes span { white-space: nowrap; font-size: 11px; display: block; margin-top: 4px; }
+.bw .k span { color: #aaa; } .bw .w span { color: #666; }
+
+/* rules */
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.rule { border-top: 2px solid var(--surma); padding-top: 14px; display: grid; gap: 6px; align-content: start; font-size: 15px; }
+.rule h3 { font-size: 18px; }
+.files { border: 1px solid var(--line); background: #fff; overflow-x: auto; }
+.files table { min-width: 560px; }
+.files td:first-child { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .idea, .album-row, .social { grid-template-columns: minmax(0, 1fr); }
+  .concepts, .type, .rules { grid-template-columns: minmax(0, 1fr); }
+  .lockups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .w4, .w3 { grid-column: 1 / -1; } .w2 { grid-column: span 1; }
+  .palette { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .duo, .wm-pair, .cards, .bw, .lockups { grid-template-columns: minmax(0, 1fr); }
+  .w2 { grid-column: 1 / -1; }
+  .storefront { grid-template-columns: 1fr 1.25fr; } .storefront .glass:last-child { display: none; }
+  .mast .meta { text-align: left; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="head">
+      <span class="eyebrow">Brand identity · Logo system</span>
+      <h1>Chakwal Photo Studio</h1>
+      <p class="urdu" style="font-size:20px;margin-top:-6px">چکوال فوٹو اسٹوڈیو</p>
+    </div>
+    <div class="meta">Pindi Road, Minhas Book Place<br>Chakwal, Punjab, Pakistan<br>October 2026</div>
+  </header>
+
+  <!-- 1. The logo, plain -->
+  <section aria-labelledby="s-logo">
+    <div class="head">
+      <span class="eyebrow">The logo</span>
+      <h2 id="s-logo">Darwaza: the doorway mark</h2>
+    </div>
+    <div class="plate">{{PRIMARY}}</div>
+    <div class="duo">
+      <div class="plate dark">{{STACK_DARK}}</div>
+      <div class="plate">{{STACK}}</div>
+    </div>
+  </section>
+
+  <!-- 2. The idea -->
+  <section aria-labelledby="s-idea">
+    <div class="head">
+      <span class="eyebrow">The idea</span>
+      <h2 id="s-idea">Every family photograph is a doorway back home</h2>
+    </div>
+    <div class="idea">
+      <div class="idea-mark">{{MARK}}</div>
+      <div style="display:grid;gap:28px">
+        <ul class="parts">
+          <li>
+            <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M4 14V4H14M30 4H40V14M40 30V40H30M14 40H4V30" fill="none" stroke="#26231F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>The focus frame <span class="ur">فوکس</span></b><span class="muted">The four corner marks every camera shows when it locks focus. It says "photography" without using another camera icon. The studio's promise: we focus on your moment.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M10 40V20A12 12 0 0 1 34 20V40Z" fill="none" stroke="#26231F" stroke-width="3" stroke-linejoin="round"/></svg>
+            <div><b>The doorway <span class="ur">دروازہ</span></b><span class="muted">The arched door of a Punjabi home, the arch of a wedding stage and the shape of a framed portrait on the wall. It stands for family, welcome and the house where the photos hang.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 44 44" aria-hidden="true"><defs><clipPath id="ic-sun"><rect width="44" height="22"/></clipPath></defs><circle cx="22" cy="24" r="10" fill="#B08D57" clip-path="url(#ic-sun)"/><path d="M3 30L10 25L14 27L19 22H25L29 26L34 24L41 28" fill="none" stroke="#26231F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Sunrise over the Potohar <span class="ur">پوٹھوہار</span></b><span class="muted">The flat-topped ridges of the Potohar plateau around Chakwal, with the sun rising behind them. A new beginning: a wedding, a newborn, a first day at school. Gold is used only for the sun.</span></div>
+          </li>
+        </ul>
+        <p class="quote">Aap ke ghar ki yaadein, Chakwal ki mitti se. A trusted local studio, drawn with the quality of a leading one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Concepts -->
+  <section aria-labelledby="s-concepts">
+    <div class="head">
+      <span class="eyebrow">Design process</span>
+      <h2 id="s-concepts">Three concepts, one direction</h2>
+      <p class="lead">Each concept was tested against the studio's real uses: a signboard read from a moving rickshaw on Pindi Road, a 40-pixel WhatsApp profile, and a gold stamp on a wedding album.</p>
+    </div>
+    <div class="concepts">
+      <article class="concept">
+        <div class="pic">{{CONCEPT_A}}</div>
+        <div class="txt">
+          <span class="tag">Concept A · Emotional</span>
+          <h3>Naslein (Generations)</h3>
+          <p class="small muted">Three nested arches: grandparents, parents and the child at the centre, in gold. Like portraits from three generations hanging in one frame.</p>
+          <p class="verdict">Strongest feeling of family. On its own it does not say "photography" or "Chakwal".</p>
+        </div>
+      </article>
+      <article class="concept">
+        <div class="pic">{{CONCEPT_B}}</div>
+        <div class="txt">
+          <span class="tag">Concept B · Photography + place</span>
+          <h3>Potohar Lens</h3>
+          <p class="small muted">A lens aperture whose opening shows the Potohar ridge and a rising sun. The landscape seen through the camera.</p>
+          <p class="verdict">Clear photography read and real local reference. The aperture is common in the trade and goes muddy at small sizes.</p>
+        </div>
+      </article>
+      <article class="concept">
+        <div class="pic">{{CONCEPT_C}}</div>
+        <div class="txt">
+          <span class="tag">Concept C · Typographic</span>
+          <h3>CPS Heritage Seal</h3>
+          <p class="small muted">A round seal with a C·P·S monogram and the name set around the ring, like an old studio's embossing stamp.</p>
+          <p class="verdict">Premium and classic, but small ring text fails on signboards and phones, and it feels distant.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="scores">
+      <table>
+        <thead><tr><th>Criterion</th><th style="text-align:center">A · Naslein</th><th style="text-align:center">B · Potohar Lens</th><th style="text-align:center">C · Seal</th><th style="text-align:center">Final · Darwaza</th></tr></thead>
+        <tbody>
+          <tr><td>Emotional pull (family, weddings)</td><td class="n dots">●●●●●</td><td class="n dots">●●●<i>●●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●●</td></tr>
+          <tr><td>Authentic Chakwal connection</td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●<i>●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●<i>●</i></td></tr>
+          <tr><td>Reads as a photo studio</td><td class="n dots">●<i>●●●●</i></td><td class="n dots">●●●●●</td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●<i>●</i></td></tr>
+          <tr><td>Small sizes (WhatsApp, watermark)</td><td class="n dots">●●●●<i>●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●<i>●●●●</i></td><td class="n dots">●●●●<i>●</i></td></tr>
+          <tr><td>Signboard impact on Pindi Road</td><td class="n dots">●●●<i>●●</i></td><td class="n dots">●●●<i>●●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●●</td></tr>
+          <tr><td>Distinctive, ownable</td><td class="n dots">●●●●<i>●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●<i>●●●</i></td><td class="n dots">●●●●●</td></tr>
+          <tr class="total"><td>Total (out of 30)</td><td class="n">19</td><td class="n">19</td><td class="n">11</td><td class="n">27</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Selected: <b style="color:var(--ink);font-weight:500">Concept A as the foundation</b>, since emotion is what brings a family through the door. It was refined with the Potohar sunrise from B, which is the only element that truly says Chakwal, and the camera focus frame for an instant photography read. C contributed the typography: a classical serif for CHAKWAL with an Urdu line for local customers.</p>
+  </section>
+
+  <!-- 4. Lockups -->
+  <section aria-labelledby="s-lockups">
+    <div class="head">
+      <span class="eyebrow">Logo versions</span>
+      <h2 id="s-lockups">One mark, six ready versions</h2>
+    </div>
+    <div class="lockups">
+      <div class="lock w4"><div class="pic">{{PRIMARY}}</div><div class="cap"><span>Primary · horizontal</span><span>letterheads, receipts, website</span></div></div>
+      <div class="lock w2"><div class="pic">{{MARK}}</div><div class="cap"><span>Mark only</span><span>stamps, favicon</span></div></div>
+      <div class="lock w2"><div class="pic dark">{{APP_ICON}}</div><div class="cap"><span>Profile icon</span><span>WhatsApp, Facebook</span></div></div>
+      <div class="lock w4"><div class="pic dark">{{SIGN}}</div><div class="cap"><span>Bilingual · signboard</span><span>shop sign, banners, flex</span></div></div>
+      <div class="lock w3"><div class="pic">{{WM_BLACK}}</div><div class="cap"><span>Watermark · dark</span><span>light photos</span></div></div>
+      <div class="lock w3"><div class="pic dark">{{WM_WHITE}}</div><div class="cap"><span>Watermark · light</span><span>dark photos, videos</span></div></div>
+    </div>
+  </section>
+
+  <!-- 5. Colour + type -->
+  <section aria-labelledby="s-colour">
+    <div class="head">
+      <span class="eyebrow">Colour and type</span>
+      <h2 id="s-colour">Named for things every Chakwal home knows</h2>
+    </div>
+    <div class="palette">
+      <div class="sw" style="background:var(--surma);color:var(--malai)"><b>Surma</b><span class="u">سرمہ</span><code>#26231F · C0 M10 Y20 K90</code><span>Main colour. Signboard, text.</span></div>
+      <div class="sw" style="background:var(--malai);color:var(--surma)"><b>Malai</b><span class="u">ملائی</span><code>#F4EDE0 · C3 M5 Y12 K0</code><span>Warm ivory. Backgrounds.</span></div>
+      <div class="sw" style="background:var(--sona);color:#1E1B17"><b>Sona</b><span class="u">سونا</span><code>#B08D57 · C30 M42 Y75 K8</code><span>The sun. Gold foil on print.</span></div>
+      <div class="sw" style="background:var(--mehndi);color:var(--malai)"><b>Mehndi</b><span class="u">مہندی</span><code>#6E2B2A · C30 M85 Y75 K40</code><span>Wedding albums only.</span></div>
+    </div>
+    <div class="type">
+      <div class="face"><span class="eyebrow">Name</span><span class="spec" style="font-family:var(--display)">CHAKWAL</span><span class="small muted">Marcellus. Classical capitals with soft flared ends: dignified, never cold.</span></div>
+      <div class="face"><span class="eyebrow">Descriptor</span><span class="spec" style="font-family:var(--body);font-weight:500;letter-spacing:.32em;font-size:26px;padding-block:10px">PHOTO STUDIO</span><span class="small muted">Jost Medium, widely spaced and justified to the width of CHAKWAL.</span></div>
+      <div class="face"><span class="eyebrow">Urdu</span><span class="spec urdu" style="font-size:32px;line-height:1.9">چکوال فوٹو اسٹوڈیو</span><span class="small muted">Noto Nastaliq Urdu. Proper Nastaliq, the script customers read every day.</span></div>
+    </div>
+  </section>
+
+  <!-- 6. Applications -->
+  <section aria-labelledby="s-apps">
+    <div class="head">
+      <span class="eyebrow">In use</span>
+      <h2 id="s-apps">How it looks in Chakwal</h2>
+    </div>
+
+    <figure class="mock">
+      <div class="street">
+        <div class="shop">
+          <div class="board">
+            {{SIGN}}
+            <div class="strip"><span>Weddings · Portraits · Passport Photos · Printing</span><span>Pindi Road, Minhas Book Place</span></div>
+          </div>
+          <div class="storefront" aria-hidden="true">
+            <div class="glass">{{MARK_WHITE}}</div><div class="door"></div><div class="glass"></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>Shop signboard, Pindi Road.</b> Ivory and gold on charcoal stays readable in strong daylight and under night lighting. Recommended build: charcoal ACP panel, 3D acrylic letters in ivory, gold mirror-acrylic sun and border, warm-white LED backlight. The mark is repeated as a frosted vinyl on the glass.</figcaption>
+    </figure>
+
+    <div class="album-row">
+      <figure class="mock">
+        <div class="table">
+          <div class="album">
+            <div class="spine"></div>
+            <div class="cover">
+              <div class="center">
+                {{FOIL_MARK}}
+                <span class="names">Ayesha &amp; Bilal</span>
+                <span class="date">12 · 12 · 2026</span>
+              </div>
+              <div class="foot">{{FOIL_WORD}}</div>
+            </div>
+          </div>
+        </div>
+        <figcaption><b>Wedding album cover.</b> Mehndi-maroon cloth with gold foil. The doorway frames the couple's new home. Names are sample text.</figcaption>
+      </figure>
+      <figure class="mock">
+        <div class="printed">
+          <div class="print">
+            <div class="ph">{{SCENE}}</div>
+            <div class="stamp">{{PRIMARY}}<small>MINHAS BOOK PLACE<br>PINDI ROAD</small></div>
+          </div>
+        </div>
+        <figcaption><b>Printed photograph.</b> The logo on the white border of every print, like the studio stamps families still keep in old albums. Sample image is an illustration.</figcaption>
+      </figure>
+    </div>
+
+    <div class="wm-pair">
+      <figure class="mock">
+        <div class="photo">{{SCENE}}<div class="wm">{{WM_WHITE}}</div></div>
+        <figcaption><b>Corner watermark</b> for Facebook and WhatsApp posts. White at about 70% opacity, bottom right.</figcaption>
+      </figure>
+      <figure class="mock">
+        <div class="photo">{{SCENE}}<div class="wm-center">{{MARK_WHITE}}</div></div>
+        <figcaption><b>Proof watermark</b> for preview photos sent before final payment. Mark only, centred, at 15 to 20% opacity.</figcaption>
+      </figure>
+    </div>
+
+    <div class="social">
+      <figure class="mock">
+        <div class="phone">
+          <div class="wa-head"><div class="av">{{APP_ICON}}</div><div>Chakwal Photo Studio<small>Business account</small></div></div>
+          <div class="wa-profile"><div class="av">{{APP_ICON}}</div><span>Chakwal Photo Studio</span><small>Photography · Pindi Road, Chakwal</small></div>
+          <div class="bubble">Assalam o Alaikum, your wedding album is ready for collection.</div>
+        </div>
+        <figcaption><b>WhatsApp Business.</b> The mark holds at chat-list size.</figcaption>
+      </figure>
+      <figure class="mock">
+        <div class="fb">
+          <div class="fb-cover">{{SCENE}}{{PRIMARY_DARK}}</div>
+          <div class="fb-id"><div class="av">{{APP_ICON}}</div><div><b>Chakwal Photo Studio</b><span class="small muted">Photographer · Chakwal, Punjab</span></div></div>
+          <div class="fb-body">Weddings, engagements, family portraits, passport photos and printing. Pindi Road, Minhas Book Place, Chakwal.</div>
+        </div>
+        <figcaption><b>Facebook page.</b> Round profile icon with the horizontal logo on the cover.</figcaption>
+      </figure>
+    </div>
+
+    <figure class="mock">
+      <div class="cards">
+        <div class="card front">{{PRIMARY_DARK}}</div>
+        <div class="card back">
+          <div><div class="nm">Chakwal Photo Studio</div><div class="role">Weddings · Portraits · Printing</div></div>
+          <div class="mk">{{MARK}}</div>
+          <div class="info">Pindi Road, Minhas Book Place, Chakwal<br>Phone / WhatsApp: ____________<div class="ur">چکوال فوٹو اسٹوڈیو · پنڈی روڈ، چکوال</div></div>
+        </div>
+      </div>
+      <figcaption><b>Business card</b>, 3.5 × 2 in. Front in charcoal with the logo; back in ivory with contact details. The same layout works for receipts and the order slip.</figcaption>
+    </figure>
+
+    <figure class="mock">
+      <div class="bw">
+        <div class="w">
+          {{MONO_BLACK}}
+          <div class="sizes">
+            <div style="width:72px">{{MARK_BLACK}}<span>72 px</span></div>
+            <div style="width:40px">{{MARK_BLACK}}<span>40 px</span></div>
+            <div style="width:24px">{{MARK_BLACK}}<span>24 px</span></div>
+          </div>
+        </div>
+        <div class="k">
+          {{MONO_WHITE}}
+          <div class="sizes">
+            <div style="width:72px">{{MARK_WHITE}}<span>72 px</span></div>
+            <div style="width:40px">{{MARK_WHITE}}<span>40 px</span></div>
+            <div style="width:24px">{{MARK_WHITE}}<span>24 px</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>Black and white.</b> For photocopies, rubber stamps, receipt books and newspaper ads. The sunrise stays clear in one colour and down to 24 pixels.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 7. Rules -->
+  <section aria-labelledby="s-rules">
+    <div class="head">
+      <span class="eyebrow">Usage</span>
+      <h2 id="s-rules">Three rules for the printer and the designer</h2>
+    </div>
+    <div class="rules">
+      <div class="rule"><h3>Clear space</h3><p class="muted">Keep empty space around the logo equal to the height of the "C" in CHAKWAL. No text, borders or photos inside it.</p></div>
+      <div class="rule"><h3>Minimum size</h3><p class="muted">Horizontal logo: 30 mm wide in print, 160 px on screen. Below that, use the mark alone (8 mm / 24 px).</p></div>
+      <div class="rule"><h3>Do not change</h3><p class="muted">Do not recolour the sun, stretch the logo, add shadows or glow, or retype the name in another font. Use the supplied files only.</p></div>
+    </div>
+    <div class="files">
+      <table>
+        <thead><tr><th>File (in the repository, folder chakwal-photo-studio/logo)</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>logo-primary.svg / .png</td><td>Main logo on light backgrounds</td></tr>
+          <tr><td>logo-primary-on-dark.svg</td><td>Charcoal background version</td></tr>
+          <tr><td>logo-bilingual-signboard.svg</td><td>Shop sign and banners (English + Urdu)</td></tr>
+          <tr><td>logo-stacked.svg / -on-dark.svg</td><td>Square spaces, album back page, posters</td></tr>
+          <tr><td>logo-black.svg / logo-white.svg</td><td>One-colour printing, stamps, receipts</td></tr>
+          <tr><td>icon-whatsapp-facebook.png</td><td>Profile picture, 1024 × 1024</td></tr>
+          <tr><td>watermark-white.png / -black.png</td><td>Photo watermark, transparent background</td></tr>
+          <tr><td>mark-only.svg</td><td>The doorway mark alone</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted">All lettering in the SVG files is converted to outlines, so any print shop can open them in CorelDRAW or Illustrator without installing fonts.</p>
+  </section>
+
+</div>
