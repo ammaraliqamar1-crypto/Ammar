@@ -55,9 +55,9 @@ $LIMMIN
   9
 $LIMMAX
  10
-420.0
+200000.0
  20
-297.0
+150000.0
   9
 $ORTHOMODE
  70
@@ -97,11 +97,11 @@ $TRACEWID
   9
 $TEXTSTYLE
   7
-ASG-TEXT
+ASG-TEXT-ANNO
   9
 $CLAYER
   8
-ASG-OBJECT
+ASG-OUTLINE-PRIMARY
   9
 $CELTYPE
   6
@@ -265,7 +265,7 @@ $DIMBLK2
   9
 $DIMSTYLE
   2
-ASG-DIM-ANNOTATIVE
+ASG-DIM-ANNO
   9
 $DIMCLRD
  70
@@ -493,7 +493,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461324.36224537
+2461324.360914352
   9
 $TDUCREATE
  40
@@ -501,7 +501,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461324.36224537
+2461324.360914352
   9
 $TDUUPDATE
  40
@@ -553,7 +553,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-19C
+195
   9
 $SURFTAB1
  70
@@ -933,11 +933,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{2EB6A3FF-829A-4BC5-A098-FCBAED169F81}
+{FE994C39-4403-4F0B-836C-DBF89408D12B}
   9
 $VERSIONGUID
   2
-{658A053E-ED8E-455B-8549-CC16487CCDD4}
+{C012BFD4-C1B1-4A99-A5E6-E092D9FD9868}
   9
 $EXTNAMES
 290
@@ -1377,7 +1377,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-18F
+188
 330
 8
 100
@@ -1397,9 +1397,9 @@ AcDbViewportTableRecord
  21
 1.0
  12
-5000.0
+10000.0
  22
-3500.0
+7000.0
  13
 0.0
  23
@@ -1425,7 +1425,7 @@ AcDbViewportTableRecord
  37
 0.0
  40
-10000.0
+20000.0
  41
 1.34
  42
@@ -1575,7 +1575,7 @@ HIDDEN
  70
 0
   3
-Hidden __ __ __ __
+Hidden __ __ __
  72
 65
  73
@@ -1605,7 +1605,7 @@ HIDDEN2
  70
 0
   3
-Hidden (.5x) _ _ _ _
+Hidden (.5x) _ _ _
  72
 65
  73
@@ -1635,7 +1635,7 @@ CENTER
  70
 0
   3
-Center ____ _ ____ _
+Center ____ _ ____
  72
 65
  73
@@ -1711,7 +1711,7 @@ DASHED
  70
 0
   3
-Dashed __ __ __
+Dashed __ __
  72
 65
  73
@@ -1741,7 +1741,7 @@ DASHED2
  70
 0
   3
-Dashed (.5x) _ _ _
+Dashed (.5x) _ _
  72
 65
  73
@@ -1771,7 +1771,7 @@ DASHDOT
  70
 0
   3
-Dash dot __ . __ .
+Dash dot __ . __
  72
 65
  73
@@ -1809,7 +1809,7 @@ DASHDOT2
  70
 0
   3
-Dash dot (.5x) _ . _ .
+Dash dot (.5x) _ . _
  72
 65
  73
@@ -1847,7 +1847,7 @@ PHANTOM
  70
 0
   3
-Phantom ____ _ _ ____
+Phantom ___ _ _ ___
  72
 65
  73
@@ -1939,7 +1939,7 @@ DOT
  70
 0
   3
-Dot . . . .
+Dot . . .
  72
 65
  73
@@ -1967,7 +1967,7 @@ LAYER
 100
 AcDbSymbolTable
  70
-35
+36
   0
 LAYER
   5
@@ -1997,7 +1997,7 @@ AcAecLayerStandard
 1000
 
 1000
-AutoCAD system layer - blocks only, do not draw
+System layer - block definitions only
   0
 LAYER
   5
@@ -2035,37 +2035,7 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-ASG-OBJECT
- 70
-0
- 62
-7
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-General object geometry - default current layer
-  0
-LAYER
-  5
-3D
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-OUTLINE
+ASG-OUTLINE-PRIMARY
  70
 0
  62
@@ -2083,7 +2053,37 @@ AcAecLayerStandard
 1000
 
 1000
-Main overall outlines / visible edges in elevation
+Primary visible outlines
+  0
+LAYER
+  5
+3D
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-OUTLINE-SECONDARY
+ 70
+0
+ 62
+8
+  6
+Continuous
+370
+18
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Secondary visible lines
   0
 LAYER
   5
@@ -2095,7 +2095,7 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-ASG-PROFILE
+ASG-ALUMINIUM-PROFILE
  70
 0
  62
@@ -2103,7 +2103,7 @@ ASG-PROFILE
   6
 Continuous
 370
-30
+25
 390
 13
 347
@@ -2113,7 +2113,7 @@ AcAecLayerStandard
 1000
 
 1000
-Aluminium profile outlines (frames, mullions, transoms, sashes)
+Aluminium profiles
   0
 LAYER
   5
@@ -2143,7 +2143,7 @@ AcAecLayerStandard
 1000
 
 1000
-Glass / mirror panel edges
+Glass and mirror
   0
 LAYER
   5
@@ -2155,7 +2155,37 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-ASG-METAL
+ASG-STAINLESS-STEEL
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Stainless steel
+  0
+LAYER
+  5
+41
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-MILD-STEEL
  70
 0
  62
@@ -2173,11 +2203,11 @@ AcAecLayerStandard
 1000
 
 1000
-MS / SS members, plates, brackets
+Mild steel
   0
 LAYER
   5
-41
+42
 330
 1
 100
@@ -2203,11 +2233,11 @@ AcAecLayerStandard
 1000
 
 1000
-Handles, hinges, locks, rollers, patch fittings
+Hardware
   0
 LAYER
   5
-42
+43
 330
 1
 100
@@ -2233,251 +2263,11 @@ AcAecLayerStandard
 1000
 
 1000
-Anchors, screws, bolts, fixing brackets
-  0
-LAYER
-  5
-43
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-CLADDING
- 70
-0
- 62
-7
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-ACP / panel cladding and flashings
+Fixings
   0
 LAYER
   5
 44
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-INSULATION
- 70
-0
- 62
-252
-  6
-Continuous
-370
-13
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Insulation / thermal break outline and hatch (plots grey)
-  0
-LAYER
-  5
-45
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-HIDDEN
- 70
-0
- 62
-8
-  6
-HIDDEN2
-370
-18
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Concealed / hidden edges
-  0
-LAYER
-  5
-46
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-CENTER
- 70
-0
- 62
-8
-  6
-CENTER2
-370
-13
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Centrelines and axes of symmetry
-  0
-LAYER
-  5
-47
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-SECTION
- 70
-0
- 62
-7
-  6
-Continuous
-370
-35
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Cut-section outlines (heaviest object line)
-  0
-LAYER
-  5
-48
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-HATCH
- 70
-0
- 62
-252
-  6
-Continuous
-370
-9
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-General section hatching (plots grey)
-  0
-LAYER
-  5
-49
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-GLAZING-BEAD
- 70
-0
- 62
-7
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Glazing beads and snap-in profiles
-  0
-LAYER
-  5
-4A
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-SEALANT
- 70
-0
- 62
-8
-  6
-Continuous
-370
-13
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Silicone / weather seal, backer rod
-  0
-LAYER
-  5
-4B
 330
 1
 100
@@ -2503,11 +2293,11 @@ AcAecLayerStandard
 1000
 
 1000
-EPDM gaskets, brushes, setting blocks
+Gaskets
   0
 LAYER
   5
-4C
+45
 330
 1
 100
@@ -2515,13 +2305,103 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-ASG-DRAINAGE
+ASG-SEALANT
  70
 0
  62
 8
   6
-DASHED2
+Continuous
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Sealants
+  0
+LAYER
+  5
+46
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-INSULATION
+ 70
+0
+ 62
+252
+  6
+Continuous
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Insulation
+  0
+LAYER
+  5
+47
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-CLADDING
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Cladding
+  0
+LAYER
+  5
+48
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-HIDDEN
+ 70
+0
+ 62
+8
+  6
+HIDDEN2
 370
 18
 390
@@ -2533,11 +2413,221 @@ AcAecLayerStandard
 1000
 
 1000
-Drainage paths, weep holes, linear drains
+Hidden geometry
+  0
+LAYER
+  5
+49
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-CENTERLINE
+ 70
+0
+ 62
+8
+  6
+CENTER2
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Centrelines
+  0
+LAYER
+  5
+4A
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-CUTTING-PLANE
+ 70
+0
+ 62
+7
+  6
+PHANTOM2
+370
+35
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Cutting planes
+  0
+LAYER
+  5
+4B
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-SECTION-CUT
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+40
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Section cut outlines
+  0
+LAYER
+  5
+4C
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-HATCH
+ 70
+0
+ 62
+252
+  6
+Continuous
+370
+9
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Section hatching
   0
 LAYER
   5
 4D
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-HATCH-FILL
+ 70
+0
+ 62
+251
+  6
+Continuous
+370
+9
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Solid fills
+  0
+LAYER
+  5
+4E
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-SETOUT
+ 70
+0
+ 62
+8
+  6
+DASHDOT2
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Setting-out geometry (plotted)
+  0
+LAYER
+  5
+4F
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-REFERENCE
+ 70
+0
+ 62
+253
+  6
+Continuous
+370
+13
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Reference geometry
+  0
+LAYER
+  5
+50
 330
 1
 100
@@ -2565,41 +2655,11 @@ AcAecLayerStandard
 1000
 
 1000
-Construction / setting-out lines - NO PLOT
+Construction geometry (NOT plotted)
   0
 LAYER
   5
-4E
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-REFERENCE
- 70
-0
- 62
-253
-  6
-Continuous
-370
-13
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Architectural / structural background (plots light grey)
-  0
-LAYER
-  5
-4F
+51
 330
 1
 100
@@ -2629,7 +2689,7 @@ Dimensions
   0
 LAYER
   5
-50
+52
 330
 1
 100
@@ -2659,7 +2719,7 @@ General text
   0
 LAYER
   5
-51
+53
 330
 1
 100
@@ -2685,11 +2745,11 @@ AcAecLayerStandard
 1000
 
 1000
-General / specification notes
+Notes
   0
 LAYER
   5
-52
+54
 330
 1
 100
@@ -2715,11 +2775,11 @@ AcAecLayerStandard
 1000
 
 1000
-Multileader callouts
+Multileaders
   0
 LAYER
   5
-53
+55
 330
 1
 100
@@ -2745,11 +2805,11 @@ AcAecLayerStandard
 1000
 
 1000
-Schedules and tables
+Tables
   0
 LAYER
   5
-54
+56
 330
 1
 100
@@ -2775,101 +2835,11 @@ AcAecLayerStandard
 1000
 
 1000
-Level markers (FFL, SSL, sill heights)
-  0
-LAYER
-  5
-55
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-REVISION
- 70
-0
- 62
-1
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Revision clouds and delta tags
-  0
-LAYER
-  5
-56
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-DETAIL-MARK
- 70
-0
- 62
-3
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Detail callout bubbles / boundaries
+Levels
   0
 LAYER
   5
 57
-330
-1
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-ASG-SECTION-MARK
- 70
-0
- 62
-3
-  6
-Continuous
-370
-25
-390
-13
-347
-21
-1001
-AcAecLayerStandard
-1000
-
-1000
-Section cut lines and markers
-  0
-LAYER
-  5
-58
 330
 1
 100
@@ -2895,11 +2865,11 @@ AcAecLayerStandard
 1000
 
 1000
-Column grid / setting-out grid
+Grids
   0
 LAYER
   5
-59
+58
 330
 1
 100
@@ -2907,11 +2877,11 @@ AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-ASG-TITLEBLOCK
+ASG-REVISION
  70
 0
  62
-7
+1
   6
 Continuous
 370
@@ -2925,7 +2895,37 @@ AcAecLayerStandard
 1000
 
 1000
-Title block linework and attributes
+Revision clouds
+  0
+LAYER
+  5
+59
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-SYMBOL
+ 70
+0
+ 62
+3
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Drafting symbols
   0
 LAYER
   5
@@ -2955,11 +2955,41 @@ AcAecLayerStandard
 1000
 
 1000
-Sheet border frame
+Sheet borders
   0
 LAYER
   5
 5B
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+ASG-TITLEBLOCK
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+25
+390
+13
+347
+21
+1001
+AcAecLayerStandard
+1000
+
+1000
+Title blocks
+  0
+LAYER
+  5
+5C
 330
 1
 100
@@ -2987,11 +3017,11 @@ AcAecLayerStandard
 1000
 
 1000
-Viewport boundaries - NO PLOT
+Viewports (NOT plotted)
   0
 LAYER
   5
-5C
+5D
 330
 1
 100
@@ -3019,7 +3049,7 @@ AcAecLayerStandard
 1000
 
 1000
-Reference notes / markups never printed - NO PLOT
+Non-plot objects
   0
 ENDTAB
   0
@@ -3033,7 +3063,7 @@ STYLE
 100
 AcDbSymbolTable
  70
-6
+7
   0
 STYLE
   5
@@ -3071,52 +3101,6 @@ Arial
   0
 STYLE
   5
-5D
-330
-5
-100
-AcDbSymbolTableRecord
-100
-AcDbTextStyleTableRecord
-  2
-ASG-TEXT
- 70
-0
- 40
-0.0
- 41
-1.0
- 50
-0.0
- 71
-0
- 42
-2.5
-  3
-arial.ttf
-  4
-
-1001
-ACAD
-1000
-Arial
-1071
-34
-1001
-AcadAnnotative
-1000
-AnnotativeData
-1002
-{
-1070
-1
-1070
-1
-1002
-}
-  0
-STYLE
-  5
 5E
 330
 5
@@ -3125,7 +3109,7 @@ AcDbSymbolTableRecord
 100
 AcDbTextStyleTableRecord
   2
-ASG-TEXT-NOTE
+ASG-TEXT-ANNO
  70
 0
  40
@@ -3171,7 +3155,7 @@ AcDbSymbolTableRecord
 100
 AcDbTextStyleTableRecord
   2
-ASG-TEXT-SMALL
+ASG-TEXT-NOTE
  70
 0
  40
@@ -3217,6 +3201,52 @@ AcDbSymbolTableRecord
 100
 AcDbTextStyleTableRecord
   2
+ASG-TEXT-SMALL
+ 70
+0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+0
+ 42
+2.5
+  3
+arial.ttf
+  4
+
+1001
+ACAD
+1000
+Arial
+1071
+34
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+1
+1070
+1
+1002
+}
+  0
+STYLE
+  5
+61
+330
+5
+100
+AcDbSymbolTableRecord
+100
+AcDbTextStyleTableRecord
+  2
 ASG-TEXT-TITLE
  70
 0
@@ -3243,7 +3273,7 @@ Arial
   0
 STYLE
   5
-61
+62
 330
 5
 100
@@ -3251,7 +3281,7 @@ AcDbSymbolTableRecord
 100
 AcDbTextStyleTableRecord
   2
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  70
 0
  40
@@ -3274,6 +3304,40 @@ ACAD
 Arial
 1071
 33554466
+  0
+STYLE
+  5
+63
+330
+5
+100
+AcDbSymbolTableRecord
+100
+AcDbTextStyleTableRecord
+  2
+ASG-TEXT-SHEET
+ 70
+0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+0
+ 42
+2.5
+  3
+arial.ttf
+  4
+
+1001
+ACAD
+1000
+Arial
+1071
+34
   0
 ENDTAB
   0
@@ -3361,7 +3425,7 @@ AcAecLayerStandard
   0
 APPID
   5
-190
+189
 330
 3
 100
@@ -3375,7 +3439,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-191
+18A
 330
 3
 100
@@ -3399,7 +3463,7 @@ DIMSTYLE
 100
 AcDbSymbolTable
  70
-8
+7
 100
 AcDbDimStyleTable
   0
@@ -3541,7 +3605,7 @@ Standard
   0
 DIMSTYLE
 105
-62
+64
 330
 4
 100
@@ -3549,7 +3613,7 @@ AcDbSymbolTableRecord
 100
 AcDbDimStyleTableRecord
   2
-ASG-DIM-ANNOTATIVE
+ASG-DIM-ANNO
  70
 0
  40
@@ -3671,7 +3735,7 @@ ASG-DIM-ANNOTATIVE
 290
 0
 340
-5D
+5E
 371
 -2
 372
@@ -3691,282 +3755,6 @@ AnnotativeData
   0
 DIMSTYLE
 105
-63
-330
-4
-100
-AcDbSymbolTableRecord
-100
-AcDbDimStyleTableRecord
-  2
-ASG-DIM-1-1
- 70
-0
- 40
-1.0
- 41
-2.5
- 42
-1.5
- 43
-7.0
- 44
-1.25
- 45
-0.0
- 46
-0.0
- 47
-0.0
- 48
-0.0
- 49
-2.5
-140
-2.5
-141
-2.5
-142
-0.0
-143
-25.4
-144
-1.0
-145
-0.0
-146
-0.7
-147
-1.0
-148
-0.0
- 69
-0
- 70
-0
- 71
-0
- 72
-0
- 73
-0
- 74
-0
- 75
-0
- 76
-0
- 77
-1
- 78
-8
- 79
-2
-170
-0
-171
-2
-172
-1
-173
-0
-174
-0
-175
-0
-176
-256
-177
-256
-178
-256
-179
-2
-271
-0
-272
-1
-273
-2
-274
-3
-275
-0
-276
-0
-277
-2
-278
-46
-279
-1
-280
-0
-281
-0
-282
-0
-283
-0
-284
-8
-285
-0
-286
-0
-288
-0
-289
-3
-290
-0
-340
-5D
-371
--2
-372
--2
-  0
-DIMSTYLE
-105
-64
-330
-4
-100
-AcDbSymbolTableRecord
-100
-AcDbDimStyleTableRecord
-  2
-ASG-DIM-1-2
- 70
-0
- 40
-2.0
- 41
-2.5
- 42
-1.5
- 43
-7.0
- 44
-1.25
- 45
-0.0
- 46
-0.0
- 47
-0.0
- 48
-0.0
- 49
-2.5
-140
-2.5
-141
-2.5
-142
-0.0
-143
-25.4
-144
-1.0
-145
-0.0
-146
-0.7
-147
-1.0
-148
-0.0
- 69
-0
- 70
-0
- 71
-0
- 72
-0
- 73
-0
- 74
-0
- 75
-0
- 76
-0
- 77
-1
- 78
-8
- 79
-2
-170
-0
-171
-2
-172
-1
-173
-0
-174
-0
-175
-0
-176
-256
-177
-256
-178
-256
-179
-2
-271
-0
-272
-1
-273
-2
-274
-3
-275
-0
-276
-0
-277
-2
-278
-46
-279
-1
-280
-0
-281
-0
-282
-0
-283
-0
-284
-8
-285
-0
-286
-0
-288
-0
-289
-3
-290
-0
-340
-5D
-371
--2
-372
--2
-  0
-DIMSTYLE
-105
 65
 330
 4
@@ -3975,11 +3763,11 @@ AcDbSymbolTableRecord
 100
 AcDbDimStyleTableRecord
   2
-ASG-DIM-1-5
+ASG-DIM-FIXED
  70
 0
  40
-5.0
+1.0
  41
 2.5
  42
@@ -4097,7 +3885,7 @@ ASG-DIM-1-5
 290
 0
 340
-5D
+5E
 371
 -2
 372
@@ -4113,11 +3901,11 @@ AcDbSymbolTableRecord
 100
 AcDbDimStyleTableRecord
   2
-ASG-DIM-1-10
+ASG-DIM-DETAIL
  70
 0
  40
-10.0
+1.0
  41
 2.5
  42
@@ -4173,7 +3961,7 @@ ASG-DIM-1-10
  77
 1
  78
-8
+0
  79
 2
 170
@@ -4197,7 +3985,7 @@ ASG-DIM-1-10
 179
 2
 271
-0
+1
 272
 1
 273
@@ -4235,11 +4023,23 @@ ASG-DIM-1-10
 290
 0
 340
-5D
+5E
 371
 -2
 372
 -2
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+1
+1070
+1
+1002
+}
   0
 DIMSTYLE
 105
@@ -4251,11 +4051,11 @@ AcDbSymbolTableRecord
 100
 AcDbDimStyleTableRecord
   2
-ASG-DIM-1-20
+ASG-DIM-ANGULAR
  70
 0
  40
-20.0
+1.0
  41
 2.5
  42
@@ -4313,7 +4113,7 @@ ASG-DIM-1-20
  78
 8
  79
-2
+0
 170
 0
 171
@@ -4373,11 +4173,23 @@ ASG-DIM-1-20
 290
 0
 340
-5D
+5E
 371
 -2
 372
 -2
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+1
+1070
+1
+1002
+}
   0
 DIMSTYLE
 105
@@ -4389,11 +4201,161 @@ AcDbSymbolTableRecord
 100
 AcDbDimStyleTableRecord
   2
-ASG-DIM-1-50
+ASG-DIM-RADIUS
  70
 0
  40
-50.0
+1.0
+ 41
+2.5
+ 42
+1.5
+ 43
+7.0
+ 44
+1.25
+ 45
+0.0
+ 46
+0.0
+ 47
+0.0
+ 48
+0.0
+ 49
+2.5
+140
+2.5
+141
+0.0
+142
+0.0
+143
+25.4
+144
+1.0
+145
+0.0
+146
+0.7
+147
+1.0
+148
+0.0
+ 69
+0
+ 70
+0
+ 71
+0
+ 72
+0
+ 73
+0
+ 74
+0
+ 75
+0
+ 76
+0
+ 77
+1
+ 78
+8
+ 79
+2
+170
+0
+171
+2
+172
+1
+173
+0
+174
+0
+175
+0
+176
+256
+177
+256
+178
+256
+179
+2
+271
+0
+272
+1
+273
+2
+274
+3
+275
+0
+276
+0
+277
+2
+278
+46
+279
+0
+280
+0
+281
+0
+282
+0
+283
+0
+284
+8
+285
+0
+286
+0
+288
+0
+289
+3
+290
+0
+340
+5E
+371
+-2
+372
+-2
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+1
+1070
+1
+1002
+}
+  0
+DIMSTYLE
+105
+69
+330
+4
+100
+AcDbSymbolTableRecord
+100
+AcDbDimStyleTableRecord
+  2
+ASG-DIM-DIAMETER
+ 70
+0
+ 40
+1.0
  41
 2.5
  42
@@ -4489,7 +4451,7 @@ ASG-DIM-1-50
 278
 46
 279
-1
+0
 280
 0
 281
@@ -4511,11 +4473,23 @@ ASG-DIM-1-50
 290
 0
 340
-5D
+5E
 371
 -2
 372
 -2
+1001
+AcadAnnotative
+1000
+AnnotativeData
+1002
+{
+1070
+1
+1070
+1
+1002
+}
   0
 ENDTAB
   0
@@ -4529,7 +4503,7 @@ BLOCK_RECORD
 100
 AcDbSymbolTable
  70
-10
+11
   0
 BLOCK_RECORD
   5
@@ -4553,7 +4527,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-6C
+6D
 330
 9
 100
@@ -4581,6 +4555,26 @@ AcDbSymbolTableRecord
 100
 AcDbBlockTableRecord
   2
+_OPEN30
+340
+0
+ 70
+0
+280
+1
+281
+0
+  0
+BLOCK_RECORD
+  5
+7A
+330
+9
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
 ASG-TB-A4
 340
 0
@@ -4593,7 +4587,7 @@ ASG-TB-A4
   0
 BLOCK_RECORD
   5
-A8
+AC
 330
 9
 100
@@ -4613,7 +4607,7 @@ ASG-TB-A3
   0
 BLOCK_RECORD
   5
-DD
+DE
 330
 9
 100
@@ -4633,7 +4627,7 @@ ASG-TB-A1
   0
 BLOCK_RECORD
   5
-12B
+128
 330
 9
 100
@@ -4643,7 +4637,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space1
 340
-12E
+12B
  70
 0
 280
@@ -4653,7 +4647,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-144
+140
 330
 9
 100
@@ -4663,7 +4657,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space2
 340
-147
+143
  70
 0
 280
@@ -4673,7 +4667,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-15D
+158
 330
 9
 100
@@ -4683,7 +4677,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space3
 340
-160
+15B
  70
 0
 280
@@ -4693,7 +4687,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-176
+170
 330
 9
 100
@@ -4703,7 +4697,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space4
 340
-179
+173
  70
 0
 280
@@ -4713,7 +4707,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-112
+110
 330
 9
 100
@@ -4723,7 +4717,7 @@ AcDbBlockTableRecord
   2
 *Paper_Space
 340
-115
+113
  70
 0
 280
@@ -4779,9 +4773,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-6D
+6E
 330
-6C
+6D
 100
 AcDbEntity
   8
@@ -4805,9 +4799,9 @@ _DOT
   0
 LINE
   5
-6F
+70
 330
-6C
+6D
 100
 AcDbEntity
   8
@@ -4833,9 +4827,9 @@ AcDbLine
   0
 LWPOLYLINE
   5
-70
+71
 330
-6C
+6D
 100
 AcDbEntity
   8
@@ -4867,9 +4861,9 @@ AcDbPolyline
   0
 ENDBLK
   5
-6E
+6F
 330
-6C
+6D
 100
 AcDbEntity
   8
@@ -4889,9 +4883,9 @@ AcDbEntity
 100
 AcDbBlockBegin
   2
-ASG-TB-A4
+_OPEN30
  70
-2
+0
  10
 0.0
  20
@@ -4899,11 +4893,11 @@ ASG-TB-A4
  30
 0.0
   3
-ASG-TB-A4
+_OPEN30
   1
 
   0
-TEXT
+LWPOLYLINE
   5
 76
 330
@@ -4912,32 +4906,30 @@ TEXT
 AcDbEntity
   8
 0
+  6
+BYBLOCK
+ 62
+0
 100
-AcDbText
+AcDbPolyline
+ 90
+3
+ 70
+0
  10
--179.16
+-1.0
  20
-7.86
- 30
+0.25881904510252074
+ 10
 0.0
- 40
-1.8
-  1
-DRAWING No.
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-7.86
- 31
+ 20
 0.0
-100
-AcDbText
- 73
-1
+ 10
+-1.0
+ 20
+-0.25881904510252074
   0
-ATTDEF
+LINE
   5
 77
 330
@@ -4946,1756 +4938,24 @@ ATTDEF
 AcDbEntity
   8
 0
-100
-AcDbText
- 10
--179.16
- 20
-0.84
- 30
-0.0
- 40
-3.5
-  1
-AS-YYYY-NNN-DIS-TYP-001
-  7
-ASG-TEXT-SHEET
- 11
--179.16
- 21
-0.84
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing number
-  2
-DWG_NO
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-0.84
- 31
-0.0
-  0
-LINE
-  5
-78
-330
-73
-100
-AcDbEntity
-  8
+  6
+BYBLOCK
+ 62
 0
 100
 AcDbLine
  10
--72.0
+0.0
  20
 0.0
  30
 0.0
  11
--72.0
+-1.0
  21
-10.5
+0.0
  31
 0.0
-  0
-TEXT
-  5
-79
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--71.16
- 20
-7.86
- 30
-0.0
- 40
-1.8
-  1
-REV
-  7
-ASG-TEXT-SMALL
- 11
--71.16
- 21
-7.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-7A
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--71.16
- 20
-0.84
- 30
-0.0
- 40
-3.5
-  1
-R0
-  7
-ASG-TEXT-SHEET
- 11
--71.16
- 21
-0.84
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Revision
-  2
-REV
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--71.16
- 21
-0.84
- 31
-0.0
-  0
-LINE
-  5
-7B
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--45.0
- 20
-0.0
- 30
-0.0
- 11
--45.0
- 21
-10.5
- 31
-0.0
-  0
-TEXT
-  5
-7C
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--44.16
- 20
-7.86
- 30
-0.0
- 40
-1.8
-  1
-SHEET No.
-  7
-ASG-TEXT-SMALL
- 11
--44.16
- 21
-7.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-7D
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--44.16
- 20
-0.84
- 30
-0.0
- 40
-2.5
-  1
-01 OF 01
-  7
-ASG-TEXT-NOTE
- 11
--44.16
- 21
-0.84
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Sheet number (__ OF __)
-  2
-SHEET_NO
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--44.16
- 21
-0.84
- 31
-0.0
-  0
-LINE
-  5
-7E
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-10.5
- 30
-0.0
- 11
-0.0
- 21
-10.5
- 31
-0.0
-  0
-TEXT
-  5
-7F
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-14.86
- 30
-0.0
- 40
-1.8
-  1
-SCALE
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-14.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-80
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-11.34
- 30
-0.0
- 40
-2.5
-  1
-AS SHOWN
-  7
-ASG-TEXT-NOTE
- 11
--179.16
- 21
-11.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Scale
-  2
-SCALE
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-11.34
- 31
-0.0
-  0
-LINE
-  5
-81
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--120.0
- 20
-10.5
- 30
-0.0
- 11
--120.0
- 21
-17.5
- 31
-0.0
-  0
-TEXT
-  5
-82
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--119.16
- 20
-14.86
- 30
-0.0
- 40
-1.8
-  1
-DATE
-  7
-ASG-TEXT-SMALL
- 11
--119.16
- 21
-14.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-83
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--119.16
- 20
-11.34
- 30
-0.0
- 40
-2.5
-  1
-DD.MM.YYYY
-  7
-ASG-TEXT-NOTE
- 11
--119.16
- 21
-11.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Date (DD.MM.YYYY)
-  2
-DATE
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--119.16
- 21
-11.34
- 31
-0.0
-  0
-LINE
-  5
-84
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--60.0
- 20
-10.5
- 30
-0.0
- 11
--60.0
- 21
-17.5
- 31
-0.0
-  0
-TEXT
-  5
-85
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--59.16
- 20
-14.86
- 30
-0.0
- 40
-1.8
-  1
-STATUS
-  7
-ASG-TEXT-SMALL
- 11
--59.16
- 21
-14.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-86
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--59.16
- 20
-11.34
- 30
-0.0
- 40
-2.5
-  1
-FOR APPROVAL
-  7
-ASG-TEXT-NOTE
- 11
--59.16
- 21
-11.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing status
-  2
-DWG_STATUS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--59.16
- 21
-11.34
- 31
-0.0
-  0
-LINE
-  5
-87
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-17.5
- 30
-0.0
- 11
-0.0
- 21
-17.5
- 31
-0.0
-  0
-TEXT
-  5
-88
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-21.86
- 30
-0.0
- 40
-1.8
-  1
-DRAWN BY
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-21.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-89
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-18.34
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-NOTE
- 11
--179.16
- 21
-18.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawn by
-  2
-DRAWN_BY
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-18.34
- 31
-0.0
-  0
-LINE
-  5
-8A
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--120.0
- 20
-17.5
- 30
-0.0
- 11
--120.0
- 21
-24.5
- 31
-0.0
-  0
-TEXT
-  5
-8B
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--119.16
- 20
-21.86
- 30
-0.0
- 40
-1.8
-  1
-CHECKED BY
-  7
-ASG-TEXT-SMALL
- 11
--119.16
- 21
-21.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-8C
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--119.16
- 20
-18.34
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-NOTE
- 11
--119.16
- 21
-18.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Checked by
-  2
-CHECKED_BY
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--119.16
- 21
-18.34
- 31
-0.0
-  0
-LINE
-  5
-8D
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--60.0
- 20
-17.5
- 30
-0.0
- 11
--60.0
- 21
-24.5
- 31
-0.0
-  0
-TEXT
-  5
-8E
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--59.16
- 20
-21.86
- 30
-0.0
- 40
-1.8
-  1
-APPROVED BY
-  7
-ASG-TEXT-SMALL
- 11
--59.16
- 21
-21.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-8F
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--59.16
- 20
-18.34
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-NOTE
- 11
--59.16
- 21
-18.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Approved by
-  2
-APPROVED_BY
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--59.16
- 21
-18.34
- 31
-0.0
-  0
-LINE
-  5
-90
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-24.5
- 30
-0.0
- 11
-0.0
- 21
-24.5
- 31
-0.0
-  0
-TEXT
-  5
-91
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-35.86
- 30
-0.0
- 40
-1.8
-  1
-DRAWING TITLE
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-35.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-92
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-30.38
- 30
-0.0
- 40
-3.5
-  1
-DRAWING TITLE
-  7
-ASG-TEXT-SHEET
- 11
--179.16
- 21
-30.38
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing title - line 1
-  2
-DWG_TITLE
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-30.38
- 31
-0.0
-  0
-ATTDEF
-  5
-93
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-25.34
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-TITLE
- 11
--179.16
- 21
-25.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing title - line 2
-  2
-DWG_TITLE_2
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-25.34
- 31
-0.0
-  0
-LINE
-  5
-94
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-38.5
- 30
-0.0
- 11
-0.0
- 21
-38.5
- 31
-0.0
-  0
-TEXT
-  5
-95
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-42.86
- 30
-0.0
- 40
-1.8
-  1
-REMARKS
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-42.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-96
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-39.34
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-NOTE
- 11
--179.16
- 21
-39.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-General remarks
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-39.34
- 31
-0.0
-  0
-LINE
-  5
-97
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-45.5
- 30
-0.0
- 11
-0.0
- 21
-45.5
- 31
-0.0
-  0
-TEXT
-  5
-98
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-49.86
- 30
-0.0
- 40
-1.8
-  1
-CLIENT
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-49.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-99
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-46.34
- 30
-0.0
- 40
-2.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
--179.16
- 21
-46.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Client
-  2
-CLIENT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-46.34
- 31
-0.0
-  0
-LINE
-  5
-9A
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--90.0
- 20
-45.5
- 30
-0.0
- 11
--90.0
- 21
-52.5
- 31
-0.0
-  0
-TEXT
-  5
-9B
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--89.16
- 20
-49.86
- 30
-0.0
- 40
-1.8
-  1
-CONSULTANT
-  7
-ASG-TEXT-SMALL
- 11
--89.16
- 21
-49.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-9C
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--89.16
- 20
-46.34
- 30
-0.0
- 40
-2.5
-  1
-CONSULTANT NAME
-  7
-ASG-TEXT-NOTE
- 11
--89.16
- 21
-46.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Consultant
-  2
-CONSULTANT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--89.16
- 21
-46.34
- 31
-0.0
-  0
-LINE
-  5
-9D
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-52.5
- 30
-0.0
- 11
-0.0
- 21
-52.5
- 31
-0.0
-  0
-TEXT
-  5
-9E
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-56.86
- 30
-0.0
- 40
-1.8
-  1
-PROJECT
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-56.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-9F
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-53.34
- 30
-0.0
- 40
-2.5
-  1
-PROJECT NAME
-  7
-ASG-TEXT-NOTE
- 11
--179.16
- 21
-53.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Project
-  2
-PROJECT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--179.16
- 21
-53.34
- 31
-0.0
-  0
-LINE
-  5
-A0
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--90.0
- 20
-52.5
- 30
-0.0
- 11
--90.0
- 21
-59.5
- 31
-0.0
-  0
-TEXT
-  5
-A1
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--89.16
- 20
-56.86
- 30
-0.0
- 40
-1.8
-  1
-LOCATION
-  7
-ASG-TEXT-SMALL
- 11
--89.16
- 21
-56.86
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-A2
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--89.16
- 20
-53.34
- 30
-0.0
- 40
-2.5
-  1
-LOCATION, UAE
-  7
-ASG-TEXT-NOTE
- 11
--89.16
- 21
-53.34
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Location
-  2
-LOCATION
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--89.16
- 21
-53.34
- 31
-0.0
-  0
-LINE
-  5
-A3
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-59.5
- 30
-0.0
- 11
-0.0
- 21
-59.5
- 31
-0.0
-  0
-TEXT
-  5
-A4
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-65.324
- 30
-0.0
- 40
-2.8
-  1
-SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C.
-  7
-ASG-TEXT-SHEET
- 11
--179.16
- 21
-65.324
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-TEXT
-  5
-A5
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--179.16
- 20
-60.34
- 30
-0.0
- 40
-1.8
-  1
-AL SIRAJ GROUP  |  ALUMINIUM & GLASS DIVISION  |  UAE
-  7
-ASG-TEXT-SMALL
- 11
--179.16
- 21
-60.34
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-LINE
-  5
-A6
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-70.7
- 30
-0.0
- 11
-0.0
- 21
-70.7
- 31
-0.0
-  0
-LWPOLYLINE
-  5
-A7
-330
-73
-100
-AcDbEntity
-  8
-0
-100
-AcDbPolyline
- 90
-4
- 70
-1
- 10
--180.0
- 20
-0.0
- 10
-0.0
- 20
-0.0
- 10
-0.0
- 20
-70.7
- 10
--180.0
- 20
-70.7
   0
 ENDBLK
   5
@@ -6711,9 +4971,1733 @@ AcDbBlockEnd
   0
 BLOCK
   5
+7B
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+ASG-TB-A4
+ 70
+2
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+ASG-TB-A4
+  1
+
+  0
+TEXT
+  5
+7D
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+7.86
+ 30
+0.0
+ 40
+1.8
+  1
+DRAWING No.
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+7.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+7E
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+0.84
+ 30
+0.0
+ 40
+3.5
+  1
+AS-YYYY-NNN-DIS-TYP-001
+  7
+ASG-TEXT-HEADING
+ 11
+-179.16
+ 21
+0.84
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawing number
+  2
+DWG_NO
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+0.84
+ 31
+0.0
+  0
+LINE
+  5
+7F
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-72.0
+ 20
+0.0
+ 30
+0.0
+ 11
+-72.0
+ 21
+10.5
+ 31
+0.0
+  0
+TEXT
+  5
+80
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-71.16
+ 20
+7.86
+ 30
+0.0
+ 40
+1.8
+  1
+REV
+  7
+ASG-TEXT-SHEET
+ 11
+-71.16
+ 21
+7.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+81
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-71.16
+ 20
+0.84
+ 30
+0.0
+ 40
+3.5
+  1
+R0
+  7
+ASG-TEXT-HEADING
+ 11
+-71.16
+ 21
+0.84
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Revision
+  2
+REV
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-71.16
+ 21
+0.84
+ 31
+0.0
+  0
+LINE
+  5
+82
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-45.0
+ 20
+0.0
+ 30
+0.0
+ 11
+-45.0
+ 21
+10.5
+ 31
+0.0
+  0
+TEXT
+  5
+83
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-44.16
+ 20
+7.86
+ 30
+0.0
+ 40
+1.8
+  1
+SHEET No.
+  7
+ASG-TEXT-SHEET
+ 11
+-44.16
+ 21
+7.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+84
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-44.16
+ 20
+0.84
+ 30
+0.0
+ 40
+2.5
+  1
+01 OF 01
+  7
+ASG-TEXT-SHEET
+ 11
+-44.16
+ 21
+0.84
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Sheet number
+  2
+SHEET_NO
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-44.16
+ 21
+0.84
+ 31
+0.0
+  0
+LINE
+  5
+85
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+10.5
+ 30
+0.0
+ 11
+0.0
+ 21
+10.5
+ 31
+0.0
+  0
+TEXT
+  5
+86
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+14.86
+ 30
+0.0
+ 40
+1.8
+  1
+SCALE
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+14.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+87
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+11.34
+ 30
+0.0
+ 40
+2.5
+  1
+AS SHOWN
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+11.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Scale
+  2
+SCALE
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+11.34
+ 31
+0.0
+  0
+LINE
+  5
+88
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-120.0
+ 20
+10.5
+ 30
+0.0
+ 11
+-120.0
+ 21
+17.5
+ 31
+0.0
+  0
+TEXT
+  5
+89
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-119.16
+ 20
+14.86
+ 30
+0.0
+ 40
+1.8
+  1
+DATE
+  7
+ASG-TEXT-SHEET
+ 11
+-119.16
+ 21
+14.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+8A
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-119.16
+ 20
+11.34
+ 30
+0.0
+ 40
+2.5
+  1
+DD.MM.YYYY
+  7
+ASG-TEXT-SHEET
+ 11
+-119.16
+ 21
+11.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Date (DD.MM.YYYY)
+  2
+DATE
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-119.16
+ 21
+11.34
+ 31
+0.0
+  0
+LINE
+  5
+8B
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-60.0
+ 20
+10.5
+ 30
+0.0
+ 11
+-60.0
+ 21
+17.5
+ 31
+0.0
+  0
+TEXT
+  5
+8C
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-59.16
+ 20
+14.86
+ 30
+0.0
+ 40
+1.8
+  1
+DRAWING STATUS
+  7
+ASG-TEXT-SHEET
+ 11
+-59.16
+ 21
+14.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+8D
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-59.16
+ 20
+11.34
+ 30
+0.0
+ 40
+2.5
+  1
+PRELIMINARY
+  7
+ASG-TEXT-SHEET
+ 11
+-59.16
+ 21
+11.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawing status
+  2
+DWG_STATUS
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-59.16
+ 21
+11.34
+ 31
+0.0
+  0
+LINE
+  5
+8E
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+17.5
+ 30
+0.0
+ 11
+0.0
+ 21
+17.5
+ 31
+0.0
+  0
+TEXT
+  5
+8F
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+21.86
+ 30
+0.0
+ 40
+1.8
+  1
+DRAWN BY
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+21.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+90
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+18.34
+ 30
+0.0
+ 40
+2.5
+  1
+-
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+18.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawn by
+  2
+DRAWN_BY
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+18.34
+ 31
+0.0
+  0
+LINE
+  5
+91
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-120.0
+ 20
+17.5
+ 30
+0.0
+ 11
+-120.0
+ 21
+24.5
+ 31
+0.0
+  0
+TEXT
+  5
+92
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-119.16
+ 20
+21.86
+ 30
+0.0
+ 40
+1.8
+  1
+CHECKED BY
+  7
+ASG-TEXT-SHEET
+ 11
+-119.16
+ 21
+21.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+93
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-119.16
+ 20
+18.34
+ 30
+0.0
+ 40
+2.5
+  1
+-
+  7
+ASG-TEXT-SHEET
+ 11
+-119.16
+ 21
+18.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Checked by
+  2
+CHECKED_BY
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-119.16
+ 21
+18.34
+ 31
+0.0
+  0
+LINE
+  5
+94
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-60.0
+ 20
+17.5
+ 30
+0.0
+ 11
+-60.0
+ 21
+24.5
+ 31
+0.0
+  0
+TEXT
+  5
+95
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-59.16
+ 20
+21.86
+ 30
+0.0
+ 40
+1.8
+  1
+APPROVED BY
+  7
+ASG-TEXT-SHEET
+ 11
+-59.16
+ 21
+21.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+96
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-59.16
+ 20
+18.34
+ 30
+0.0
+ 40
+2.5
+  1
+-
+  7
+ASG-TEXT-SHEET
+ 11
+-59.16
+ 21
+18.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Approved by
+  2
+APPROVED_BY
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-59.16
+ 21
+18.34
+ 31
+0.0
+  0
+LINE
+  5
+97
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+24.5
+ 30
+0.0
+ 11
+0.0
+ 21
+24.5
+ 31
+0.0
+  0
+TEXT
+  5
+98
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+35.86
+ 30
+0.0
+ 40
+1.8
+  1
+DRAWING TITLE
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+35.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+99
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+30.1
+ 30
+0.0
+ 40
+3.5
+  1
+DRAWING TITLE
+  7
+ASG-TEXT-HEADING
+ 11
+-179.16
+ 21
+30.1
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawing title
+  2
+DWG_TITLE
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+30.1
+ 31
+0.0
+  0
+ATTDEF
+  5
+9A
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+25.34
+ 30
+0.0
+ 40
+2.5
+  1
+
+  7
+ASG-TEXT-TITLE
+ 11
+-179.16
+ 21
+25.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawing title - second line (optional)
+  2
+DWG_TITLE_2
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+25.34
+ 31
+0.0
+  0
+LINE
+  5
+9B
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+38.5
+ 30
+0.0
+ 11
+0.0
+ 21
+38.5
+ 31
+0.0
+  0
+TEXT
+  5
+9C
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+42.86
+ 30
+0.0
+ 40
+1.8
+  1
+CLIENT
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+42.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+9D
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+39.34
+ 30
+0.0
+ 40
+2.5
+  1
+CLIENT
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+39.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Client
+  2
+CLIENT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+39.34
+ 31
+0.0
+  0
+LINE
+  5
+9E
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-90.0
+ 20
+38.5
+ 30
+0.0
+ 11
+-90.0
+ 21
+45.5
+ 31
+0.0
+  0
+TEXT
+  5
+9F
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-89.16
+ 20
+42.86
+ 30
+0.0
+ 40
+1.8
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-89.16
+ 21
+42.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+A0
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-89.16
+ 20
+39.34
+ 30
+0.0
+ 40
+2.5
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-89.16
+ 21
+39.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Consultant
+  2
+CONSULTANT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-89.16
+ 21
+39.34
+ 31
+0.0
+  0
+LINE
+  5
+A1
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+45.5
+ 30
+0.0
+ 11
+0.0
+ 21
+45.5
+ 31
+0.0
+  0
+TEXT
+  5
+A2
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+49.86
+ 30
+0.0
+ 40
+1.8
+  1
+PROJECT
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+49.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+A3
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+46.34
+ 30
+0.0
+ 40
+2.5
+  1
+PROJECT NAME
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+46.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Project
+  2
+PROJECT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-179.16
+ 21
+46.34
+ 31
+0.0
+  0
+LINE
+  5
+A4
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-90.0
+ 20
+45.5
+ 30
+0.0
+ 11
+-90.0
+ 21
+52.5
+ 31
+0.0
+  0
+TEXT
+  5
+A5
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-89.16
+ 20
+49.86
+ 30
+0.0
+ 40
+1.8
+  1
+LOCATION
+  7
+ASG-TEXT-SHEET
+ 11
+-89.16
+ 21
+49.86
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+A6
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-89.16
+ 20
+46.34
+ 30
+0.0
+ 40
+2.5
+  1
+LOCATION, UAE
+  7
+ASG-TEXT-SHEET
+ 11
+-89.16
+ 21
+46.34
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Location
+  2
+LOCATION
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-89.16
+ 21
+46.34
+ 31
+0.0
+  0
+LINE
+  5
+A7
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+52.5
+ 30
+0.0
+ 11
+0.0
+ 21
+52.5
+ 31
+0.0
+  0
+TEXT
+  5
+A8
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+58.1
+ 30
+0.0
+ 40
+2.8
+  1
+SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C.
+  7
+ASG-TEXT-HEADING
+ 11
+-179.16
+ 21
+58.1
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+TEXT
+  5
 A9
 330
-A8
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-179.16
+ 20
+53.34
+ 30
+0.0
+ 40
+1.8
+  1
+AL SIRAJ GROUP  |  ALUMINIUM, GLASS & FACADE DIVISION  |  UNITED ARAB EMIRATES
+  7
+ASG-TEXT-SHEET
+ 11
+-179.16
+ 21
+53.34
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+LINE
+  5
+AA
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+63.7
+ 30
+0.0
+ 11
+0.0
+ 21
+63.7
+ 31
+0.0
+  0
+LWPOLYLINE
+  5
+AB
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbPolyline
+ 90
+4
+ 70
+1
+ 10
+-180.0
+ 20
+0.0
+ 10
+0.0
+ 20
+0.0
+ 10
+0.0
+ 20
+63.7
+ 10
+-180.0
+ 20
+63.7
+  0
+ENDBLK
+  5
+7C
+330
+7A
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+AD
+330
+AC
 100
 AcDbEntity
   8
@@ -6737,9 +6721,9 @@ ASG-TB-A3
   0
 TEXT
   5
-AB
+AF
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6757,7 +6741,7 @@ AcDbText
   1
 DRAWING No.
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
@@ -6771,9 +6755,9 @@ AcDbText
   0
 ATTDEF
   5
-AC
+B0
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6791,7 +6775,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -178.92
  21
@@ -6821,9 +6805,9 @@ DWG_NO
   0
 LINE
   5
-AD
+B1
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6845,9 +6829,9 @@ AcDbLine
   0
 TEXT
   5
-AE
+B2
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6865,7 +6849,7 @@ AcDbText
   1
 REV
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -70.92
  21
@@ -6879,9 +6863,9 @@ AcDbText
   0
 ATTDEF
   5
-AF
+B3
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6899,7 +6883,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -70.92
  21
@@ -6929,9 +6913,9 @@ REV
   0
 LINE
   5
-B0
+B4
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6953,9 +6937,9 @@ AcDbLine
   0
 TEXT
   5
-B1
+B5
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -6973,7 +6957,7 @@ AcDbText
   1
 SHEET No.
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -43.92
  21
@@ -6987,9 +6971,9 @@ AcDbText
   0
 ATTDEF
   5
-B2
+B6
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7007,7 +6991,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -43.92
  21
@@ -7017,7 +7001,7 @@ ASG-TEXT-NOTE
 100
 AcDbAttributeDefinition
   3
-Sheet number (__ OF __)
+Sheet number
   2
 SHEET_NO
  70
@@ -7037,9 +7021,9 @@ SHEET_NO
   0
 LINE
   5
-B3
+B7
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7061,9 +7045,9 @@ AcDbLine
   0
 TEXT
   5
-B4
+B8
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7081,7 +7065,7 @@ AcDbText
   1
 SCALE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
@@ -7095,9 +7079,9 @@ AcDbText
   0
 ATTDEF
   5
-B5
+B9
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7115,7 +7099,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -178.92
  21
@@ -7145,9 +7129,9 @@ SCALE
   0
 LINE
   5
-B6
+BA
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7169,9 +7153,9 @@ AcDbLine
   0
 TEXT
   5
-B7
+BB
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7189,7 +7173,7 @@ AcDbText
   1
 DATE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -118.92
  21
@@ -7203,9 +7187,9 @@ AcDbText
   0
 ATTDEF
   5
-B8
+BC
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7223,7 +7207,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -118.92
  21
@@ -7253,9 +7237,9 @@ DATE
   0
 LINE
   5
-B9
+BD
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7277,9 +7261,9 @@ AcDbLine
   0
 TEXT
   5
-BA
+BE
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7295,9 +7279,9 @@ AcDbText
  40
 2.0
   1
-STATUS
+DRAWING STATUS
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -58.92
  21
@@ -7311,9 +7295,9 @@ AcDbText
   0
 ATTDEF
   5
-BB
+BF
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7329,9 +7313,9 @@ AcDbText
  40
 2.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -58.92
  21
@@ -7361,9 +7345,9 @@ DWG_STATUS
   0
 LINE
   5
-BC
+C0
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7385,9 +7369,9 @@ AcDbLine
   0
 TEXT
   5
-BD
+C1
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7405,7 +7389,7 @@ AcDbText
   1
 DRAWN BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
@@ -7419,9 +7403,9 @@ AcDbText
   0
 ATTDEF
   5
-BE
+C2
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7439,7 +7423,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -178.92
  21
@@ -7469,9 +7453,9 @@ DRAWN_BY
   0
 LINE
   5
-BF
+C3
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7493,9 +7477,9 @@ AcDbLine
   0
 TEXT
   5
-C0
+C4
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7513,7 +7497,7 @@ AcDbText
   1
 CHECKED BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -118.92
  21
@@ -7527,9 +7511,9 @@ AcDbText
   0
 ATTDEF
   5
-C1
+C5
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7547,7 +7531,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -118.92
  21
@@ -7577,9 +7561,9 @@ CHECKED_BY
   0
 LINE
   5
-C2
+C6
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7601,9 +7585,9 @@ AcDbLine
   0
 TEXT
   5
-C3
+C7
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7621,7 +7605,7 @@ AcDbText
   1
 APPROVED BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -58.92
  21
@@ -7635,9 +7619,9 @@ AcDbText
   0
 ATTDEF
   5
-C4
+C8
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7655,7 +7639,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -58.92
  21
@@ -7685,167 +7669,9 @@ APPROVED_BY
   0
 LINE
   5
-C5
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-31.5
- 30
-0.0
- 11
-0.0
- 21
-31.5
- 31
-0.0
-  0
-TEXT
-  5
-C6
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--178.92
- 20
-46.42
- 30
-0.0
- 40
-2.0
-  1
-DRAWING TITLE
-  7
-ASG-TEXT-SMALL
- 11
--178.92
- 21
-46.42
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-C7
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--178.92
- 20
-39.06
- 30
-0.0
- 40
-5.0
-  1
-DRAWING TITLE
-  7
-ASG-TEXT-SHEET
- 11
--178.92
- 21
-39.06
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing title - line 1
-  2
-DWG_TITLE
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--178.92
- 21
-39.06
- 31
-0.0
-  0
-ATTDEF
-  5
-C8
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--178.92
- 20
-32.58
- 30
-0.0
- 40
-2.5
-  1
--
-  7
-ASG-TEXT-TITLE
- 11
--178.92
- 21
-32.58
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Drawing title - line 2
-  2
-DWG_TITLE_2
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--178.92
- 21
-32.58
- 31
-0.0
-  0
-LINE
-  5
 C9
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7855,13 +7681,13 @@ AcDbLine
  10
 -180.0
  20
-49.5
+31.5
  30
 0.0
  11
 0.0
  21
-49.5
+31.5
  31
 0.0
   0
@@ -7869,7 +7695,7 @@ TEXT
   5
 CA
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7879,19 +7705,19 @@ AcDbText
  10
 -178.92
  20
-55.42
+46.42
  30
 0.0
  40
 2.0
   1
-REMARKS
+DRAWING TITLE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
-55.42
+46.42
  31
 0.0
 100
@@ -7903,7 +7729,7 @@ ATTDEF
   5
 CB
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7913,27 +7739,27 @@ AcDbText
  10
 -178.92
  20
-50.58
+38.7
  30
 0.0
  40
-2.5
+5.0
   1
--
+DRAWING TITLE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-HEADING
  11
 -178.92
  21
-50.58
+38.7
  31
 0.0
 100
 AcDbAttributeDefinition
   3
-General remarks
+Drawing title
   2
-REMARKS
+DWG_TITLE
  70
 0
  74
@@ -7945,15 +7771,65 @@ REMARKS
  11
 -178.92
  21
-50.58
+38.7
+ 31
+0.0
+  0
+ATTDEF
+  5
+CC
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-178.92
+ 20
+32.58
+ 30
+0.0
+ 40
+2.5
+  1
+
+  7
+ASG-TEXT-TITLE
+ 11
+-178.92
+ 21
+32.58
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Drawing title - second line (optional)
+  2
+DWG_TITLE_2
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-178.92
+ 21
+32.58
  31
 0.0
   0
 LINE
   5
-CC
+CD
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7963,21 +7839,21 @@ AcDbLine
  10
 -180.0
  20
-58.5
+49.5
  30
 0.0
  11
 0.0
  21
-58.5
+49.5
  31
 0.0
   0
 TEXT
   5
-CD
+CE
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -7987,7 +7863,7 @@ AcDbText
  10
 -178.92
  20
-64.42
+55.42
  30
 0.0
  40
@@ -7995,11 +7871,11 @@ AcDbText
   1
 CLIENT
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
-64.42
+55.42
  31
 0.0
 100
@@ -8009,9 +7885,9 @@ AcDbText
   0
 ATTDEF
   5
-CE
+CF
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8021,19 +7897,19 @@ AcDbText
  10
 -178.92
  20
-59.58
+50.58
  30
 0.0
  40
 2.5
   1
-CLIENT NAME
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -178.92
  21
-59.58
+50.58
  31
 0.0
 100
@@ -8053,15 +7929,231 @@ CLIENT
  11
 -178.92
  21
+50.58
+ 31
+0.0
+  0
+LINE
+  5
+D0
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-90.0
+ 20
+49.5
+ 30
+0.0
+ 11
+-90.0
+ 21
+58.5
+ 31
+0.0
+  0
+TEXT
+  5
+D1
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-88.92
+ 20
+55.42
+ 30
+0.0
+ 40
+2.0
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-88.92
+ 21
+55.42
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+D2
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-88.92
+ 20
+50.58
+ 30
+0.0
+ 40
+2.5
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-88.92
+ 21
+50.58
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Consultant
+  2
+CONSULTANT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-88.92
+ 21
+50.58
+ 31
+0.0
+  0
+LINE
+  5
+D3
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-180.0
+ 20
+58.5
+ 30
+0.0
+ 11
+0.0
+ 21
+58.5
+ 31
+0.0
+  0
+TEXT
+  5
+D4
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-178.92
+ 20
+64.42
+ 30
+0.0
+ 40
+2.0
+  1
+PROJECT
+  7
+ASG-TEXT-SHEET
+ 11
+-178.92
+ 21
+64.42
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+D5
+330
+AC
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-178.92
+ 20
+59.58
+ 30
+0.0
+ 40
+2.5
+  1
+PROJECT NAME
+  7
+ASG-TEXT-SHEET
+ 11
+-178.92
+ 21
+59.58
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Project
+  2
+PROJECT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-178.92
+ 21
 59.58
  31
 0.0
   0
 LINE
   5
-CF
+D6
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8083,9 +8175,9 @@ AcDbLine
   0
 TEXT
   5
-D0
+D7
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8096,222 +8188,6 @@ AcDbText
 -88.92
  20
 64.42
- 30
-0.0
- 40
-2.0
-  1
-CONSULTANT
-  7
-ASG-TEXT-SMALL
- 11
--88.92
- 21
-64.42
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-D1
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--88.92
- 20
-59.58
- 30
-0.0
- 40
-2.5
-  1
-CONSULTANT NAME
-  7
-ASG-TEXT-NOTE
- 11
--88.92
- 21
-59.58
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Consultant
-  2
-CONSULTANT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--88.92
- 21
-59.58
- 31
-0.0
-  0
-LINE
-  5
-D2
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--180.0
- 20
-67.5
- 30
-0.0
- 11
-0.0
- 21
-67.5
- 31
-0.0
-  0
-TEXT
-  5
-D3
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--178.92
- 20
-73.42
- 30
-0.0
- 40
-2.0
-  1
-PROJECT
-  7
-ASG-TEXT-SMALL
- 11
--178.92
- 21
-73.42
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-D4
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--178.92
- 20
-68.58
- 30
-0.0
- 40
-2.5
-  1
-PROJECT NAME
-  7
-ASG-TEXT-NOTE
- 11
--178.92
- 21
-68.58
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Project
-  2
-PROJECT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--178.92
- 21
-68.58
- 31
-0.0
-  0
-LINE
-  5
-D5
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--90.0
- 20
-67.5
- 30
-0.0
- 11
--90.0
- 21
-76.5
- 31
-0.0
-  0
-TEXT
-  5
-D6
-330
-A8
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--88.92
- 20
-73.42
  30
 0.0
  40
@@ -8319,11 +8195,11 @@ AcDbText
   1
 LOCATION
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -88.92
  21
-73.42
+64.42
  31
 0.0
 100
@@ -8333,9 +8209,9 @@ AcDbText
   0
 ATTDEF
   5
-D7
+D8
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8345,7 +8221,7 @@ AcDbText
  10
 -88.92
  20
-68.58
+59.58
  30
 0.0
  40
@@ -8353,11 +8229,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -88.92
  21
-68.58
+59.58
  31
 0.0
 100
@@ -8377,15 +8253,15 @@ LOCATION
  11
 -88.92
  21
-68.58
+59.58
  31
 0.0
   0
 LINE
   5
-D8
+D9
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8395,21 +8271,21 @@ AcDbLine
  10
 -180.0
  20
-76.5
+67.5
  30
 0.0
  11
 0.0
  21
-76.5
+67.5
  31
 0.0
   0
 TEXT
   5
-D9
+DA
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8419,7 +8295,7 @@ AcDbText
  10
 -178.92
  20
-83.988
+74.7
  30
 0.0
  40
@@ -8427,11 +8303,11 @@ AcDbText
   1
 SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C.
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -178.92
  21
-83.988
+74.7
  31
 0.0
 100
@@ -8441,9 +8317,9 @@ AcDbText
   0
 TEXT
   5
-DA
+DB
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8453,19 +8329,19 @@ AcDbText
  10
 -178.92
  20
-77.58
+68.58
  30
 0.0
  40
 2.0
   1
-AL SIRAJ GROUP  |  ALUMINIUM & GLASS DIVISION  |  UAE
+AL SIRAJ GROUP  |  ALUMINIUM, GLASS & FACADE DIVISION  |  UNITED ARAB EMIRATES
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -178.92
  21
-77.58
+68.58
  31
 0.0
 100
@@ -8475,9 +8351,9 @@ AcDbText
   0
 LINE
   5
-DB
+DC
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8487,21 +8363,21 @@ AcDbLine
  10
 -180.0
  20
-90.9
+81.9
  30
 0.0
  11
 0.0
  21
-90.9
+81.9
  31
 0.0
   0
 LWPOLYLINE
   5
-DC
+DD
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8523,17 +8399,17 @@ AcDbPolyline
  10
 0.0
  20
-90.9
+81.9
  10
 -180.0
  20
-90.9
+81.9
   0
 ENDBLK
   5
-AA
+AE
 330
-A8
+AC
 100
 AcDbEntity
   8
@@ -8543,9 +8419,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-DE
+DF
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8569,9 +8445,9 @@ ASG-TB-A1
   0
 TEXT
   5
-E0
+E1
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8589,7 +8465,7 @@ AcDbText
   1
 DRAWING No.
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -8603,9 +8479,9 @@ AcDbText
   0
 ATTDEF
   5
-E1
+E2
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8623,7 +8499,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -248.56
  21
@@ -8653,9 +8529,9 @@ DWG_NO
   0
 LINE
   5
-E2
+E3
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8677,9 +8553,9 @@ AcDbLine
   0
 TEXT
   5
-E3
+E4
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8697,7 +8573,7 @@ AcDbText
   1
 REV
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -98.56
  21
@@ -8711,9 +8587,9 @@ AcDbText
   0
 ATTDEF
   5
-E4
+E5
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8731,7 +8607,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -98.56
  21
@@ -8761,9 +8637,9 @@ REV
   0
 LINE
   5
-E5
+E6
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8785,9 +8661,9 @@ AcDbLine
   0
 TEXT
   5
-E6
+E7
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8805,7 +8681,7 @@ AcDbText
   1
 SHEET No.
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -61.06
  21
@@ -8819,9 +8695,9 @@ AcDbText
   0
 ATTDEF
   5
-E7
+E8
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8839,7 +8715,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -61.06
  21
@@ -8849,7 +8725,7 @@ ASG-TEXT-NOTE
 100
 AcDbAttributeDefinition
   3
-Sheet number (__ OF __)
+Sheet number
   2
 SHEET_NO
  70
@@ -8869,9 +8745,9 @@ SHEET_NO
   0
 LINE
   5
-E8
+E9
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8893,9 +8769,9 @@ AcDbLine
   0
 TEXT
   5
-E9
+EA
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8913,7 +8789,7 @@ AcDbText
   1
 SCALE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -8927,9 +8803,9 @@ AcDbText
   0
 ATTDEF
   5
-EA
+EB
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -8947,7 +8823,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -8977,9 +8853,9 @@ SCALE
   0
 LINE
   5
-EB
+EC
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9001,9 +8877,9 @@ AcDbLine
   0
 TEXT
   5
-EC
+ED
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9021,7 +8897,7 @@ AcDbText
   1
 DATE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -165.2266666666667
  21
@@ -9035,9 +8911,9 @@ AcDbText
   0
 ATTDEF
   5
-ED
+EE
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9055,7 +8931,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -165.2266666666667
  21
@@ -9085,9 +8961,9 @@ DATE
   0
 LINE
   5
-EE
+EF
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9109,9 +8985,9 @@ AcDbLine
   0
 TEXT
   5
-EF
+F0
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9127,9 +9003,9 @@ AcDbText
  40
 2.5
   1
-STATUS
+DRAWING STATUS
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -81.89333333333336
  21
@@ -9143,9 +9019,9 @@ AcDbText
   0
 ATTDEF
   5
-F0
+F1
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9161,9 +9037,9 @@ AcDbText
  40
 3.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -81.89333333333336
  21
@@ -9193,9 +9069,9 @@ DWG_STATUS
   0
 LINE
   5
-F1
+F2
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9217,9 +9093,9 @@ AcDbLine
   0
 TEXT
   5
-F2
+F3
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9237,7 +9113,7 @@ AcDbText
   1
 DRAWN BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -9251,9 +9127,9 @@ AcDbText
   0
 ATTDEF
   5
-F3
+F4
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9271,7 +9147,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -9301,9 +9177,9 @@ DRAWN_BY
   0
 LINE
   5
-F4
+F5
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9325,9 +9201,9 @@ AcDbLine
   0
 TEXT
   5
-F5
+F6
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9345,7 +9221,7 @@ AcDbText
   1
 CHECKED BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -165.2266666666667
  21
@@ -9359,9 +9235,9 @@ AcDbText
   0
 ATTDEF
   5
-F6
+F7
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9379,7 +9255,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -165.2266666666667
  21
@@ -9409,9 +9285,9 @@ CHECKED_BY
   0
 LINE
   5
-F7
+F8
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9433,9 +9309,9 @@ AcDbLine
   0
 TEXT
   5
-F8
+F9
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9453,7 +9329,7 @@ AcDbText
   1
 APPROVED BY
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -81.89333333333336
  21
@@ -9467,9 +9343,9 @@ AcDbText
   0
 ATTDEF
   5
-F9
+FA
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9487,7 +9363,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -81.89333333333336
  21
@@ -9517,9 +9393,9 @@ APPROVED_BY
   0
 LINE
   5
-FA
+FB
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9541,9 +9417,9 @@ AcDbLine
   0
 TEXT
   5
-FB
+FC
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9561,7 +9437,7 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
@@ -9575,9 +9451,9 @@ AcDbText
   0
 ATTDEF
   5
-FC
+FD
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9587,7 +9463,7 @@ AcDbText
  10
 -248.56
  20
-52.08
+51.6
  30
 0.0
  40
@@ -9595,17 +9471,17 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -248.56
  21
-52.08
+51.6
  31
 0.0
 100
 AcDbAttributeDefinition
   3
-Drawing title - line 1
+Drawing title
   2
 DWG_TITLE
  70
@@ -9619,15 +9495,15 @@ DWG_TITLE
  11
 -248.56
  21
-52.08
+51.6
  31
 0.0
   0
 ATTDEF
   5
-FD
+FE
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9643,7 +9519,7 @@ AcDbText
  40
 3.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -9655,7 +9531,7 @@ ASG-TEXT-TITLE
 100
 AcDbAttributeDefinition
   3
-Drawing title - line 2
+Drawing title - second line (optional)
   2
 DWG_TITLE_2
  70
@@ -9675,117 +9551,9 @@ DWG_TITLE_2
   0
 LINE
   5
-FE
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--250.0
- 20
-66.0
- 30
-0.0
- 11
-0.0
- 21
-66.0
- 31
-0.0
-  0
-TEXT
-  5
 FF
 330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--248.56
- 20
-74.06
- 30
-0.0
- 40
-2.5
-  1
-REMARKS
-  7
-ASG-TEXT-SMALL
- 11
--248.56
- 21
-74.06
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-100
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--248.56
- 20
-67.44
- 30
-0.0
- 40
-3.5
-  1
--
-  7
-ASG-TEXT-NOTE
- 11
--248.56
- 21
-67.44
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-General remarks
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--248.56
- 21
-67.44
- 31
-0.0
-  0
-LINE
-  5
-101
-330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9795,21 +9563,21 @@ AcDbLine
  10
 -250.0
  20
-78.0
+66.0
  30
 0.0
  11
 0.0
  21
-78.0
+66.0
  31
 0.0
   0
 TEXT
   5
-102
+100
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9819,7 +9587,7 @@ AcDbText
  10
 -248.56
  20
-86.06
+74.06
  30
 0.0
  40
@@ -9827,11 +9595,11 @@ AcDbText
   1
 CLIENT
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
-86.06
+74.06
  31
 0.0
 100
@@ -9841,9 +9609,9 @@ AcDbText
   0
 ATTDEF
   5
-103
+101
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9853,19 +9621,19 @@ AcDbText
  10
 -248.56
  20
-79.44
+67.44
  30
 0.0
  40
 3.5
   1
-CLIENT NAME
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -248.56
  21
-79.44
+67.44
  31
 0.0
 100
@@ -9885,15 +9653,231 @@ CLIENT
  11
 -248.56
  21
+67.44
+ 31
+0.0
+  0
+LINE
+  5
+102
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-125.0
+ 20
+66.0
+ 30
+0.0
+ 11
+-125.0
+ 21
+78.0
+ 31
+0.0
+  0
+TEXT
+  5
+103
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-123.56
+ 20
+74.06
+ 30
+0.0
+ 40
+2.5
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-123.56
+ 21
+74.06
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+104
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-123.56
+ 20
+67.44
+ 30
+0.0
+ 40
+3.5
+  1
+CONSULTANT
+  7
+ASG-TEXT-SHEET
+ 11
+-123.56
+ 21
+67.44
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Consultant
+  2
+CONSULTANT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-123.56
+ 21
+67.44
+ 31
+0.0
+  0
+LINE
+  5
+105
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+-250.0
+ 20
+78.0
+ 30
+0.0
+ 11
+0.0
+ 21
+78.0
+ 31
+0.0
+  0
+TEXT
+  5
+106
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-248.56
+ 20
+86.06
+ 30
+0.0
+ 40
+2.5
+  1
+PROJECT
+  7
+ASG-TEXT-SHEET
+ 11
+-248.56
+ 21
+86.06
+ 31
+0.0
+100
+AcDbText
+ 73
+1
+  0
+ATTDEF
+  5
+107
+330
+DE
+100
+AcDbEntity
+  8
+0
+100
+AcDbText
+ 10
+-248.56
+ 20
+79.44
+ 30
+0.0
+ 40
+3.5
+  1
+PROJECT NAME
+  7
+ASG-TEXT-SHEET
+ 11
+-248.56
+ 21
+79.44
+ 31
+0.0
+100
+AcDbAttributeDefinition
+  3
+Project
+  2
+PROJECT
+ 70
+0
+ 74
+1
+ 71
+1
+ 72
+0
+ 11
+-248.56
+ 21
 79.44
  31
 0.0
   0
 LINE
   5
-104
+108
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -9915,225 +9899,9 @@ AcDbLine
   0
 TEXT
   5
-105
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--123.56
- 20
-86.06
- 30
-0.0
- 40
-2.5
-  1
-CONSULTANT
-  7
-ASG-TEXT-SMALL
- 11
--123.56
- 21
-86.06
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
-106
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--123.56
- 20
-79.44
- 30
-0.0
- 40
-3.5
-  1
-CONSULTANT NAME
-  7
-ASG-TEXT-NOTE
- 11
--123.56
- 21
-79.44
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Consultant
-  2
-CONSULTANT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--123.56
- 21
-79.44
- 31
-0.0
-  0
-LINE
-  5
-107
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--250.0
- 20
-90.0
- 30
-0.0
- 11
-0.0
- 21
-90.0
- 31
-0.0
-  0
-TEXT
-  5
-108
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--248.56
- 20
-98.06
- 30
-0.0
- 40
-2.5
-  1
-PROJECT
-  7
-ASG-TEXT-SMALL
- 11
--248.56
- 21
-98.06
- 31
-0.0
-100
-AcDbText
- 73
-1
-  0
-ATTDEF
-  5
 109
 330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
--248.56
- 20
-91.44
- 30
-0.0
- 40
-3.5
-  1
-PROJECT NAME
-  7
-ASG-TEXT-NOTE
- 11
--248.56
- 21
-91.44
- 31
-0.0
-100
-AcDbAttributeDefinition
-  3
-Project
-  2
-PROJECT
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
--248.56
- 21
-91.44
- 31
-0.0
-  0
-LINE
-  5
-10A
-330
-DD
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
--125.0
- 20
-90.0
- 30
-0.0
- 11
--125.0
- 21
-102.0
- 31
-0.0
-  0
-TEXT
-  5
-10B
-330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10143,7 +9911,7 @@ AcDbText
  10
 -123.56
  20
-98.06
+86.06
  30
 0.0
  40
@@ -10151,11 +9919,11 @@ AcDbText
   1
 LOCATION
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -123.56
  21
-98.06
+86.06
  31
 0.0
 100
@@ -10165,9 +9933,9 @@ AcDbText
   0
 ATTDEF
   5
-10C
+10A
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10177,7 +9945,7 @@ AcDbText
  10
 -123.56
  20
-91.44
+79.44
  30
 0.0
  40
@@ -10185,11 +9953,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 -123.56
  21
-91.44
+79.44
  31
 0.0
 100
@@ -10209,15 +9977,15 @@ LOCATION
  11
 -123.56
  21
-91.44
+79.44
  31
 0.0
   0
 LINE
   5
-10D
+10B
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10227,21 +9995,21 @@ AcDbLine
  10
 -250.0
  20
-102.0
+90.0
  30
 0.0
  11
 0.0
  21
-102.0
+90.0
  31
 0.0
   0
 TEXT
   5
-10E
+10C
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10251,7 +10019,7 @@ AcDbText
  10
 -248.56
  20
-111.98400000000001
+99.6
  30
 0.0
  40
@@ -10259,11 +10027,11 @@ AcDbText
   1
 SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C.
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 -248.56
  21
-111.98400000000001
+99.6
  31
 0.0
 100
@@ -10273,9 +10041,9 @@ AcDbText
   0
 TEXT
   5
-10F
+10D
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10285,19 +10053,19 @@ AcDbText
  10
 -248.56
  20
-103.44
+91.44
  30
 0.0
  40
 2.5
   1
-AL SIRAJ GROUP  |  ALUMINIUM & GLASS DIVISION  |  UAE
+AL SIRAJ GROUP  |  ALUMINIUM, GLASS & FACADE DIVISION  |  UNITED ARAB EMIRATES
   7
-ASG-TEXT-SMALL
+ASG-TEXT-SHEET
  11
 -248.56
  21
-103.44
+91.44
  31
 0.0
 100
@@ -10307,9 +10075,9 @@ AcDbText
   0
 LINE
   5
-110
+10E
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10319,21 +10087,21 @@ AcDbLine
  10
 -250.0
  20
-121.2
+109.2
  30
 0.0
  11
 0.0
  21
-121.2
+109.2
  31
 0.0
   0
 LWPOLYLINE
   5
-111
+10F
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10355,17 +10123,17 @@ AcDbPolyline
  10
 0.0
  20
-121.2
+109.2
  10
 -250.0
  20
-121.2
+109.2
   0
 ENDBLK
   5
-DF
+E0
 330
-DD
+DE
 100
 AcDbEntity
   8
@@ -10375,9 +10143,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-12C
+129
 330
-12B
+128
 100
 AcDbEntity
   8
@@ -10401,9 +10169,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-12F
+12C
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10505,9 +10273,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-130
+12D
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10539,9 +10307,9 @@ AcDbPolyline
   0
 INSERT
   5
-131
+12E
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10563,9 +10331,9 @@ ASG-TB-A4
   0
 ATTRIB
   5
-133
+130
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10585,7 +10353,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 20.840000000000003
  21
@@ -10613,9 +10381,9 @@ DWG_NO
   0
 ATTRIB
   5
-134
+131
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10635,7 +10403,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 128.84
  21
@@ -10663,9 +10431,9 @@ REV
   0
 ATTRIB
   5
-135
+132
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10685,7 +10453,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 155.84
  21
@@ -10713,9 +10481,9 @@ SHEET_NO
   0
 ATTRIB
   5
-136
+133
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10735,7 +10503,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 20.840000000000003
  21
@@ -10763,9 +10531,9 @@ SCALE
   0
 ATTRIB
   5
-137
+134
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10785,7 +10553,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 80.84
  21
@@ -10813,9 +10581,9 @@ DATE
   0
 ATTRIB
   5
-138
+135
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10833,9 +10601,9 @@ AcDbText
  40
 2.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 140.84
  21
@@ -10863,9 +10631,9 @@ DWG_STATUS
   0
 ATTRIB
   5
-139
+136
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10885,7 +10653,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 20.840000000000003
  21
@@ -10913,9 +10681,9 @@ DRAWN_BY
   0
 ATTRIB
   5
-13A
+137
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10935,7 +10703,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 80.84
  21
@@ -10963,9 +10731,9 @@ CHECKED_BY
   0
 ATTRIB
   5
-13B
+138
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -10985,7 +10753,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 140.84
  21
@@ -11013,9 +10781,9 @@ APPROVED_BY
   0
 ATTRIB
   5
-13C
+139
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11027,7 +10795,7 @@ AcDbText
  10
 20.840000000000003
  20
-40.379999999999995
+40.1
  30
 0.0
  40
@@ -11035,11 +10803,11 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 20.840000000000003
  21
-40.379999999999995
+40.1
  31
 0.0
 100
@@ -11057,15 +10825,15 @@ DWG_TITLE
  11
 20.840000000000003
  21
-40.379999999999995
+40.1
  31
 0.0
   0
 ATTRIB
   5
-13D
+13A
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11083,7 +10851,7 @@ AcDbText
  40
 2.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -11113,9 +10881,9 @@ DWG_TITLE_2
   0
 ATTRIB
   5
-13E
+13B
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11133,63 +10901,13 @@ AcDbText
  40
 2.5
   1
--
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 20.840000000000003
  21
 49.34
- 31
-0.0
-100
-AcDbAttribute
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
-20.840000000000003
- 21
-49.34
- 31
-0.0
-  0
-ATTRIB
-  5
-13F
-330
-12B
-100
-AcDbEntity
- 67
-1
-  8
-0
-100
-AcDbText
- 10
-20.840000000000003
- 20
-56.34
- 30
-0.0
- 40
-2.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
-20.840000000000003
- 21
-56.34
  31
 0.0
 100
@@ -11207,15 +10925,15 @@ CLIENT
  11
 20.840000000000003
  21
-56.34
+49.34
  31
 0.0
   0
 ATTRIB
   5
-140
+13C
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11227,19 +10945,19 @@ AcDbText
  10
 110.84
  20
-56.34
+49.34
  30
 0.0
  40
 2.5
   1
-CONSULTANT NAME
+CONSULTANT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 110.84
  21
-56.34
+49.34
  31
 0.0
 100
@@ -11257,15 +10975,15 @@ CONSULTANT
  11
 110.84
  21
-56.34
+49.34
  31
 0.0
   0
 ATTRIB
   5
-141
+13D
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11277,7 +10995,7 @@ AcDbText
  10
 20.840000000000003
  20
-63.34
+56.34
  30
 0.0
  40
@@ -11285,11 +11003,11 @@ AcDbText
   1
 PROJECT NAME
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 20.840000000000003
  21
-63.34
+56.34
  31
 0.0
 100
@@ -11307,15 +11025,15 @@ PROJECT
  11
 20.840000000000003
  21
-63.34
+56.34
  31
 0.0
   0
 ATTRIB
   5
-142
+13E
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11327,7 +11045,7 @@ AcDbText
  10
 110.84
  20
-63.34
+56.34
  30
 0.0
  40
@@ -11335,11 +11053,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 110.84
  21
-63.34
+56.34
  31
 0.0
 100
@@ -11357,15 +11075,15 @@ LOCATION
  11
 110.84
  21
-63.34
+56.34
  31
 0.0
   0
 SEQEND
   5
-132
+12F
 330
-131
+12E
 100
 AcDbEntity
  67
@@ -11375,9 +11093,9 @@ ASG-TITLEBLOCK
   0
 VIEWPORT
   5
-143
+13F
 330
-12B
+128
 100
 AcDbEntity
  67
@@ -11389,13 +11107,13 @@ AcDbViewport
  10
 110.0
  20
-183.85
+180.35
  30
 0.0
  40
 170.0
  41
-196.3
+203.3
  68
 2
  69
@@ -11403,7 +11121,7 @@ AcDbViewport
  12
 850.0
  22
-981.5
+1016.5
  13
 0.0
  23
@@ -11435,7 +11153,7 @@ AcDbViewport
  44
 0.0
  45
-1963.0
+2033.0
  50
 0.0
  51
@@ -11479,9 +11197,9 @@ AcDbViewport
   0
 ENDBLK
   5
-12D
+12A
 330
-12B
+128
 100
 AcDbEntity
   8
@@ -11491,9 +11209,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-145
+141
 330
-144
+140
 100
 AcDbEntity
   8
@@ -11517,9 +11235,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-148
-330
 144
+330
+140
 100
 AcDbEntity
  67
@@ -11621,9 +11339,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-149
+145
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11655,9 +11373,9 @@ AcDbPolyline
   0
 INSERT
   5
-14A
+146
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11679,9 +11397,9 @@ ASG-TB-A3
   0
 ATTRIB
   5
-14C
+148
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11701,7 +11419,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 231.08
  21
@@ -11729,9 +11447,9 @@ DWG_NO
   0
 ATTRIB
   5
-14D
+149
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11751,7 +11469,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 339.08
  21
@@ -11779,9 +11497,9 @@ REV
   0
 ATTRIB
   5
-14E
+14A
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11801,7 +11519,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 366.08
  21
@@ -11829,9 +11547,9 @@ SHEET_NO
   0
 ATTRIB
   5
-14F
+14B
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11851,7 +11569,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 231.08
  21
@@ -11879,9 +11597,9 @@ SCALE
   0
 ATTRIB
   5
-150
+14C
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11901,7 +11619,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 291.08
  21
@@ -11929,9 +11647,9 @@ DATE
   0
 ATTRIB
   5
-151
+14D
 330
-144
+140
 100
 AcDbEntity
  67
@@ -11949,9 +11667,9 @@ AcDbText
  40
 2.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 351.08
  21
@@ -11979,9 +11697,9 @@ DWG_STATUS
   0
 ATTRIB
   5
-152
+14E
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12001,7 +11719,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 231.08
  21
@@ -12029,9 +11747,9 @@ DRAWN_BY
   0
 ATTRIB
   5
-153
+14F
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12051,7 +11769,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 291.08
  21
@@ -12079,9 +11797,9 @@ CHECKED_BY
   0
 ATTRIB
   5
-154
+150
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12101,7 +11819,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 351.08
  21
@@ -12129,9 +11847,9 @@ APPROVED_BY
   0
 ATTRIB
   5
-155
+151
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12143,7 +11861,7 @@ AcDbText
  10
 231.08
  20
-49.06
+48.7
  30
 0.0
  40
@@ -12151,11 +11869,11 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 231.08
  21
-49.06
+48.7
  31
 0.0
 100
@@ -12173,15 +11891,15 @@ DWG_TITLE
  11
 231.08
  21
-49.06
+48.7
  31
 0.0
   0
 ATTRIB
   5
-156
+152
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12199,7 +11917,7 @@ AcDbText
  40
 2.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -12229,9 +11947,9 @@ DWG_TITLE_2
   0
 ATTRIB
   5
-157
+153
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12249,63 +11967,13 @@ AcDbText
  40
 2.5
   1
--
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 231.08
  21
 60.58
- 31
-0.0
-100
-AcDbAttribute
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
-231.08
- 21
-60.58
- 31
-0.0
-  0
-ATTRIB
-  5
-158
-330
-144
-100
-AcDbEntity
- 67
-1
-  8
-0
-100
-AcDbText
- 10
-231.08
- 20
-69.58
- 30
-0.0
- 40
-2.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
-231.08
- 21
-69.58
  31
 0.0
 100
@@ -12323,15 +11991,15 @@ CLIENT
  11
 231.08
  21
-69.58
+60.58
  31
 0.0
   0
 ATTRIB
   5
-159
+154
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12343,19 +12011,19 @@ AcDbText
  10
 321.08
  20
-69.58
+60.58
  30
 0.0
  40
 2.5
   1
-CONSULTANT NAME
+CONSULTANT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 321.08
  21
-69.58
+60.58
  31
 0.0
 100
@@ -12373,15 +12041,15 @@ CONSULTANT
  11
 321.08
  21
-69.58
+60.58
  31
 0.0
   0
 ATTRIB
   5
-15A
+155
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12393,7 +12061,7 @@ AcDbText
  10
 231.08
  20
-78.58
+69.58
  30
 0.0
  40
@@ -12401,11 +12069,11 @@ AcDbText
   1
 PROJECT NAME
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 231.08
  21
-78.58
+69.58
  31
 0.0
 100
@@ -12423,15 +12091,15 @@ PROJECT
  11
 231.08
  21
-78.58
+69.58
  31
 0.0
   0
 ATTRIB
   5
-15B
+156
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12443,7 +12111,7 @@ AcDbText
  10
 321.08
  20
-78.58
+69.58
  30
 0.0
  40
@@ -12451,11 +12119,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 321.08
  21
-78.58
+69.58
  31
 0.0
 100
@@ -12473,15 +12141,15 @@ LOCATION
  11
 321.08
  21
-78.58
+69.58
  31
 0.0
   0
 SEQEND
   5
-14B
+147
 330
-14A
+146
 100
 AcDbEntity
  67
@@ -12491,9 +12159,9 @@ ASG-TITLEBLOCK
   0
 VIEWPORT
   5
-15C
+157
 330
-144
+140
 100
 AcDbEntity
  67
@@ -12595,9 +12263,9 @@ AcDbViewport
   0
 ENDBLK
   5
-146
+142
 330
-144
+140
 100
 AcDbEntity
   8
@@ -12607,9 +12275,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-15E
+159
 330
-15D
+158
 100
 AcDbEntity
   8
@@ -12633,9 +12301,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-161
+15C
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12737,9 +12405,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-162
-330
 15D
+330
+158
 100
 AcDbEntity
  67
@@ -12771,9 +12439,9 @@ AcDbPolyline
   0
 INSERT
   5
-163
+15E
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12795,9 +12463,9 @@ ASG-TB-A3
   0
 ATTRIB
   5
-165
+160
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12817,7 +12485,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 108.08000000000001
  21
@@ -12845,9 +12513,9 @@ DWG_NO
   0
 ATTRIB
   5
-166
+161
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12867,7 +12535,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 216.07999999999998
  21
@@ -12895,9 +12563,9 @@ REV
   0
 ATTRIB
   5
-167
+162
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12917,7 +12585,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 243.07999999999998
  21
@@ -12945,9 +12613,9 @@ SHEET_NO
   0
 ATTRIB
   5
-168
+163
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -12967,7 +12635,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 108.08000000000001
  21
@@ -12995,9 +12663,9 @@ SCALE
   0
 ATTRIB
   5
-169
+164
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13017,7 +12685,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 168.07999999999998
  21
@@ -13045,9 +12713,9 @@ DATE
   0
 ATTRIB
   5
-16A
+165
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13065,9 +12733,9 @@ AcDbText
  40
 2.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 228.07999999999998
  21
@@ -13095,9 +12763,9 @@ DWG_STATUS
   0
 ATTRIB
   5
-16B
+166
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13117,7 +12785,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 108.08000000000001
  21
@@ -13145,9 +12813,9 @@ DRAWN_BY
   0
 ATTRIB
   5
-16C
+167
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13167,7 +12835,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 168.07999999999998
  21
@@ -13195,9 +12863,9 @@ CHECKED_BY
   0
 ATTRIB
   5
-16D
+168
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13217,7 +12885,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 228.07999999999998
  21
@@ -13245,9 +12913,9 @@ APPROVED_BY
   0
 ATTRIB
   5
-16E
+169
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13259,7 +12927,7 @@ AcDbText
  10
 108.08000000000001
  20
-49.06
+48.7
  30
 0.0
  40
@@ -13267,11 +12935,11 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 108.08000000000001
  21
-49.06
+48.7
  31
 0.0
 100
@@ -13289,15 +12957,15 @@ DWG_TITLE
  11
 108.08000000000001
  21
-49.06
+48.7
  31
 0.0
   0
 ATTRIB
   5
-16F
+16A
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13315,7 +12983,7 @@ AcDbText
  40
 2.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -13345,9 +13013,9 @@ DWG_TITLE_2
   0
 ATTRIB
   5
-170
+16B
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13365,63 +13033,13 @@ AcDbText
  40
 2.5
   1
--
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 108.08000000000001
  21
 60.58
- 31
-0.0
-100
-AcDbAttribute
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
-108.08000000000001
- 21
-60.58
- 31
-0.0
-  0
-ATTRIB
-  5
-171
-330
-15D
-100
-AcDbEntity
- 67
-1
-  8
-0
-100
-AcDbText
- 10
-108.08000000000001
- 20
-69.58
- 30
-0.0
- 40
-2.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
-108.08000000000001
- 21
-69.58
  31
 0.0
 100
@@ -13439,15 +13057,15 @@ CLIENT
  11
 108.08000000000001
  21
-69.58
+60.58
  31
 0.0
   0
 ATTRIB
   5
-172
+16C
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13459,19 +13077,19 @@ AcDbText
  10
 198.07999999999998
  20
-69.58
+60.58
  30
 0.0
  40
 2.5
   1
-CONSULTANT NAME
+CONSULTANT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 198.07999999999998
  21
-69.58
+60.58
  31
 0.0
 100
@@ -13489,15 +13107,15 @@ CONSULTANT
  11
 198.07999999999998
  21
-69.58
+60.58
  31
 0.0
   0
 ATTRIB
   5
-173
+16D
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13509,7 +13127,7 @@ AcDbText
  10
 108.08000000000001
  20
-78.58
+69.58
  30
 0.0
  40
@@ -13517,11 +13135,11 @@ AcDbText
   1
 PROJECT NAME
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 108.08000000000001
  21
-78.58
+69.58
  31
 0.0
 100
@@ -13539,15 +13157,15 @@ PROJECT
  11
 108.08000000000001
  21
-78.58
+69.58
  31
 0.0
   0
 ATTRIB
   5
-174
+16E
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13559,7 +13177,7 @@ AcDbText
  10
 198.07999999999998
  20
-78.58
+69.58
  30
 0.0
  40
@@ -13567,11 +13185,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 198.07999999999998
  21
-78.58
+69.58
  31
 0.0
 100
@@ -13589,15 +13207,15 @@ LOCATION
  11
 198.07999999999998
  21
-78.58
+69.58
  31
 0.0
   0
 SEQEND
   5
-164
+15F
 330
-163
+15E
 100
 AcDbEntity
  67
@@ -13607,9 +13225,9 @@ ASG-TITLEBLOCK
   0
 VIEWPORT
   5
-175
+16F
 330
-15D
+158
 100
 AcDbEntity
  67
@@ -13621,13 +13239,13 @@ AcDbViewport
  10
 153.5
  20
-255.45
+250.95
  30
 0.0
  40
 257.0
  41
-299.1
+308.1
  68
 2
  69
@@ -13635,7 +13253,7 @@ AcDbViewport
  12
 2570.0
  22
-2991.0
+3081.0
  13
 0.0
  23
@@ -13667,7 +13285,7 @@ AcDbViewport
  44
 0.0
  45
-5982.0
+6162.0
  50
 0.0
  51
@@ -13711,9 +13329,9 @@ AcDbViewport
   0
 ENDBLK
   5
-15F
+15A
 330
-15D
+158
 100
 AcDbEntity
   8
@@ -13723,9 +13341,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-177
+171
 330
-176
+170
 100
 AcDbEntity
   8
@@ -13749,9 +13367,9 @@ AcDbBlockBegin
   0
 VIEWPORT
   5
-17A
+174
 330
-176
+170
 100
 AcDbEntity
  67
@@ -13853,9 +13471,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-17B
+175
 330
-176
+170
 100
 AcDbEntity
  67
@@ -13887,9 +13505,9 @@ AcDbPolyline
   0
 INSERT
   5
-17C
-330
 176
+330
+170
 100
 AcDbEntity
  67
@@ -13911,9 +13529,9 @@ ASG-TB-A1
   0
 ATTRIB
   5
-17E
+178
 330
-176
+170
 100
 AcDbEntity
  67
@@ -13933,7 +13551,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 582.44
  21
@@ -13961,9 +13579,9 @@ DWG_NO
   0
 ATTRIB
   5
-17F
+179
 330
-176
+170
 100
 AcDbEntity
  67
@@ -13983,7 +13601,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 732.44
  21
@@ -14011,9 +13629,9 @@ REV
   0
 ATTRIB
   5
-180
+17A
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14033,7 +13651,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 769.94
  21
@@ -14061,9 +13679,9 @@ SHEET_NO
   0
 ATTRIB
   5
-181
+17B
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14083,7 +13701,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 582.44
  21
@@ -14111,9 +13729,9 @@ SCALE
   0
 ATTRIB
   5
-182
+17C
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14133,7 +13751,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 665.7733333333333
  21
@@ -14161,9 +13779,9 @@ DATE
   0
 ATTRIB
   5
-183
+17D
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14181,9 +13799,9 @@ AcDbText
  40
 3.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 749.1066666666667
  21
@@ -14211,9 +13829,9 @@ DWG_STATUS
   0
 ATTRIB
   5
-184
+17E
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14233,7 +13851,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 582.44
  21
@@ -14261,9 +13879,9 @@ DRAWN_BY
   0
 ATTRIB
   5
-185
+17F
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14283,7 +13901,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 665.7733333333333
  21
@@ -14311,9 +13929,9 @@ CHECKED_BY
   0
 ATTRIB
   5
-186
+180
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14333,7 +13951,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 749.1066666666667
  21
@@ -14361,9 +13979,9 @@ APPROVED_BY
   0
 ATTRIB
   5
-187
+181
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14375,7 +13993,7 @@ AcDbText
  10
 582.44
  20
-62.08
+61.6
  30
 0.0
  40
@@ -14383,11 +14001,11 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 582.44
  21
-62.08
+61.6
  31
 0.0
 100
@@ -14405,15 +14023,15 @@ DWG_TITLE
  11
 582.44
  21
-62.08
+61.6
  31
 0.0
   0
 ATTRIB
   5
-188
+182
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14431,7 +14049,7 @@ AcDbText
  40
 3.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -14461,9 +14079,9 @@ DWG_TITLE_2
   0
 ATTRIB
   5
-189
+183
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14481,63 +14099,13 @@ AcDbText
  40
 3.5
   1
--
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 582.44
  21
 77.44
- 31
-0.0
-100
-AcDbAttribute
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
-582.44
- 21
-77.44
- 31
-0.0
-  0
-ATTRIB
-  5
-18A
-330
-176
-100
-AcDbEntity
- 67
-1
-  8
-0
-100
-AcDbText
- 10
-582.44
- 20
-89.44
- 30
-0.0
- 40
-3.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
-582.44
- 21
-89.44
  31
 0.0
 100
@@ -14555,15 +14123,15 @@ CLIENT
  11
 582.44
  21
-89.44
+77.44
  31
 0.0
   0
 ATTRIB
   5
-18B
+184
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14575,19 +14143,19 @@ AcDbText
  10
 707.44
  20
-89.44
+77.44
  30
 0.0
  40
 3.5
   1
-CONSULTANT NAME
+CONSULTANT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 707.44
  21
-89.44
+77.44
  31
 0.0
 100
@@ -14605,15 +14173,15 @@ CONSULTANT
  11
 707.44
  21
-89.44
+77.44
  31
 0.0
   0
 ATTRIB
   5
-18C
+185
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14625,7 +14193,7 @@ AcDbText
  10
 582.44
  20
-101.44
+89.44
  30
 0.0
  40
@@ -14633,11 +14201,11 @@ AcDbText
   1
 PROJECT NAME
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 582.44
  21
-101.44
+89.44
  31
 0.0
 100
@@ -14655,15 +14223,15 @@ PROJECT
  11
 582.44
  21
-101.44
+89.44
  31
 0.0
   0
 ATTRIB
   5
-18D
+186
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14675,7 +14243,7 @@ AcDbText
  10
 707.44
  20
-101.44
+89.44
  30
 0.0
  40
@@ -14683,11 +14251,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 707.44
  21
-101.44
+89.44
  31
 0.0
 100
@@ -14705,15 +14273,15 @@ LOCATION
  11
 707.44
  21
-101.44
+89.44
  31
 0.0
   0
 SEQEND
   5
-17D
+177
 330
-17C
+176
 100
 AcDbEntity
  67
@@ -14723,9 +14291,9 @@ ASG-TITLEBLOCK
   0
 VIEWPORT
   5
-18E
+187
 330
-176
+170
 100
 AcDbEntity
  67
@@ -14827,9 +14395,9 @@ AcDbViewport
   0
 ENDBLK
   5
-178
+172
 330
-176
+170
 100
 AcDbEntity
   8
@@ -14839,9 +14407,9 @@ AcDbBlockEnd
   0
 BLOCK
   5
-113
+111
 330
-112
+110
 100
 AcDbEntity
   8
@@ -14865,9 +14433,9 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-114
-330
 112
+330
+110
 100
 AcDbEntity
   8
@@ -14883,9 +14451,9 @@ ENTITIES
   0
 VIEWPORT
   5
-116
+114
 330
-112
+110
 100
 AcDbEntity
  67
@@ -14987,9 +14555,9 @@ AcDbViewport
   0
 LWPOLYLINE
   5
-117
+115
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15021,9 +14589,9 @@ AcDbPolyline
   0
 INSERT
   5
-118
+116
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15045,9 +14613,9 @@ ASG-TB-A4
   0
 ATTRIB
   5
-11A
+118
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15067,7 +14635,7 @@ AcDbText
   1
 AS-YYYY-NNN-DIS-TYP-001
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 107.84
  21
@@ -15095,9 +14663,9 @@ DWG_NO
   0
 ATTRIB
   5
-11B
+119
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15117,7 +14685,7 @@ AcDbText
   1
 R0
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 215.84
  21
@@ -15145,9 +14713,9 @@ REV
   0
 ATTRIB
   5
-11C
+11A
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15167,7 +14735,7 @@ AcDbText
   1
 01 OF 01
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 242.84
  21
@@ -15195,9 +14763,9 @@ SHEET_NO
   0
 ATTRIB
   5
-11D
+11B
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15217,7 +14785,7 @@ AcDbText
   1
 AS SHOWN
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 107.84
  21
@@ -15245,9 +14813,9 @@ SCALE
   0
 ATTRIB
   5
-11E
+11C
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15267,7 +14835,7 @@ AcDbText
   1
 DD.MM.YYYY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 167.84
  21
@@ -15295,9 +14863,9 @@ DATE
   0
 ATTRIB
   5
-11F
+11D
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15315,9 +14883,9 @@ AcDbText
  40
 2.5
   1
-FOR APPROVAL
+PRELIMINARY
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 227.84
  21
@@ -15345,9 +14913,9 @@ DWG_STATUS
   0
 ATTRIB
   5
-120
+11E
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15367,7 +14935,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 107.84
  21
@@ -15395,9 +14963,9 @@ DRAWN_BY
   0
 ATTRIB
   5
-121
+11F
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15417,7 +14985,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 167.84
  21
@@ -15445,9 +15013,9 @@ CHECKED_BY
   0
 ATTRIB
   5
-122
+120
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15467,7 +15035,7 @@ AcDbText
   1
 -
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 227.84
  21
@@ -15495,9 +15063,9 @@ APPROVED_BY
   0
 ATTRIB
   5
-123
+121
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15509,7 +15077,7 @@ AcDbText
  10
 107.84
  20
-40.379999999999995
+40.1
  30
 0.0
  40
@@ -15517,11 +15085,11 @@ AcDbText
   1
 DRAWING TITLE
   7
-ASG-TEXT-SHEET
+ASG-TEXT-HEADING
  11
 107.84
  21
-40.379999999999995
+40.1
  31
 0.0
 100
@@ -15539,15 +15107,15 @@ DWG_TITLE
  11
 107.84
  21
-40.379999999999995
+40.1
  31
 0.0
   0
 ATTRIB
   5
-124
+122
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15565,7 +15133,7 @@ AcDbText
  40
 2.5
   1
--
+
   7
 ASG-TEXT-TITLE
  11
@@ -15595,9 +15163,9 @@ DWG_TITLE_2
   0
 ATTRIB
   5
-125
+123
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15615,63 +15183,13 @@ AcDbText
  40
 2.5
   1
--
+CLIENT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 107.84
  21
 49.34
- 31
-0.0
-100
-AcDbAttribute
-  2
-REMARKS
- 70
-0
- 74
-1
- 71
-1
- 72
-0
- 11
-107.84
- 21
-49.34
- 31
-0.0
-  0
-ATTRIB
-  5
-126
-330
-112
-100
-AcDbEntity
- 67
-1
-  8
-0
-100
-AcDbText
- 10
-107.84
- 20
-56.34
- 30
-0.0
- 40
-2.5
-  1
-CLIENT NAME
-  7
-ASG-TEXT-NOTE
- 11
-107.84
- 21
-56.34
  31
 0.0
 100
@@ -15689,15 +15207,15 @@ CLIENT
  11
 107.84
  21
-56.34
+49.34
  31
 0.0
   0
 ATTRIB
   5
-127
+124
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15709,19 +15227,19 @@ AcDbText
  10
 197.84
  20
-56.34
+49.34
  30
 0.0
  40
 2.5
   1
-CONSULTANT NAME
+CONSULTANT
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 197.84
  21
-56.34
+49.34
  31
 0.0
 100
@@ -15739,15 +15257,15 @@ CONSULTANT
  11
 197.84
  21
-56.34
+49.34
  31
 0.0
   0
 ATTRIB
   5
-128
+125
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15759,7 +15277,7 @@ AcDbText
  10
 107.84
  20
-63.34
+56.34
  30
 0.0
  40
@@ -15767,11 +15285,11 @@ AcDbText
   1
 PROJECT NAME
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 107.84
  21
-63.34
+56.34
  31
 0.0
 100
@@ -15789,15 +15307,15 @@ PROJECT
  11
 107.84
  21
-63.34
+56.34
  31
 0.0
   0
 ATTRIB
   5
-129
+126
 330
-112
+110
 100
 AcDbEntity
  67
@@ -15809,7 +15327,7 @@ AcDbText
  10
 197.84
  20
-63.34
+56.34
  30
 0.0
  40
@@ -15817,11 +15335,11 @@ AcDbText
   1
 LOCATION, UAE
   7
-ASG-TEXT-NOTE
+ASG-TEXT-SHEET
  11
 197.84
  21
-63.34
+56.34
  31
 0.0
 100
@@ -15839,15 +15357,15 @@ LOCATION
  11
 197.84
  21
-63.34
+56.34
  31
 0.0
   0
 SEQEND
   5
-119
+117
 330
-118
+116
 100
 AcDbEntity
  67
@@ -15857,9 +15375,9 @@ ASG-TITLEBLOCK
   0
 VIEWPORT
   5
-12A
+127
 330
-112
+110
 100
 AcDbEntity
  67
@@ -16059,23 +15577,23 @@ Model
   3
 A4-LANDSCAPE
 350
-115
+113
   3
 A4-PORTRAIT
 350
-12E
+12B
   3
 A3-LANDSCAPE
 350
-147
+143
   3
 A3-PORTRAIT
 350
-160
+15B
   3
 A1-LANDSCAPE
 350
-179
+173
   0
 DICTIONARY
   5
@@ -16113,17 +15631,21 @@ Standard
 350
 2C
   3
-ASG-ML-ANNOTATIVE
-350
-69
-  3
-ASG-ML-NOTE
+ASG-ML-ANNO
 350
 6A
   3
-ASG-ML-DETAIL
+ASG-ML-NOTE
 350
 6B
+  3
+ASG-ML-DETAIL
+350
+6C
+  3
+ASG-ML-REFERENCE
+350
+72
   0
 DICTIONARY
   5
@@ -16141,11 +15663,11 @@ Standard
   3
 ASG-MLINE-2
 350
-71
+78
   3
 ASG-MLINE-3
 350
-72
+79
   0
 DICTIONARY
   5
@@ -16193,35 +15715,35 @@ AcDbDictionary
   3
 A0
 350
-193
+18C
   3
 A1
 350
-194
+18D
   3
 A2
 350
-195
+18E
   3
 A3
 350
-196
+18F
   3
 A4
 350
-197
+190
   3
 A5
 350
-198
+191
   3
 A6
 350
-199
+192
   3
 A7
 350
-19A
+193
   0
 DICTIONARY
   5
@@ -16321,9 +15843,9 @@ Model
  20
 0.0
  11
-420.0
+200000.0
  21
-297.0
+150000.0
  12
 0.0
  22
@@ -16893,7 +16415,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-192
+18B
   0
 DICTIONARYVAR
   5
@@ -16905,103 +16427,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-10-10T08:41:38.661878+00:00
-  0
-MLEADERSTYLE
-  5
-69
-102
-{ACAD_REACTORS
-330
-F
-102
-}
-330
-F
-100
-AcDbMLeaderStyle
-179
-2
-170
-2
-171
-1
-172
-0
- 90
-2
- 40
-0.0
- 41
-0.0
-173
-1
- 91
--1073741824
- 92
--2
-290
-1
- 42
-1.0
-291
-1
- 43
-4.0
-  3
-ASG-ML-ANNOTATIVE
- 44
-2.5
-300
-
-342
-5E
-174
-1
-175
-1
-176
-0
-178
-1
- 93
--1073741824
- 45
-2.5
-292
-0
-297
-0
- 46
-4.0
- 94
--1056964608
- 47
-1.0
- 49
-1.0
-140
-1.0
-294
-1
-141
-0.0
-177
-0
-142
-1.0
-295
-0
-296
-1
-143
-3.75
-271
-0
-272
-9
-273
-9
+1.4.4 @ 2026-10-10T08:39:43.164586+00:00
   0
 MLEADERSTYLE
   5
@@ -17045,13 +16471,13 @@ AcDbMLeaderStyle
  43
 4.0
   3
-ASG-ML-NOTE
+ASG-ML-ANNO
  44
 2.5
 300
 
 342
-5E
+5F
 174
 1
 175
@@ -17089,7 +16515,7 @@ ASG-ML-NOTE
 295
 0
 296
-0
+1
 143
 3.75
 271
@@ -17141,15 +16567,111 @@ AcDbMLeaderStyle
  43
 4.0
   3
+ASG-ML-NOTE
+ 44
+2.5
+300
+
+342
+5F
+174
+1
+175
+1
+176
+0
+178
+1
+ 93
+-1073741824
+ 45
+2.5
+292
+0
+297
+0
+ 46
+4.0
+ 94
+-1056964608
+ 47
+1.0
+ 49
+1.0
+140
+1.0
+294
+1
+141
+0.0
+177
+0
+142
+1.0
+295
+0
+296
+0
+143
+3.75
+271
+0
+272
+9
+273
+9
+  0
+MLEADERSTYLE
+  5
+6C
+102
+{ACAD_REACTORS
+330
+F
+102
+}
+330
+F
+100
+AcDbMLeaderStyle
+179
+2
+170
+2
+171
+1
+172
+0
+ 90
+2
+ 40
+0.0
+ 41
+0.0
+173
+1
+ 91
+-1073741824
+ 92
+-2
+290
+1
+ 42
+1.0
+291
+1
+ 43
+4.0
+  3
 ASG-ML-DETAIL
 341
-6C
+6D
  44
 1.5
 300
 
 342
-5F
+60
 174
 1
 175
@@ -17187,7 +16709,105 @@ ASG-ML-DETAIL
 295
 0
 296
+1
+143
+3.75
+271
 0
+272
+9
+273
+9
+  0
+MLEADERSTYLE
+  5
+72
+102
+{ACAD_REACTORS
+330
+F
+102
+}
+330
+F
+100
+AcDbMLeaderStyle
+179
+2
+170
+2
+171
+1
+172
+0
+ 90
+2
+ 40
+0.0
+ 41
+0.0
+173
+1
+ 91
+-1073741824
+ 92
+-2
+290
+1
+ 42
+1.0
+291
+1
+ 43
+4.0
+  3
+ASG-ML-REFERENCE
+341
+73
+ 44
+2.5
+300
+
+342
+5F
+174
+1
+175
+1
+176
+0
+178
+1
+ 93
+-1073741824
+ 45
+2.5
+292
+1
+297
+0
+ 46
+4.0
+ 94
+-1056964608
+ 47
+1.0
+ 49
+1.0
+140
+1.0
+294
+1
+141
+0.0
+177
+0
+142
+1.0
+295
+0
+296
+1
 143
 3.75
 271
@@ -17199,7 +16819,7 @@ ASG-ML-DETAIL
   0
 MLINESTYLE
   5
-71
+78
 102
 {ACAD_REACTORS
 330
@@ -17215,7 +16835,7 @@ ASG-MLINE-2
  70
 272
   3
-Two-line, offsets +/-0.5 - set MLINE scale = overall width
+Two lines +/-0.5; MLINE scale = overall width
  62
 256
  51
@@ -17239,7 +16859,7 @@ BYLAYER
   0
 MLINESTYLE
   5
-72
+79
 102
 {ACAD_REACTORS
 330
@@ -17255,7 +16875,7 @@ ASG-MLINE-3
  70
 272
   3
-Three-line with centreline - frames / panels with axis
+Two lines + CENTER2 axis
  62
 256
  51
@@ -17285,7 +16905,7 @@ BYLAYER
   0
 LAYOUT
   5
-115
+113
 330
 D
 100
@@ -17407,13 +17027,13 @@ A4-LANDSCAPE
  76
 1
 330
-112
+110
 331
-116
+114
   0
 LAYOUT
   5
-12E
+12B
 330
 D
 100
@@ -17535,13 +17155,13 @@ A4-PORTRAIT
  76
 1
 330
-12B
+128
 331
-12F
+12C
   0
 LAYOUT
   5
-147
+143
 330
 D
 100
@@ -17663,13 +17283,13 @@ A3-LANDSCAPE
  76
 1
 330
-144
+140
 331
-148
+144
   0
 LAYOUT
   5
-160
+15B
 330
 D
 100
@@ -17791,13 +17411,13 @@ A3-PORTRAIT
  76
 1
 330
-15D
+158
 331
-161
+15C
   0
 LAYOUT
   5
-179
+173
 330
 D
 100
@@ -17919,13 +17539,13 @@ A1-LANDSCAPE
  76
 1
 330
-176
+170
 331
-17A
+174
   0
 DICTIONARYVAR
   5
-192
+18B
 330
 2D
 100
@@ -17933,11 +17553,11 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-10-10T08:41:38.677988+00:00
+1.4.4 @ 2026-10-10T08:39:43.181757+00:00
   0
 SCALE
   5
-193
+18C
 102
 {ACAD_REACTORS
 330
@@ -17961,7 +17581,7 @@ AcDbScale
   0
 SCALE
   5
-194
+18D
 102
 {ACAD_REACTORS
 330
@@ -17985,7 +17605,7 @@ AcDbScale
   0
 SCALE
   5
-195
+18E
 102
 {ACAD_REACTORS
 330
@@ -18009,7 +17629,7 @@ AcDbScale
   0
 SCALE
   5
-196
+18F
 102
 {ACAD_REACTORS
 330
@@ -18033,7 +17653,7 @@ AcDbScale
   0
 SCALE
   5
-197
+190
 102
 {ACAD_REACTORS
 330
@@ -18057,7 +17677,7 @@ AcDbScale
   0
 SCALE
   5
-198
+191
 102
 {ACAD_REACTORS
 330
@@ -18081,7 +17701,7 @@ AcDbScale
   0
 SCALE
   5
-199
+192
 102
 {ACAD_REACTORS
 330
@@ -18105,7 +17725,7 @@ AcDbScale
   0
 SCALE
   5
-19A
+193
 102
 {ACAD_REACTORS
 330

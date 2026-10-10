@@ -410,7 +410,7 @@ STANDARD_NOTES = [
 def setup_layout(doc, name, size_key):
     w, h, paper = SHEETS[size_key]
     lay = doc.layouts.new(name)
-    lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", scale=1,
+    lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", scale=(1, 1),
                    name=paper, device="DWG To PDF.pc3")
     lay.dxf.current_style_sheet = CTB_NAME
     lay.use_plot_styles(True)

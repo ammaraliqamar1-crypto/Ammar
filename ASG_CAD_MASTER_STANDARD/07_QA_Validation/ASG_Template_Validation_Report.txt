@@ -1,0 +1,151 @@
+ASG TEMPLATE VALIDATION REPORT - 10.10.2026
+Summary: PASS 130 | PARTIAL 1 | UNVERIFIED 13 | FAIL 3
+AutoCAD not available - nothing tested inside AutoCAD.
+
+FAIL        [Environment] Native AutoCAD / DWG writer available  -- None of AutoCAD, accoreconsole, ODA File Converter, LibreDWG, QCAD, BricsCAD present
+FAIL        [Deliverables] ASG_Master_Template.dwt generated natively  -- Not generated - no DWG writer. Not faked by renaming. Create in AutoCAD per README step 4.
+FAIL        [Deliverables] ASG_Master_Template.dwg generated natively  -- Not generated - no DWG writer. Not faked by renaming. Create in AutoCAD per README step 4.
+PASS        [File] Master DXF re-opened (recover + audit)  -- 0 errors, 0 fixes, AC1032 = AutoCAD 2018 DXF
+PASS        [File] Master DXF strict parse  -- ezdxf.readfile without exception
+PASS        [File] Master DXF opened by second, independent reader (LibreOffice Draw)  -- converted without load error
+UNVERIFIED  [File] Opens in AutoCAD  -- AutoCAD not available - README step 2
+PASS        [Units & variables] $INSUNITS = 4  -- read back 4 - Insertion units = millimetres (no unit conversion on block insert)
+PASS        [Units & variables] $MEASUREMENT = 1  -- read back 1 - Metric - acadiso.lin / acadiso.pat used
+PASS        [Units & variables] $LUNITS = 2  -- read back 2 - Linear units = Decimal
+PASS        [Units & variables] $LUPREC = 0  -- read back 0 - Linear display precision 0 dp
+PASS        [Units & variables] $AUNITS = 0  -- read back 0 - Angular units = Decimal Degrees
+PASS        [Units & variables] $AUPREC = 2  -- read back 2 - Angle precision 0.00
+PASS        [Units & variables] $ANGBASE = 0.0  -- read back 0.0 - 0 deg = East
+PASS        [Units & variables] $ANGDIR = 0  -- read back 0 - Counter-clockwise positive
+PASS        [Units & variables] $LIMMIN = (0.0, 0.0)  -- read back (0.0, 0.0) - Nominal limits origin
+PASS        [Units & variables] $LIMMAX = (200000.0, 150000.0)  -- read back (200000.0, 150000.0) - Nominal 200 x 150 m - never restrictive
+PASS        [Units & variables] $LIMCHECK = 0  -- read back 0 - Limits not enforced (large facade elevations)
+PASS        [Units & variables] $LTSCALE = 1.0  -- read back 1.0 - Global linetype scale 1 - dash lengths in paper mm
+PASS        [Units & variables] $PSLTSCALE = 1  -- read back 1 - Viewport scale controls linetype scale
+PASS        [Units & variables] $CELTSCALE = 1.0  -- read back 1.0 - Object linetype scale default
+PASS        [Units & variables] $LWDISPLAY = 1  -- read back 1 - Show lineweights on screen
+PASS        [Units & variables] $CELWEIGHT = -1  -- read back -1 - New objects lineweight ByLayer
+PASS        [Units & variables] $CECOLOR = 256  -- read back 256 - New objects colour ByLayer
+PASS        [Units & variables] $ORTHOMODE = 0  -- read back 0 - Ortho off - polar tracking preferred
+PASS        [Units & variables] $DIMASSOC = 2  -- read back 2 - Associative dimensions follow geometry
+PASS        [Units & variables] $PLINEGEN = 1  -- read back 1 - Continuous linetype pattern along polylines
+PASS        [Units & variables] $FILLMODE = 1  -- read back 1 - Fills displayed
+PASS        [Units & variables] $MIRRTEXT = 0  -- read back 0 - Text not mirrored
+PASS        [Units & variables] $TEXTSIZE = 2.5  -- read back 2.5 - Default text height
+PASS        [Units & variables] $PSTYLEMODE = 1  -- read back 1 - Colour-dependent plot styles (CTB)
+PASS        [Units & variables] $WORLDVIEW = 1  -- read back 1 - UCS follows WCS in views
+PASS        [Units & variables] $UCSORG = (0.0, 0.0, 0.0)  -- read back (0.0, 0.0, 0.0) - UCS origin at WCS origin
+PASS        [Units & variables] $UCSXDIR = (1.0, 0.0, 0.0)  -- read back (1.0, 0.0, 0.0) - UCS = World
+PASS        [Units & variables] $UCSYDIR = (0.0, 1.0, 0.0)  -- read back (0.0, 1.0, 0.0) - UCS = World
+PASS        [Units & variables] $VISRETAIN = 1  -- read back 1 - Xref layer overrides retained
+PASS        [Units & variables] $PROXYGRAPHICS = 1  -- read back 1 - Proxy images saved for interoperability
+PASS        [Units & variables] $CLAYER = ASG-OUTLINE-PRIMARY  -- read back ASG-OUTLINE-PRIMARY - Default current layer (plottable geometry)
+PASS        [Units & variables] $TEXTSTYLE = ASG-TEXT-ANNO  -- read back ASG-TEXT-ANNO - Default text style
+PASS        [Units & variables] $DIMSTYLE = ASG-DIM-ANNO  -- read back ASG-DIM-ANNO - Default dimension style
+PASS        [Units & variables] $CMLSTYLE = ASG-MLINE-2  -- read back ASG-MLINE-2 - Default multiline style
+UNVERIFIED  [Units & variables] Machine/profile variables (OSMODE, AUTOSNAP, PICKBOX ...)  -- Not drawing-resident; applied only by opt-in ASG-PROFILE in AutoCAD
+PASS        [Linetypes] HIDDEN loaded
+PASS        [Linetypes] HIDDEN2 loaded
+PASS        [Linetypes] CENTER loaded
+PASS        [Linetypes] CENTER2 loaded
+PASS        [Linetypes] DASHED loaded
+PASS        [Linetypes] DASHED2 loaded
+PASS        [Linetypes] DASHDOT loaded
+PASS        [Linetypes] DASHDOT2 loaded
+PASS        [Linetypes] PHANTOM loaded
+PASS        [Linetypes] PHANTOM2 loaded
+PASS        [Linetypes] DOT loaded
+PASS        [Linetypes] Continuous loaded
+PASS        [Layers] 34 ASG layers present  -- found 34
+PASS        [Layers] No other layers except system 0 / Defpoints  -- ['0', 'Defpoints']
+PASS        [Layers] Layer names and codes unique
+PASS        [Layers] Every layer: ACI, linetype (loaded), lineweight, plot flag, description  -- 34/34 correct 
+PASS        [Layers] No-plot layers exactly: ASG-CONSTRUCTION, ASG-NOPLOT, ASG-VIEWPORT
+PASS        [Layers] Current layer is plottable geometry  -- ASG-OUTLINE-PRIMARY
+PASS        [Text styles] ASG-TEXT-ANNO: arial.ttf, height 0, annotative=True
+PASS        [Text styles] ASG-TEXT-NOTE: arial.ttf, height 0, annotative=True
+PASS        [Text styles] ASG-TEXT-SMALL: arial.ttf, height 0, annotative=True
+PASS        [Text styles] ASG-TEXT-TITLE: arialbd.ttf, height 0, annotative=False
+PASS        [Text styles] ASG-TEXT-HEADING: arialbd.ttf, height 0, annotative=False
+PASS        [Text styles] ASG-TEXT-SHEET: arial.ttf, height 0, annotative=False
+UNVERIFIED  [Text styles] Annotative text behaviour at viewport scales  -- Annotative flag written & re-read; scaling behaviour needs AutoCAD (README step 5)
+PASS        [Dimension styles] ASG-DIM-ANNO  -- all 44 variables match; annotative=True
+PASS        [Dimension styles] ASG-DIM-FIXED  -- all 44 variables match; annotative=False
+PASS        [Dimension styles] ASG-DIM-DETAIL  -- all 44 variables match; annotative=True
+PASS        [Dimension styles] ASG-DIM-ANGULAR  -- all 44 variables match; annotative=True
+PASS        [Dimension styles] ASG-DIM-RADIUS  -- all 44 variables match; annotative=True
+PASS        [Dimension styles] ASG-DIM-DIAMETER  -- all 44 variables match; annotative=True
+PASS        [Multileader styles] ASG-ML-ANNO  -- ASG-TEXT-NOTE 2.5 mm, arrow closed filled 2.5
+PASS        [Multileader styles] ASG-ML-NOTE  -- ASG-TEXT-NOTE 2.5 mm, arrow closed filled 2.5
+PASS        [Multileader styles] ASG-ML-DETAIL  -- ASG-TEXT-SMALL 1.8 mm, arrow _DOT 1.5
+PASS        [Multileader styles] ASG-ML-REFERENCE  -- ASG-TEXT-NOTE 2.5 mm, arrow _OPEN30 2.5
+UNVERIFIED  [Multileader styles] Background mask  -- Mask is an MText property, not stored in MLEADERSTYLE - documented per-note procedure
+PASS        [Multiline styles] ASG-MLINE-2
+PASS        [Multiline styles] ASG-MLINE-3
+PASS        [Annotation scales] Scale list = 1:1, 1:2, 1:5, 1:10, 1:20, 1:25, 1:50, 1:100  -- read back ['1:1', '1:2', '1:5', '1:10', '1:20', '1:25', '1:50', '1:100']; drawing units [1.0, 2.0, 5.0, 10.0, 20.0, 25.0, 50.0, 100.0]
+PASS        [Annotation scales] No duplicate scales
+UNVERIFIED  [Annotation scales] Scale list accepted by AutoCAD  -- Raw AcDbScale objects; confirm in SCALELISTEDIT (ASG-QA checks it)
+UNVERIFIED  [Table styles] 7 ASG-TABLE-* styles  -- ezdxf cannot write TABLESTYLE; created by ASG-SETUP in AutoCAD. In DXF now: none
+UNVERIFIED  [Page setups] Named page setups ASG-<layout>  -- ezdxf cannot write named PLOTSETTINGS; ASG-SETUP copies them from the layouts
+PASS        [Layouts] Layouts: A4-LANDSCAPE, A4-PORTRAIT, A3-LANDSCAPE, A3-PORTRAIT, A1-LANDSCAPE  -- ['Model', 'A4-LANDSCAPE', 'A4-PORTRAIT', 'A3-LANDSCAPE', 'A3-PORTRAIT', 'A1-LANDSCAPE']
+PASS        [Layouts] A4-LANDSCAPE: 297x210 mm, DWG To PDF.pc3, layout area, 1:1, centred, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A4_(297.00_x_210.00_MM)
+PASS        [Title blocks] A4-LANDSCAPE: ASG-TB-A4 at scale 1 (not stretched), 15 attributes
+PASS        [Sheets] A4-LANDSCAPE: border 20/10 mm margins inside 297x210
+PASS        [Viewports] A4-LANDSCAPE: 1 viewport, locked, ASG-VIEWPORT (no plot), 1:10
+PASS        [Viewports] A4-LANDSCAPE: viewport clear of title block
+PASS        [Layouts] A4-PORTRAIT: 210x297 mm, DWG To PDF.pc3, layout area, 1:1, centred, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A4_(210.00_x_297.00_MM)
+PASS        [Title blocks] A4-PORTRAIT: ASG-TB-A4 at scale 1 (not stretched), 15 attributes
+PASS        [Sheets] A4-PORTRAIT: border 20/10 mm margins inside 210x297
+PASS        [Viewports] A4-PORTRAIT: 1 viewport, locked, ASG-VIEWPORT (no plot), 1:10
+PASS        [Viewports] A4-PORTRAIT: viewport clear of title block
+PASS        [Layouts] A3-LANDSCAPE: 420x297 mm, DWG To PDF.pc3, layout area, 1:1, centred, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A3_(420.00_x_297.00_MM)
+PASS        [Title blocks] A3-LANDSCAPE: ASG-TB-A3 at scale 1 (not stretched), 15 attributes
+PASS        [Sheets] A3-LANDSCAPE: border 20/10 mm margins inside 420x297
+PASS        [Viewports] A3-LANDSCAPE: 1 viewport, locked, ASG-VIEWPORT (no plot), 1:20
+PASS        [Viewports] A3-LANDSCAPE: viewport clear of title block
+PASS        [Layouts] A3-PORTRAIT: 297x420 mm, DWG To PDF.pc3, layout area, 1:1, centred, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A3_(297.00_x_420.00_MM)
+PASS        [Title blocks] A3-PORTRAIT: ASG-TB-A3 at scale 1 (not stretched), 15 attributes
+PASS        [Sheets] A3-PORTRAIT: border 20/10 mm margins inside 297x420
+PASS        [Viewports] A3-PORTRAIT: 1 viewport, locked, ASG-VIEWPORT (no plot), 1:20
+PASS        [Viewports] A3-PORTRAIT: viewport clear of title block
+PASS        [Layouts] A1-LANDSCAPE: 841x594 mm, DWG To PDF.pc3, layout area, 1:1, centred, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A1_(841.00_x_594.00_MM)
+PASS        [Title blocks] A1-LANDSCAPE: ASG-TB-A1 at scale 1 (not stretched), 15 attributes
+PASS        [Sheets] A1-LANDSCAPE: border 20/10 mm margins inside 841x594
+PASS        [Viewports] A1-LANDSCAPE: 1 viewport, locked, ASG-VIEWPORT (no plot), 1:50
+PASS        [Viewports] A1-LANDSCAPE: viewport clear of title block
+PASS        [Title blocks] ASG-TB-A4: 15 attribute definitions, 180 x 63.7 mm
+PASS        [Title blocks] ASG-TB-A3: 15 attribute definitions, 180 x 81.9 mm
+PASS        [Title blocks] ASG-TB-A1: 15 attribute definitions, 250 x 109.2 mm
+PASS        [Model space] Model space empty  -- 0 entities
+PASS        [References] No external references
+PASS        [References] No image / PDF underlay dependencies
+PASS        [Interoperability] No proxy entities
+PASS        [Scope] Only title-block blocks (no product blocks / libraries)  -- ['ASG-TB-A1', 'ASG-TB-A3', 'ASG-TB-A4']
+PASS        [Interoperability] Fonts referenced  -- ['arial.ttf', 'arialbd.ttf'] - Windows core fonts; AutoCAD substitutes via FONTALT if missing
+PASS        [Automation] Re-running scale injection adds nothing (idempotent)
+PASS        [Automation] Rebuild produces identical layer / style / layout sets
+PASS        [Automation] Re-running layout creation creates no duplicate layouts
+UNVERIFIED  [Automation] ASG_Setup.lsp idempotency  -- Uses get-or-create; needs AutoCAD
+PASS        [Drawing templates] ASG_A4-LANDSCAPE.dxf: opens, single layout, full standard, empty model
+PASS        [Drawing templates] ASG_A4-PORTRAIT.dxf: opens, single layout, full standard, empty model
+PASS        [Drawing templates] ASG_A3-LANDSCAPE.dxf: opens, single layout, full standard, empty model
+PASS        [Drawing templates] ASG_A3-PORTRAIT.dxf: opens, single layout, full standard, empty model
+PASS        [Drawing templates] ASG_A1-LANDSCAPE.dxf: opens, single layout, full standard, empty model
+PASS        [Plot style] ASG_Monochrome.ctb: binary header (4-byte fields) + zlib body re-read  -- ezdxf writer bug (8-byte fields on 64-bit Linux) worked around and verified
+PASS        [Plot style] CTB: ACI 1-249,255 -> black; 250-254 -> grey; object lineweight
+UNVERIFIED  [Plot style] CTB loads in AutoCAD Plot Style Manager  -- README step 1
+PASS        [QA drawing] Temporary QA drawing is a separate file  -- QA_TEST_DRAWING_temporary.dxf
+PASS        [Dimensions] Linear dims measure geometry (1200, 2400)  -- [1200.0, 2400.0]
+PASS        [Dimensions] Detail dim measures 50
+PASS        [Dimensions] Angular dim measures 30.00 deg  -- 30.0
+PASS        [Dimensions] Radius / diameter dims present and measure R40 / D80  -- R [40.0] D [80.0]
+PASS        [Dimensions] No overridden dimension text
+PASS        [Dimensions] Rendered dim text precision: 1200 / 2400 (0 dp), 50.0 (detail 0.0), angles 0.00  -- ['1200', '2400', '50.0', '30.00°', 'R40', 'Ø80']
+PASS        [Viewports] QA viewports at 1:20 and 1:5  -- [5.0, 20.0]
+PARTIAL     [Lineweights] Lineweight matrix (2400 dpi render): 8 classes distinct, ordered, proportional  -- nominal->rendered width ratio: 0.50:0.36, 0.40:0.34, 0.35:0.36, 0.30:0.35, 0.25:0.34, 0.18:0.35, 0.13:0.33, 0.09:0.35. Hierarchy confirmed; absolute plotted widths need AutoCAD PDF plot (renderer not mm-calibrated).
+UNVERIFIED  [Plotting] No-plot layers (ASG-CONSTRUCTION, ASG-NOPLOT) excluded from plot  -- Plot flag is set and re-read (PASS above), but the ezdxf renderer ignores the layer plot flag - no-plot geometry appears in QA_render_A3. Confirm in AutoCAD plot preview.
+UNVERIFIED  [Plotting] Viewport boundaries not plotted  -- ASG-VIEWPORT plot flag off (PASS above); renderer never draws viewport frames, so not testable here
+UNVERIFIED  [Plotting] PDF output via DWG To PDF.pc3 with CTB  -- QA_render_A3.pdf produced by ezdxf/matplotlib, not by AutoCAD plot engine
+UNVERIFIED  [Annotation scales] Annotative objects in viewports (text/dims/mleaders)  -- ezdxf cannot create scale-context data; QA drawing uses fixed-scale overrides; test in AutoCAD
+PASS        [Deliverables] ASG_Layer_Register.xlsx written and re-opened
+PASS        [Deliverables] ASG_CAD_Standards.pdf written

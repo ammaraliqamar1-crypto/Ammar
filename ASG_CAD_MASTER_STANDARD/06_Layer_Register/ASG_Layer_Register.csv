@@ -1,0 +1,35 @@
+Layer code,Full layer name,Functional group,Purpose,ACI colour,Linetype,Lineweight (mm),Plot status,Description,Recommended use,Revision
+G01,ASG-OUTLINE-PRIMARY,Geometry,Primary visible outlines,7,Continuous,0.35,Plot,"Primary visible outlines; ACI 7, Continuous, 0.35 mm",Overall frame / panel outlines in elevation and plan,R0
+G02,ASG-OUTLINE-SECONDARY,Geometry,Secondary visible lines,8,Continuous,0.18,Plot,"Secondary visible lines; ACI 8, Continuous, 0.18 mm","Edges beyond, minor returns, internal lines",R0
+G03,ASG-ALUMINIUM-PROFILE,Geometry,Aluminium profiles,7,Continuous,0.25,Plot,"Aluminium profiles; ACI 7, Continuous, 0.25 mm","Frames, mullions, transoms, sashes, beads (elevation and section)",R0
+G04,ASG-GLASS,Geometry,Glass and mirror,4,Continuous,0.18,Plot,"Glass and mirror; ACI 4, Continuous, 0.18 mm","Glass / mirror edges, DGU / laminate interlayer lines",R0
+G05,ASG-STAINLESS-STEEL,Geometry,Stainless steel,7,Continuous,0.25,Plot,"Stainless steel; ACI 7, Continuous, 0.25 mm","SS fittings, spigots, channels, handrails, patch plates",R0
+G06,ASG-MILD-STEEL,Geometry,Mild steel,7,Continuous,0.30,Plot,"Mild steel; ACI 7, Continuous, 0.30 mm","MS brackets, sub-frames, support steel, base plates",R0
+G07,ASG-HARDWARE,Geometry,Hardware,8,Continuous,0.18,Plot,"Hardware; ACI 8, Continuous, 0.18 mm","Hinges, handles, locks, rollers, closers, patch fittings",R0
+G08,ASG-FIXING,Geometry,Fixings,8,Continuous,0.18,Plot,"Fixings; ACI 8, Continuous, 0.18 mm","Anchors, screws, bolts, rivets, fixing brackets",R0
+G09,ASG-GASKET,Geometry,Gaskets,8,Continuous,0.13,Plot,"Gaskets; ACI 8, Continuous, 0.13 mm","EPDM gaskets, brushes, setting / distance blocks",R0
+G10,ASG-SEALANT,Geometry,Sealants,8,Continuous,0.13,Plot,"Sealants; ACI 8, Continuous, 0.13 mm","Structural / weather silicone, backer rod, tapes",R0
+G11,ASG-INSULATION,Geometry,Insulation,252,Continuous,0.13,Plot,"Insulation; ACI 252, Continuous, 0.13 mm",Insulation and thermal breaks (plots grey),R0
+G12,ASG-CLADDING,Geometry,Cladding,7,Continuous,0.25,Plot,"Cladding; ACI 7, Continuous, 0.25 mm","ACP / solid panels, flashings, copings",R0
+T01,ASG-HIDDEN,Technical,Hidden geometry,8,HIDDEN2,0.18,Plot,"Hidden geometry; ACI 8, HIDDEN2, 0.18 mm","Concealed edges, embedded parts",R0
+T02,ASG-CENTERLINE,Technical,Centrelines,8,CENTER2,0.13,Plot,"Centrelines; ACI 8, CENTER2, 0.13 mm","Axes of symmetry, hole centres, module lines",R0
+T03,ASG-CUTTING-PLANE,Technical,Cutting planes,7,PHANTOM2,0.35,Plot,"Cutting planes; ACI 7, PHANTOM2, 0.35 mm",Section cut lines (markers go on ASG-SYMBOL),R0
+T04,ASG-SECTION-CUT,Technical,Section cut outlines,7,Continuous,0.40,Plot,"Section cut outlines; ACI 7, Continuous, 0.40 mm",Outline of material cut by the section plane - heaviest geometry,R0
+T05,ASG-HATCH,Technical,Section hatching,252,Continuous,0.09,Plot,"Section hatching; ACI 252, Continuous, 0.09 mm",Pattern hatches in sections (plots grey),R0
+T06,ASG-HATCH-FILL,Technical,Solid fills,251,Continuous,0.09,Plot,"Solid fills; ACI 251, Continuous, 0.09 mm",Solid fill of thin aluminium / steel walls (plots dark grey),R0
+T07,ASG-SETOUT,Technical,Setting-out geometry (plotted),8,DASHDOT2,0.13,Plot,"Setting-out geometry (plotted); ACI 8, DASHDOT2, 0.13 mm","Opening lines, setting-out lines that must print",R0
+T08,ASG-REFERENCE,Technical,Reference geometry,253,Continuous,0.13,Plot,"Reference geometry; ACI 253, Continuous, 0.13 mm","Architectural / structural background, xrefs (plots light grey)",R0
+T09,ASG-CONSTRUCTION,Technical,Construction geometry (NOT plotted),6,Continuous,0.05,NO PLOT,"Construction geometry (NOT plotted); ACI 6, Continuous, 0.05 mm",Temporary helper lines only - never final geometry,R0
+A01,ASG-DIMENSION,Annotation,Dimensions,3,Continuous,0.13,Plot,"Dimensions; ACI 3, Continuous, 0.13 mm",All dimensions,R0
+A02,ASG-TEXT,Annotation,General text,7,Continuous,0.18,Plot,"General text; ACI 7, Continuous, 0.18 mm","Labels, view titles",R0
+A03,ASG-TEXT-NOTE,Annotation,Notes,7,Continuous,0.18,Plot,"Notes; ACI 7, Continuous, 0.18 mm",General and specification notes,R0
+A04,ASG-MULTILEADER,Annotation,Multileaders,3,Continuous,0.13,Plot,"Multileaders; ACI 3, Continuous, 0.13 mm",Callouts and material labels,R0
+A05,ASG-TABLE,Annotation,Tables,7,Continuous,0.18,Plot,"Tables; ACI 7, Continuous, 0.18 mm","Schedules, registers, note tables",R0
+A06,ASG-LEVEL,Annotation,Levels,3,Continuous,0.18,Plot,"Levels; ACI 3, Continuous, 0.18 mm",FFL / SSL / sill / head level markers,R0
+A07,ASG-GRID,Annotation,Grids,8,CENTER,0.13,Plot,"Grids; ACI 8, CENTER, 0.13 mm",Structural / architectural grid lines and bubbles,R0
+A08,ASG-REVISION,Annotation,Revision clouds,1,Continuous,0.25,Plot,"Revision clouds; ACI 1, Continuous, 0.25 mm",Revision clouds and delta tags,R0
+A09,ASG-SYMBOL,Annotation,Drafting symbols,3,Continuous,0.25,Plot,"Drafting symbols; ACI 3, Continuous, 0.25 mm","Section / detail / elevation marks, north arrow",R0
+S01,ASG-BORDER,Sheet,Sheet borders,7,Continuous,0.50,Plot,"Sheet borders; ACI 7, Continuous, 0.50 mm",Border frame in layouts,R0
+S02,ASG-TITLEBLOCK,Sheet,Title blocks,7,Continuous,0.25,Plot,"Title blocks; ACI 7, Continuous, 0.25 mm",Title block insert and attributes,R0
+S03,ASG-VIEWPORT,Sheet,Viewports (NOT plotted),6,Continuous,0.00,NO PLOT,"Viewports (NOT plotted); ACI 6, Continuous, 0.00 mm",All layout viewports,R0
+S04,ASG-NOPLOT,Sheet,Non-plot objects,6,Continuous,0.00,NO PLOT,"Non-plot objects; ACI 6, Continuous, 0.00 mm","Internal markups, reminders - never printed",R0

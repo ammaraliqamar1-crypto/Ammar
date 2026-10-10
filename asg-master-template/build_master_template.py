@@ -381,7 +381,7 @@ def add_title_block(doc, name, w, r, cap, val, title, num, comp):
 def add_layouts(doc):
     for name, w, h, paper, tb, vp_scale in SHEETS:
         lay = doc.layouts.new(name)
-        lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", scale=1,
+        lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", scale=(1, 1),
                        name=paper, device="DWG To PDF.pc3")
         lay.dxf.current_style_sheet = CTB_NAME
         lay.use_plot_styles(True)
