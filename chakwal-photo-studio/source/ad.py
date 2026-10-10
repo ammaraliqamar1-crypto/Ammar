@@ -29,12 +29,31 @@ STAFF_UR = "مرد اور خواتین اسٹاف دستیاب"
 INK2 = "#CFC6B6"  # softer ivory for secondary text on charcoal
 
 
+LIVE = False  # True: emit live <text> (editable in the Studio Designer app) instead of outlines
+FAMILY = {id(F_DISPLAY): "CPS Display", id(F_SUB): "CPS Sans", id(F_URDU): "CPS Urdu"}
+
+
+def _esc(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 def t(font, s, size, x, y, fill, track=0.0, anchor="start", max_w=None):
-    """Outlined text; shrinks to max_w if given."""
+    """Outlined text (or live text when LIVE); shrinks to max_w if given."""
+    base = size
     if max_w:
         w = font.width(s, size, track)
         if w > max_w:
             size *= max_w / w
+    if LIVE:
+        fam = FAMILY[id(font)]
+        ls = f' letter-spacing="{track * size:.2f}"' if track else ""
+        mw = f' data-maxw="{fmt(max_w)}" data-base="{base:.2f}" data-track="{track}"' if max_w else ""
+        rtl = font is F_URDU
+        if rtl:  # in RTL, SVG "start" is the right edge
+            anchor = {"start": "end", "end": "start"}.get(anchor, anchor)
+        d = ' direction="rtl"' if rtl else ""
+        return (f'<text x="{fmt(x)}" y="{fmt(y)}" font-family="{fam}" font-size="{size:.2f}" fill="{fill}" '
+                f'text-anchor="{anchor}"{d}{ls}{mw} data-edit="1" xml:space="preserve">{_esc(s)}</text>')
     return f'<path fill="{fill}" d="{font.path(s, size, x, y, track, anchor)}"/>'
 
 
@@ -81,7 +100,8 @@ def arch_window(x, y, w, h, photo, uid):
     corners = (f"M{fmt(x0)} {fmt(y0 + L)}V{fmt(y0)}H{fmt(x0 + L)}M{fmt(x1 - L)} {fmt(y0)}H{fmt(x1)}V{fmt(y0 + L)}"
                f"M{fmt(x1)} {fmt(y1 - L)}V{fmt(y1)}H{fmt(x1 - L)}M{fmt(x0 + L)} {fmt(y1)}H{fmt(x0)}V{fmt(y1 - L)}")
     return (f'<clipPath id="arch{uid}"><path d="{d}"/></clipPath>'
-            f'<g clip-path="url(#arch{uid})">{fill}</g>'
+            f'<g clip-path="url(#arch{uid})" data-slot="photo" data-box="{fmt(x)} {fmt(y)} {fmt(w)} {fmt(h)}">'
+            f'<g class="slot-default">{fill}</g></g>'
             f'<path d="{d}" fill="none" stroke="{MALAI}" stroke-width="6" stroke-linejoin="round"/>'
             f'<path d="{corners}" fill="none" stroke="{SONA}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>')
 

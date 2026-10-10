@@ -193,7 +193,9 @@ def arch_slot(x, y, w, h, key, panel, line, gold, corners=True):
     else:
         fill = (f'<svg x="{fmt(x)}" y="{fmt(y)}" width="{fmt(w)}" height="{fmt(h)}" viewBox="150 0 300 400" '
                 f'preserveAspectRatio="xMidYMid slice">{SCENE}</svg>')
-    out = (f'<clipPath id="{uid}"><path d="{d}"/></clipPath><g clip-path="url(#{uid})">{fill}</g>'
+    out = (f'<clipPath id="{uid}"><path d="{d}"/></clipPath>'
+           f'<g clip-path="url(#{uid})" data-slot="{key or "photo"}" data-box="{fmt(x)} {fmt(y)} {fmt(w)} {fmt(h)}">'
+           f'<g class="slot-default">{fill}</g></g>'
            f'<path d="{d}" fill="none" stroke="{line}" stroke-width="5" stroke-linejoin="round"/>')
     if corners:
         g, L = 24, min(w, h) * 0.15
@@ -328,9 +330,16 @@ def album(kind, title, sub_ur, date):
     body += f'<rect x="60" y="60" width="{S - 120}" height="{S - 120}" fill="none" stroke="{ink}" stroke-width="3"/>'
     body += f'<rect x="76" y="76" width="{S - 152}" height="{S - 152}" fill="none" stroke="{ink}" stroke-width="1.2"/>'
     s = 1.55
-    body += (f'<g transform="translate({fmt(c - 100 * s)} 190) scale({s})">'
-             f'<path d="M30 200V90A70 70 0 0 1 170 90V200" fill="none" stroke="{ink}" stroke-width="3.2"/>'
-             f'<g transform="translate(40 52) scale(.6)">{ILLUSTRATIONS[ill](ink, ink, bg, sw=5.5)}</g></g>')
+    ax, ay, aw, ah = c - 100 * s + 30 * s, 190 + 20 * s, 140 * s, 180 * s
+    r = aw / 2
+    d = (f"M{fmt(ax)} {fmt(ay + ah)}V{fmt(ay + r)}A{fmt(r)} {fmt(r)} 0 0 1 {fmt(ax + aw)} {fmt(ay + r)}"
+         f"V{fmt(ay + ah)}Z")
+    body += (f'<clipPath id="alb{kind}"><path d="{d}"/></clipPath>'
+             f'<g clip-path="url(#alb{kind})" data-slot="{ill}" data-box="{fmt(ax)} {fmt(ay)} {fmt(aw)} {fmt(ah)}">'
+             f'<g class="slot-default"><g transform="translate({fmt(c - 100 * s)} 190) scale({s})">'
+             f'<g transform="translate(40 52) scale(.6)">{ILLUSTRATIONS[ill](ink, ink, bg, sw=5.5)}</g></g></g></g>'
+             f'<path d="M{fmt(ax)} {fmt(ay + ah)}V{fmt(ay + r)}A{fmt(r)} {fmt(r)} 0 0 1 {fmt(ax + aw)} {fmt(ay + r)}'
+             f'V{fmt(ay + ah)}" fill="none" stroke="{ink}" stroke-width="{3.2 * s:.2f}"/>')
     body += t(F_DISPLAY, title, 74, c, 640, ink, 0.03, "middle", max_w=900)
     body += t(F_URDU, sub_ur, 44, c, 730, ink, anchor="middle")
     body += t(F_SUB, date, 24, c, 800, ink, 0.4, "middle")
