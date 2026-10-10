@@ -1,0 +1,34 @@
+No.,Layer,Group,ACI colour,Linetype,Lineweight (mm),Plot,Purpose / description
+1,ASG-OBJECT,General geometry,7,Continuous,0.25,Yes,General object geometry - default current layer
+2,ASG-OUTLINE,General geometry,7,Continuous,0.35,Yes,Main overall outlines / visible edges in elevation
+3,ASG-PROFILE,General geometry,7,Continuous,0.30,Yes,"Aluminium profile outlines (frames, mullions, transoms, sashes)"
+4,ASG-GLASS,General geometry,4,Continuous,0.18,Yes,Glass / mirror panel edges
+5,ASG-METAL,General geometry,7,Continuous,0.30,Yes,"MS / SS members, plates, brackets"
+6,ASG-HARDWARE,General geometry,8,Continuous,0.18,Yes,"Handles, hinges, locks, rollers, patch fittings"
+7,ASG-FIXING,General geometry,8,Continuous,0.18,Yes,"Anchors, screws, bolts, fixing brackets"
+8,ASG-CLADDING,General geometry,7,Continuous,0.25,Yes,ACP / panel cladding and flashings
+9,ASG-INSULATION,General geometry,252,Continuous,0.13,Yes,Insulation / thermal break outline and hatch (plots grey)
+10,ASG-HIDDEN,Technical details,8,HIDDEN2,0.18,Yes,Concealed / hidden edges
+11,ASG-CENTER,Technical details,8,CENTER2,0.13,Yes,Centrelines and axes of symmetry
+12,ASG-SECTION,Technical details,7,Continuous,0.35,Yes,Cut-section outlines (heaviest object line)
+13,ASG-HATCH,Technical details,252,Continuous,0.09,Yes,General section hatching (plots grey)
+14,ASG-GLAZING-BEAD,Technical details,7,Continuous,0.25,Yes,Glazing beads and snap-in profiles
+15,ASG-SEALANT,Technical details,8,Continuous,0.13,Yes,"Silicone / weather seal, backer rod"
+16,ASG-GASKET,Technical details,8,Continuous,0.13,Yes,"EPDM gaskets, brushes, setting blocks"
+17,ASG-DRAINAGE,Technical details,8,DASHED2,0.18,Yes,"Drainage paths, weep holes, linear drains"
+18,ASG-CONSTRUCTION,Technical details,6,Continuous,0.05,NO PLOT,Construction / setting-out lines - NO PLOT
+19,ASG-REFERENCE,Technical details,253,Continuous,0.13,Yes,Architectural / structural background (plots light grey)
+20,ASG-DIMENSION,Dimensions & annotation,3,Continuous,0.13,Yes,Dimensions
+21,ASG-TEXT,Dimensions & annotation,7,Continuous,0.18,Yes,General text
+22,ASG-TEXT-NOTE,Dimensions & annotation,7,Continuous,0.18,Yes,General / specification notes
+23,ASG-MULTILEADER,Dimensions & annotation,3,Continuous,0.13,Yes,Multileader callouts
+24,ASG-TABLE,Dimensions & annotation,7,Continuous,0.18,Yes,Schedules and tables
+25,ASG-LEVEL,Dimensions & annotation,3,Continuous,0.18,Yes,"Level markers (FFL, SSL, sill heights)"
+26,ASG-REVISION,Dimensions & annotation,1,Continuous,0.25,Yes,Revision clouds and delta tags
+27,ASG-DETAIL-MARK,Dimensions & annotation,3,Continuous,0.25,Yes,Detail callout bubbles / boundaries
+28,ASG-SECTION-MARK,Dimensions & annotation,3,Continuous,0.25,Yes,Section cut lines and markers
+29,ASG-GRID,Dimensions & annotation,8,CENTER,0.13,Yes,Column grid / setting-out grid
+30,ASG-TITLEBLOCK,Sheet & plotting,7,Continuous,0.25,Yes,Title block linework and attributes
+31,ASG-BORDER,Sheet & plotting,7,Continuous,0.50,Yes,Sheet border frame
+32,ASG-VIEWPORT,Sheet & plotting,6,Continuous,0.00,NO PLOT,Viewport boundaries - NO PLOT
+33,ASG-NOPLOT,Sheet & plotting,6,Continuous,0.00,NO PLOT,Reference notes / markups never printed - NO PLOT

@@ -1,0 +1,211 @@
+ASG MASTER TEMPLATE - VALIDATION REPORT
+SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C. | AL SIRAJ GROUP
+Generated 10.10.2026 08:27 | tool: ezdxf 1.4.4 | file: ASG_Master_Template.dxf
+
+Status key: PASS = checked by re-reading the saved file; PASS* = written and re-read correctly, behaviour inside AutoCAD not testable here; UNVERIFIED / NOT GENERATED = see detail and README manual steps.
+Target CAD environment (AutoCAD) is NOT available in this environment - no check below was performed inside AutoCAD.
+
+Summary: NOT GENERATED 2, PASS 116, PASS* 5, UNVERIFIED 1
+
+
+[File]
+  PASS           DXF re-opened from disk (ezdxf recover + audit)  -- 0 errors, 0 fixes; DXF version AC1032 (AutoCAD 2018)
+  PASS           DXF strict read (ezdxf.readfile)
+  PASS           DXF opened by independent reader (LibreOffice Draw import)  -- converted to PDF without load error
+
+[Units & variables]
+  PASS           $INSUNITS = 4  -- found 4
+  PASS           $MEASUREMENT = 1  -- found 1
+  PASS           $LUNITS = 2  -- found 2
+  PASS           $LUPREC = 0  -- found 0
+  PASS           $AUNITS = 0  -- found 0
+  PASS           $AUPREC = 2  -- found 2
+  PASS           $LTSCALE = 1.0  -- found 1.0
+  PASS           $PSLTSCALE = 1  -- found 1
+  PASS           $LWDISPLAY = 1  -- found 1
+  PASS           $DIMASSOC = 2  -- found 2
+  PASS           $CLAYER = ASG-OBJECT  -- found ASG-OBJECT
+  PASS           $TEXTSTYLE = ASG-TEXT  -- found ASG-TEXT
+  PASS           $DIMSTYLE = ASG-DIM-ANNOTATIVE  -- found ASG-DIM-ANNOTATIVE
+  PASS           $ORTHOMODE = 0  -- found 0
+  PASS           $PSTYLEMODE = 1  -- found 1
+
+[Linetypes]
+  PASS           HIDDEN loaded
+  PASS           HIDDEN2 loaded
+  PASS           CENTER loaded
+  PASS           CENTER2 loaded
+  PASS           DASHED loaded
+  PASS           DASHED2 loaded
+  PASS           DASHDOT loaded
+  PASS           DASHDOT2 loaded
+  PASS           PHANTOM loaded
+  PASS           PHANTOM2 loaded
+  PASS           DOT loaded
+  PASS           Continuous loaded
+
+[Layers]
+  PASS           ASG layer count = 33  -- found 33
+  PASS           Only system layers besides ASG-*: 0, Defpoints  -- ['0', 'Defpoints']
+  PASS           Layer names unique
+  PASS           ASG-OBJECT  -- ACI 7, Continuous, 0.25 mm, plot
+  PASS           ASG-OUTLINE  -- ACI 7, Continuous, 0.35 mm, plot
+  PASS           ASG-PROFILE  -- ACI 7, Continuous, 0.30 mm, plot
+  PASS           ASG-GLASS  -- ACI 4, Continuous, 0.18 mm, plot
+  PASS           ASG-METAL  -- ACI 7, Continuous, 0.30 mm, plot
+  PASS           ASG-HARDWARE  -- ACI 8, Continuous, 0.18 mm, plot
+  PASS           ASG-FIXING  -- ACI 8, Continuous, 0.18 mm, plot
+  PASS           ASG-CLADDING  -- ACI 7, Continuous, 0.25 mm, plot
+  PASS           ASG-INSULATION  -- ACI 252, Continuous, 0.13 mm, plot
+  PASS           ASG-HIDDEN  -- ACI 8, HIDDEN2, 0.18 mm, plot
+  PASS           ASG-CENTER  -- ACI 8, CENTER2, 0.13 mm, plot
+  PASS           ASG-SECTION  -- ACI 7, Continuous, 0.35 mm, plot
+  PASS           ASG-HATCH  -- ACI 252, Continuous, 0.09 mm, plot
+  PASS           ASG-GLAZING-BEAD  -- ACI 7, Continuous, 0.25 mm, plot
+  PASS           ASG-SEALANT  -- ACI 8, Continuous, 0.13 mm, plot
+  PASS           ASG-GASKET  -- ACI 8, Continuous, 0.13 mm, plot
+  PASS           ASG-DRAINAGE  -- ACI 8, DASHED2, 0.18 mm, plot
+  PASS           ASG-CONSTRUCTION  -- ACI 6, Continuous, 0.05 mm, NO PLOT
+  PASS           ASG-REFERENCE  -- ACI 253, Continuous, 0.13 mm, plot
+  PASS           ASG-DIMENSION  -- ACI 3, Continuous, 0.13 mm, plot
+  PASS           ASG-TEXT  -- ACI 7, Continuous, 0.18 mm, plot
+  PASS           ASG-TEXT-NOTE  -- ACI 7, Continuous, 0.18 mm, plot
+  PASS           ASG-MULTILEADER  -- ACI 3, Continuous, 0.13 mm, plot
+  PASS           ASG-TABLE  -- ACI 7, Continuous, 0.18 mm, plot
+  PASS           ASG-LEVEL  -- ACI 3, Continuous, 0.18 mm, plot
+  PASS           ASG-REVISION  -- ACI 1, Continuous, 0.25 mm, plot
+  PASS           ASG-DETAIL-MARK  -- ACI 3, Continuous, 0.25 mm, plot
+  PASS           ASG-SECTION-MARK  -- ACI 3, Continuous, 0.25 mm, plot
+  PASS           ASG-GRID  -- ACI 8, CENTER, 0.13 mm, plot
+  PASS           ASG-TITLEBLOCK  -- ACI 7, Continuous, 0.25 mm, plot
+  PASS           ASG-BORDER  -- ACI 7, Continuous, 0.50 mm, plot
+  PASS           ASG-VIEWPORT  -- ACI 6, Continuous, 0.00 mm, NO PLOT
+  PASS           ASG-NOPLOT  -- ACI 6, Continuous, 0.00 mm, NO PLOT
+  PASS           Current layer is plottable geometry layer
+
+[Text styles]
+  PASS           ASG-TEXT (arial.ttf, height 0)
+  PASS*          ASG-TEXT annotative flag (AcadAnnotative xdata)  -- flag written; behaviour in AutoCAD UNVERIFIED
+  PASS           ASG-TEXT-NOTE (arial.ttf, height 0)
+  PASS*          ASG-TEXT-NOTE annotative flag (AcadAnnotative xdata)  -- flag written; behaviour in AutoCAD UNVERIFIED
+  PASS           ASG-TEXT-SMALL (arial.ttf, height 0)
+  PASS*          ASG-TEXT-SMALL annotative flag (AcadAnnotative xdata)  -- flag written; behaviour in AutoCAD UNVERIFIED
+  PASS           ASG-TEXT-TITLE (arialbd.ttf, height 0)
+  PASS           ASG-TEXT-SHEET (arialbd.ttf, height 0)
+
+[Dimension styles]
+  PASS           ASG-DIM-ANNOTATIVE  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-1  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-2  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-5  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-10  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-20  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS           ASG-DIM-1-50  -- DIMLFAC 1 (true measurement), DIMDEC 0, DIMALT off
+  PASS*          ASG-DIM-ANNOTATIVE annotative flag  -- behaviour in AutoCAD UNVERIFIED
+
+[Multileader styles]
+  PASS           ASG-ML-ANNOTATIVE  -- text 2.5 mm ASG-TEXT-NOTE, annotative=True
+  PASS           ASG-ML-NOTE  -- text 2.5 mm ASG-TEXT-NOTE, annotative=False
+  PASS           ASG-ML-DETAIL  -- text 1.8 mm ASG-TEXT-SMALL, annotative=False
+
+[Multiline styles]
+  PASS           ASG-MLINE-2
+  PASS           ASG-MLINE-3
+
+[Annotation scales]
+  PASS*          ACAD_SCALELIST = 1:1, 1:2, 1:5, 1:10, 1:20, 1:25, 1:50, 1:100  -- found ['1:1', '1:2', '1:5', '1:10', '1:20', '1:25', '1:50', '1:100']; AutoCAD acceptance UNVERIFIED
+  PASS           No duplicate scales
+
+[Table styles]
+  UNVERIFIED     ASG-TABLE-* table styles in DXF  -- Not writable with ezdxf - created by ASG_Template_Setup.lsp (run once in AutoCAD). DXF currently holds: []
+
+[Layouts]
+  PASS           Layouts = Model, A4-LANDSCAPE, A4-PORTRAIT, A3-LANDSCAPE, A3-PORTRAIT, A1-LANDSCAPE  -- found ['Model', 'A4-LANDSCAPE', 'A4-PORTRAIT', 'A3-LANDSCAPE', 'A3-PORTRAIT', 'A1-LANDSCAPE']
+
+[Page setups]
+  PASS           A4-LANDSCAPE: 297x210 mm, DWG To PDF, ASG_Monochrome.ctb, plot lineweights
+
+[Title blocks]
+  PASS           A4-LANDSCAPE: ASG-TB-A4 inserted with 16 attributes
+
+[Viewports]
+  PASS           A4-LANDSCAPE: 1 locked viewport on ASG-VIEWPORT (no-plot), 1:10
+
+[Sheets]
+  PASS           A4-LANDSCAPE: border on ASG-BORDER
+
+[Page setups]
+  PASS           A4-PORTRAIT: 210x297 mm, DWG To PDF, ASG_Monochrome.ctb, plot lineweights
+
+[Title blocks]
+  PASS           A4-PORTRAIT: ASG-TB-A4 inserted with 16 attributes
+
+[Viewports]
+  PASS           A4-PORTRAIT: 1 locked viewport on ASG-VIEWPORT (no-plot), 1:10
+
+[Sheets]
+  PASS           A4-PORTRAIT: border on ASG-BORDER
+
+[Page setups]
+  PASS           A3-LANDSCAPE: 420x297 mm, DWG To PDF, ASG_Monochrome.ctb, plot lineweights
+
+[Title blocks]
+  PASS           A3-LANDSCAPE: ASG-TB-A3 inserted with 16 attributes
+
+[Viewports]
+  PASS           A3-LANDSCAPE: 1 locked viewport on ASG-VIEWPORT (no-plot), 1:20
+
+[Sheets]
+  PASS           A3-LANDSCAPE: border on ASG-BORDER
+
+[Page setups]
+  PASS           A3-PORTRAIT: 297x420 mm, DWG To PDF, ASG_Monochrome.ctb, plot lineweights
+
+[Title blocks]
+  PASS           A3-PORTRAIT: ASG-TB-A3 inserted with 16 attributes
+
+[Viewports]
+  PASS           A3-PORTRAIT: 1 locked viewport on ASG-VIEWPORT (no-plot), 1:20
+
+[Sheets]
+  PASS           A3-PORTRAIT: border on ASG-BORDER
+
+[Page setups]
+  PASS           A1-LANDSCAPE: 841x594 mm, DWG To PDF, ASG_Monochrome.ctb, plot lineweights
+
+[Title blocks]
+  PASS           A1-LANDSCAPE: ASG-TB-A1 inserted with 16 attributes
+
+[Viewports]
+  PASS           A1-LANDSCAPE: 1 locked viewport on ASG-VIEWPORT (no-plot), 1:50
+
+[Sheets]
+  PASS           A1-LANDSCAPE: border on ASG-BORDER
+
+[Title blocks]
+  PASS           ASG-TB-A4 block: 16 attribute definitions
+  PASS           ASG-TB-A3 block: 16 attribute definitions
+  PASS           ASG-TB-A1 block: 16 attribute definitions
+
+[Model space]
+  PASS           Model space contains no entities  -- 0 entities
+
+[External references]
+  PASS           No external references  -- []
+
+[Scope]
+  PASS           Only title-block blocks defined (no product blocks)  -- ['ASG-TB-A4', 'ASG-TB-A3', 'ASG-TB-A1']
+
+[Plot style]
+  PASS           ASG_Monochrome.ctb re-loaded: ACI 1-249,255 black; 250-254 grey; object lineweight  -- file format verified by re-reading; loading in AutoCAD UNVERIFIED
+
+[File]
+  NOT GENERATED  ASG_Master_Template.dwg  -- NOT GENERATED - no DWG writer available (no AutoCAD / ODA File Converter / RealDWG in this environment). See README for the 1-minute conversion.
+  NOT GENERATED  ASG_Master_Template.dwt  -- NOT GENERATED - no DWG writer available (no AutoCAD / ODA File Converter / RealDWG in this environment). See README for the 1-minute conversion.
+
+[Sheets]
+  PASS           All layouts rendered to preview PNG (visual check)
+
+[Deliverables]
+  PASS           Layer register XLSX + CSV written
+  PASS           ASG_CAD_Standards.pdf written

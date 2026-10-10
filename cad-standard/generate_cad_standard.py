@@ -813,6 +813,20 @@ def build_sample():
     return path
 
 
+def _compress_ctb(stream, content: str):
+    """ezdxf packs the CTB header with native longs (8 bytes on 64-bit
+    Linux/macOS); AutoCAD expects three little-endian 4-byte ints."""
+    import struct
+    import zlib
+    body = zlib.compress(content.encode())
+    stream.write(b"PIAFILEVERSION_2.0,CTBVER1,compress\r\npmzlibcodec")
+    stream.write(struct.pack("<LLL", zlib.adler32(body), len(content), len(body)))
+    stream.write(body)
+
+
+acadctb._compress = _compress_ctb
+
+
 def build_ctb():
     ctb = acadctb.new_ctb()
     ctb.description = "Al Siraj Group - all colours plot black, object lineweight"
