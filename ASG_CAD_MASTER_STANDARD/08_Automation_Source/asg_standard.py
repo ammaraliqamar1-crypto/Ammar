@@ -2,14 +2,19 @@
 ASG CAD MASTER STANDARD - single source of truth + DXF builder.
 Saeed Al Siraj Glass & Aluminium Works L.L.C. | Al Siraj Group | UAE
 
-Every table in the documentation, the layer register and the QA checks is
-read from the definitions in this module, so the standard, the files and the
-tests cannot drift apart.
+Every table in the documentation, the layer register, the AutoLISP setup/QA
+file and the Python QA is generated from the definitions in this module, so
+the standard, the files and the tests cannot drift apart.
 
-Builder: ezdxf (DXF R2018 / AC1032). Features ezdxf cannot write natively
-(annotation scale list) are added as raw DXF tags and re-validated; features
-it cannot write at all (table styles, named page setups) are created in
-AutoCAD by ASG_Setup.lsp.
+Builder: ezdxf (DXF R2018 / AC1032).
+  * written natively by ezdxf ........ units, layers, linetypes, text / dim /
+                                        multileader / multiline styles, blocks,
+                                        layouts, page settings, viewports
+  * written as raw DXF tags .......... annotation scale list (AcDbScale) -
+                                        re-read and checked by qa_validate.py
+  * not writable by any DXF library .. table styles, named page setups and a
+    used here                          few drawing variables -> created inside
+                                        AutoCAD by ASG_Setup.lsp (ASG-SETUP)
 """
 
 from __future__ import annotations
@@ -23,7 +28,8 @@ from ezdxf import colors
 from ezdxf.addons import acadctb
 from ezdxf.enums import TextEntityAlignment
 
-STANDARD_REV = "R0"
+STANDARD_REV = "R1"
+STANDARD_DATE = "10.10.2026"
 COMPANY = "SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C."
 GROUP = "AL SIRAJ GROUP"
 DIVISION = "ALUMINIUM, GLASS & FACADE DIVISION  |  UNITED ARAB EMIRATES"
@@ -31,71 +37,86 @@ CTB_NAME = "ASG_Monochrome.ctb"
 PLOTTER = "DWG To PDF.pc3"
 
 # ---------------------------------------------------------------------------
-# 03 Units & drawing-resident variables  (var, value, purpose)
+# 03 Units - drawing-resident variables written into the DXF
+# (var, value, purpose)
 # ---------------------------------------------------------------------------
 HEADER_VARS = [
     ("$INSUNITS", 4, "Insertion units = millimetres (no unit conversion on block insert)"),
-    ("$MEASUREMENT", 1, "Metric - acadiso.lin / acadiso.pat used"),
+    ("$MEASUREMENT", 1, "Metric - acadiso.lin / acadiso.pat"),
     ("$LUNITS", 2, "Linear units = Decimal"),
     ("$LUPREC", 0, "Linear display precision 0 dp"),
     ("$AUNITS", 0, "Angular units = Decimal Degrees"),
-    ("$AUPREC", 2, "Angle precision 0.00"),
+    ("$AUPREC", 2, "Angle display precision 0.00"),
     ("$ANGBASE", 0.0, "0 deg = East"),
     ("$ANGDIR", 0, "Counter-clockwise positive"),
     ("$LIMMIN", (0.0, 0.0), "Nominal limits origin"),
     ("$LIMMAX", (200000.0, 150000.0), "Nominal 200 x 150 m - never restrictive"),
     ("$LIMCHECK", 0, "Limits not enforced (large facade elevations)"),
     ("$LTSCALE", 1.0, "Global linetype scale 1 - dash lengths in paper mm"),
-    ("$PSLTSCALE", 1, "Viewport scale controls linetype scale"),
-    ("$CELTSCALE", 1.0, "Object linetype scale default"),
-    ("$LWDISPLAY", 1, "Show lineweights on screen"),
-    ("$CELWEIGHT", -1, "New objects lineweight ByLayer"),
-    ("$CECOLOR", 256, "New objects colour ByLayer"),
-    ("$ORTHOMODE", 0, "Ortho off - polar tracking preferred"),
+    ("$PSLTSCALE", 1, "Viewport scale controls paper-space linetype scaling"),
+    ("$CELTSCALE", 1.0, "New-object linetype scale 1"),
+    ("$LWDISPLAY", 1, "Lineweights displayed on screen"),
+    ("$CELWEIGHT", -1, "New objects: lineweight ByLayer"),
+    ("$CECOLOR", 256, "New objects: colour ByLayer"),
     ("$DIMASSOC", 2, "Associative dimensions follow geometry"),
     ("$PLINEGEN", 1, "Continuous linetype pattern along polylines"),
     ("$FILLMODE", 1, "Fills displayed"),
     ("$MIRRTEXT", 0, "Text not mirrored"),
-    ("$TEXTSIZE", 2.5, "Default text height"),
+    ("$TEXTSIZE", 2.5, "Default text height (paper mm for annotative styles)"),
     ("$PSTYLEMODE", 1, "Colour-dependent plot styles (CTB)"),
     ("$WORLDVIEW", 1, "UCS follows WCS in views"),
-    ("$UCSORG", (0.0, 0.0, 0.0), "UCS origin at WCS origin"),
+    ("$UCSORG", (0.0, 0.0, 0.0), "UCS origin = WCS origin"),
     ("$UCSXDIR", (1.0, 0.0, 0.0), "UCS = World"),
     ("$UCSYDIR", (0.0, 1.0, 0.0), "UCS = World"),
     ("$VISRETAIN", 1, "Xref layer overrides retained"),
-    ("$PROXYGRAPHICS", 1, "Proxy images saved for interoperability"),
+    ("$PROXYGRAPHICS", 1, "Proxy images saved (interoperability)"),
 ]
 CURRENT_LAYER = "ASG-OUTLINE-PRIMARY"
-# set after styles exist
-HEADER_STYLE_VARS = [
+HEADER_STYLE_VARS = [  # applied after the styles exist
     ("$CLAYER", CURRENT_LAYER, "Default current layer (plottable geometry)"),
     ("$TEXTSTYLE", "ASG-TEXT-ANNO", "Default text style"),
-    ("$DIMSTYLE", "ASG-DIM-ANNO", "Default dimension style"),
+    ("$DIMSTYLE", "ASG-DIM-ANNO", "Default dimension style (header dim vars synchronised - no overrides)"),
     ("$CMLSTYLE", "ASG-MLINE-2", "Default multiline style"),
 ]
 
-# Machine / profile (NOT stored in DWG/DWT) - applied only by ASG-PROFILE on request
+# Drawing-resident variables that no DXF library can write: set inside AutoCAD
+# by ASG-SETUP (saved with the DWG/DWT). (var, value, purpose)
+SETUP_DRAWING_VARS = [
+    ("CANNOSCALE", "1:1", "Current annotation scale in model space"),
+    ("MSLTSCALE", 1, "Model-space linetypes follow the annotation scale"),
+    ("ANNOALLVISIBLE", 0, "Show only annotation that supports the current scale (no visual duplicates)"),
+    ("CMLEADERSTYLE", "ASG-ML-ANNO", "Default multileader style"),
+    ("CTABLESTYLE", "ASG-TABLE-STANDARD", "Default table style"),
+    ("HPLAYER", "ASG-HATCH", "New hatches go to ASG-HATCH automatically"),
+    ("DIMLAYER", "ASG-DIMENSION", "New dimensions go to ASG-DIMENSION automatically"),
+    ("UCSFOLLOW", 0, "View does not rotate with UCS changes"),
+]
+
+# Machine / user-profile variables - stored in the registry, NOT in any DWG/DWT.
+# Applied only by the opt-in command ASG-PROFILE.  (var, value, purpose)
 PROFILE_VARS = [
-    ("OSMODE", "2223", "Endpoint, Midpoint, Centre, Node, Intersection, Perpendicular, Extension"),
-    ("AUTOSNAP", "63", "Marker, magnet, tooltip, aperture box, polar + object snap tracking"),
-    ("POLARANG", "45", "Polar increment"),
-    ("DYNMODE / DYNPROMPT", "3 / 1", "Dynamic input"),
-    ("SELECTIONCYCLING", "2", "Cycle overlapping objects with list"),
-    ("GRIPS / GRIPSIZE", "1 / 5", "Grips on"),
-    ("PICKBOX / APERTURE", "4 / 8", "Selection target sizes"),
-    ("PICKFIRST / PICKADD", "1 / 2", "Noun-verb selection, Shift to remove"),
-    ("MSLTSCALE", "1", "Model-space linetypes follow annotation scale"),
-    ("ANNOAUTOSCALE", "0", "Do NOT auto-add scales to annotative objects"),
-    ("ANNOALLVISIBLE", "0", "Show only annotation of the current scale"),
-    ("SAVETIME / ISAVEBAK", "10 / 1", "Autosave 10 min, keep .bak"),
-    ("LAYOUTREGENCTL", "2", "Fast layout switching"),
-    ("HPLAYER / DIMLAYER", "ASG-HATCH / ASG-DIMENSION", "Auto-layer for hatch & dims (AutoCAD 2016+)"),
-    ("REFPATHTYPE", "1", "Relative xref paths"),
-    ("UCSFOLLOW / UCSVP", "0 / 1", "UCS stays World per viewport"),
+    ("OSMODE", 2223, "Endpoint, Midpoint, Centre, Node, Intersection, Perpendicular, Extension"),
+    ("AUTOSNAP", 63, "Marker, magnet, tooltip, aperture, polar + object snap tracking"),
+    ("POLARANG", 45.0, "Polar tracking increment 45 deg"),
+    ("ORTHOMODE", 0, "Ortho off - polar tracking preferred"),
+    ("DYNMODE", 3, "Dynamic input: pointer + dimension input"),
+    ("DYNPROMPT", 1, "Prompts near cursor"),
+    ("SELECTIONCYCLING", 2, "Cycle overlapping objects with list"),
+    ("GRIPS", 1, "Grips on"),
+    ("GRIPSIZE", 5, "Grip size"),
+    ("PICKBOX", 4, "Selection target size"),
+    ("APERTURE", 8, "Object snap target size"),
+    ("PICKFIRST", 1, "Noun-verb selection"),
+    ("PICKADD", 2, "Shift removes from selection"),
+    ("ANNOAUTOSCALE", 0, "Do NOT auto-add scales to annotative objects"),
+    ("SAVETIME", 10, "Autosave every 10 min"),
+    ("ISAVEBAK", 1, "Keep .bak on save"),
+    ("LAYOUTREGENCTL", 2, "Fast layout switching"),
+    ("REFPATHTYPE", 1, "Relative xref paths"),
 ]
 
 # ---------------------------------------------------------------------------
-# 04 Linetypes (acadiso values, mm)
+# 04 Linetypes (acadiso.lin values, mm)
 # ---------------------------------------------------------------------------
 LINETYPES = {
     "HIDDEN": ([9.525, 6.35, -3.175], "Hidden __ __ __"),
@@ -112,6 +133,19 @@ LINETYPES = {
 }
 
 # ---------------------------------------------------------------------------
+# 04 Lineweight matrix - ISO 128 series (ratio ~1.4) + 0.09 for hatching only
+# ---------------------------------------------------------------------------
+LW_MATRIX = [
+    (0.50, "Extra heavy", "Section cut outlines, sheet border"),
+    (0.35, "Heavy", "Primary visible outlines, cutting planes"),
+    (0.25, "Medium", "Aluminium, steel, cladding, symbols, revisions, title block"),
+    (0.18, "Light", "Secondary lines, glass, hardware, fixings, hidden lines, text, tables"),
+    (0.13, "Fine", "Dimensions, leaders, centrelines, grids, seals, insulation, set-out, reference"),
+    (0.09, "Hatch", "Hatch patterns and fills only (also plotted grey)"),
+]
+ISO_128_SERIES = (0.13, 0.18, 0.25, 0.35, 0.50, 0.70, 1.00)
+
+# ---------------------------------------------------------------------------
 # 04 Layer dictionary
 # code, name, group, ACI, linetype, lw mm, plot, description, recommended use
 # Palette: 7 primary | 8 secondary | 4 glass | 3 annotation | 1 revision |
@@ -119,16 +153,16 @@ LINETYPES = {
 # ---------------------------------------------------------------------------
 LAYERS = [
     ("G01", "ASG-OUTLINE-PRIMARY", "Geometry", 7, "Continuous", 0.35, True,
-     "Primary visible outlines", "Overall frame / panel outlines in elevation and plan"),
+     "Primary visible outlines", "Overall frame / panel / opening outlines in elevation and plan"),
     ("G02", "ASG-OUTLINE-SECONDARY", "Geometry", 8, "Continuous", 0.18, True,
      "Secondary visible lines", "Edges beyond, minor returns, internal lines"),
     ("G03", "ASG-ALUMINIUM-PROFILE", "Geometry", 7, "Continuous", 0.25, True,
      "Aluminium profiles", "Frames, mullions, transoms, sashes, beads (elevation and section)"),
     ("G04", "ASG-GLASS", "Geometry", 4, "Continuous", 0.18, True,
-     "Glass and mirror", "Glass / mirror edges, DGU / laminate interlayer lines"),
+     "Glass and mirror", "Glass / mirror edges, DGU and laminate ply lines"),
     ("G05", "ASG-STAINLESS-STEEL", "Geometry", 7, "Continuous", 0.25, True,
      "Stainless steel", "SS fittings, spigots, channels, handrails, patch plates"),
-    ("G06", "ASG-MILD-STEEL", "Geometry", 7, "Continuous", 0.30, True,
+    ("G06", "ASG-MILD-STEEL", "Geometry", 7, "Continuous", 0.25, True,
      "Mild steel", "MS brackets, sub-frames, support steel, base plates"),
     ("G07", "ASG-HARDWARE", "Geometry", 8, "Continuous", 0.18, True,
      "Hardware", "Hinges, handles, locks, rollers, closers, patch fittings"),
@@ -147,8 +181,8 @@ LAYERS = [
     ("T02", "ASG-CENTERLINE", "Technical", 8, "CENTER2", 0.13, True,
      "Centrelines", "Axes of symmetry, hole centres, module lines"),
     ("T03", "ASG-CUTTING-PLANE", "Technical", 7, "PHANTOM2", 0.35, True,
-     "Cutting planes", "Section cut lines (markers go on ASG-SYMBOL)"),
-    ("T04", "ASG-SECTION-CUT", "Technical", 7, "Continuous", 0.40, True,
+     "Cutting planes", "Section cut lines (section markers go on ASG-SYMBOL)"),
+    ("T04", "ASG-SECTION-CUT", "Technical", 7, "Continuous", 0.50, True,
      "Section cut outlines", "Outline of material cut by the section plane - heaviest geometry"),
     ("T05", "ASG-HATCH", "Technical", 252, "Continuous", 0.09, True,
      "Section hatching", "Pattern hatches in sections (plots grey)"),
@@ -158,7 +192,7 @@ LAYERS = [
      "Setting-out geometry (plotted)", "Opening lines, setting-out lines that must print"),
     ("T08", "ASG-REFERENCE", "Technical", 253, "Continuous", 0.13, True,
      "Reference geometry", "Architectural / structural background, xrefs (plots light grey)"),
-    ("T09", "ASG-CONSTRUCTION", "Technical", 6, "Continuous", 0.05, False,
+    ("T09", "ASG-CONSTRUCTION", "Technical", 6, "Continuous", 0.00, False,
      "Construction geometry (NOT plotted)", "Temporary helper lines only - never final geometry"),
     ("A01", "ASG-DIMENSION", "Annotation", 3, "Continuous", 0.13, True,
      "Dimensions", "All dimensions"),
@@ -170,7 +204,7 @@ LAYERS = [
      "Multileaders", "Callouts and material labels"),
     ("A05", "ASG-TABLE", "Annotation", 7, "Continuous", 0.18, True,
      "Tables", "Schedules, registers, note tables"),
-    ("A06", "ASG-LEVEL", "Annotation", 3, "Continuous", 0.18, True,
+    ("A06", "ASG-LEVEL", "Annotation", 3, "Continuous", 0.13, True,
      "Levels", "FFL / SSL / sill / head level markers"),
     ("A07", "ASG-GRID", "Annotation", 8, "CENTER", 0.13, True,
      "Grids", "Structural / architectural grid lines and bubbles"),
@@ -185,40 +219,42 @@ LAYERS = [
     ("S03", "ASG-VIEWPORT", "Sheet", 6, "Continuous", 0.00, False,
      "Viewports (NOT plotted)", "All layout viewports"),
     ("S04", "ASG-NOPLOT", "Sheet", 6, "Continuous", 0.00, False,
-     "Non-plot objects", "Internal markups, reminders - never printed"),
+     "Non-plot objects", "Internal markups and reminders - never printed"),
 ]
 
-LW_MATRIX = [
-    (0.50, "Sheet border"),
-    (0.40, "Section cut outline"),
-    (0.35, "Primary outline, cutting plane"),
-    (0.30, "Mild steel"),
-    (0.25, "Aluminium, stainless, cladding, symbols, title block, revision"),
-    (0.18, "Secondary lines, glass, hardware, fixings, hidden, text"),
-    (0.13, "Dimensions, leaders, centrelines, seals, insulation, set-out, reference"),
-    (0.09, "Hatches and fills"),
+COLOUR_LOGIC = [
+    ("7", "Primary geometry, metals, text, sheet", "Black"),
+    ("8", "Secondary geometry, hardware, seals, hidden, centrelines, grids", "Black (lighter weights)"),
+    ("4", "Glass and mirror", "Black"),
+    ("3", "Annotation: dimensions, leaders, levels, symbols", "Black"),
+    ("1", "Revisions", "Black"),
+    ("6", "Non-plot: construction, viewport, no-plot", "Not plotted (layer plot flag off)"),
+    ("251", "Solid fills (aluminium / steel walls in section)", "Grey RGB 91 (about 64 % dark)"),
+    ("252", "Hatch patterns, insulation", "Grey RGB 132 (about 48 % dark)"),
+    ("253", "Reference background / xrefs", "Grey RGB 173 (about 32 % dark)"),
 ]
 
 # ---------------------------------------------------------------------------
-# 05 Text styles: name, ttf, bold, annotative, use
+# 05 Text styles: name, ttf, bold, annotative, use  (ISO 3098 height series)
 # ---------------------------------------------------------------------------
 TEXT_STYLES = [
-    ("ASG-TEXT-ANNO", "arial.ttf", False, True, "Model-space general text / dimension text"),
+    ("ASG-TEXT-ANNO", "arial.ttf", False, True, "Model-space general text and dimension text"),
     ("ASG-TEXT-NOTE", "arial.ttf", False, True, "Model-space notes, material labels, leaders"),
     ("ASG-TEXT-SMALL", "arial.ttf", False, True, "Small detail notes, profile codes"),
     ("ASG-TEXT-TITLE", "arialbd.ttf", True, False, "Detail / view titles (paper space)"),
-    ("ASG-TEXT-HEADING", "arialbd.ttf", True, False, "Drawing titles, section headings (paper space)"),
-    ("ASG-TEXT-SHEET", "arial.ttf", False, False, "Title block fields, sheet text (paper space)"),
+    ("ASG-TEXT-HEADING", "arialbd.ttf", True, False, "Drawing titles, sheet headings (paper space)"),
+    ("ASG-TEXT-SHEET", "arial.ttf", False, False, "Title block fields, tables, sheet text (paper space)"),
 ]
 TEXT_HEIGHTS = [  # use, plotted mm, style
-    ("General dimensions", 2.5, "ASG-TEXT-ANNO (via dim style)"),
+    ("General dimensions", 2.5, "ASG-TEXT-ANNO (via dimension style)"),
     ("Technical notes", 2.5, "ASG-TEXT-NOTE"),
     ("Material labels", 2.5, "ASG-TEXT-NOTE (via ASG-ML-ANNO)"),
     ("Small detail notes", 1.8, "ASG-TEXT-SMALL"),
     ("Detail titles", 3.5, "ASG-TEXT-TITLE"),
     ("Drawing titles", 5.0, "ASG-TEXT-HEADING"),
-    ("Sheet headings", 7.0, "ASG-TEXT-HEADING (A1); 5.0 on A3/A4"),
+    ("Sheet headings", 7.0, "ASG-TEXT-HEADING (A1); 5.0 on A3 / A4"),
 ]
+ISO_3098_HEIGHTS = (1.8, 2.5, 3.5, 5.0, 7.0, 10.0, 14.0, 20.0)
 
 # ---------------------------------------------------------------------------
 # 05 Dimension styles
@@ -238,24 +274,24 @@ DIM_BASE = {
 DIM_STYLES = [
     # name, annotative, overrides, use
     ("ASG-DIM-ANNO", True, {}, "Default linear / aligned dimensions in model space, any viewport scale"),
-    ("ASG-DIM-FIXED", False, {}, "Non-annotative: paper-space (trans-spatial) dimensioning over viewports, or 1:1 sheets"),
-    ("ASG-DIM-DETAIL", True, {"dimdec": 1, "dimzin": 0, "dimtdec": 1},
-     "Fabrication details: 0.0 precision; tolerance switched on per dimension (symmetrical, 0.7 height)"),
-    ("ASG-DIM-ANGULAR", True, {"dimadec": 2, "dimazin": 0},
-     "Angular dimensions, decimal degrees 0.00"),
-    ("ASG-DIM-RADIUS", True, {"dimcen": 0.0, "dimtmove": 0, "dimtofl": 1},
-     "Radius dimensions (R prefix automatic), no centre mark"),
-    ("ASG-DIM-DIAMETER", True, {"dimcen": 2.5, "dimtmove": 0, "dimtofl": 1},
-     "Diameter dimensions (diameter symbol automatic), centre mark 2.5"),
+    ("ASG-DIM-FIXED", False, {},
+     "Non-annotative: dimensions placed in paper space over viewports (true size), or 1:1 sheets"),
+    ("ASG-DIM-DETAIL", True, {"dimdec": 1, "dimzin": 0},
+     "Fabrication details 0.0; symmetrical tolerance switched on per dimension (height 0.7)"),
+    ("ASG-DIM-ANGULAR", True, {"dimazin": 0}, "Angular dimensions, decimal degrees 0.00"),
+    ("ASG-DIM-RADIUS", True, {"dimcen": 0.0, "dimtmove": 0}, "Radius dimensions (R prefix automatic), no centre mark"),
+    ("ASG-DIM-DIAMETER", True, {"dimcen": 2.5, "dimtmove": 0}, "Diameter dimensions (diameter sign automatic), centre mark 2.5"),
 ]
+DIM_HEADER_EXCLUDE = {"dimblk"}  # $DIMBLK "" already = closed filled
 
 # ---------------------------------------------------------------------------
 # 05 Multileader styles
+# name, annotative, arrow block ("" = closed filled), arrow size, text style,
+# text height, text frame, use
 # ---------------------------------------------------------------------------
 MLEADER_STYLES = [
-    # name, annotative, arrow block ("" = closed filled), arrow size, text style, height, frame, use
     ("ASG-ML-ANNO", True, "", 2.5, "ASG-TEXT-NOTE", 2.5, False, "Default model-space callouts and material labels"),
-    ("ASG-ML-NOTE", False, "", 2.5, "ASG-TEXT-NOTE", 2.5, False, "Paper-space notes pointing into viewports"),
+    ("ASG-ML-NOTE", False, "", 2.5, "ASG-TEXT-SHEET", 2.5, False, "Paper-space notes pointing into viewports"),
     ("ASG-ML-DETAIL", True, "_DOT", 1.5, "ASG-TEXT-SMALL", 1.8, False, "Dense 1:1 / 1:2 fabrication details"),
     ("ASG-ML-REFERENCE", True, "_OPEN30", 2.5, "ASG-TEXT-NOTE", 2.5, True, "References to other drawings / details (framed text)"),
 ]
@@ -263,8 +299,9 @@ MLEADER_STYLES = [
 ANNO_SCALES = [1, 2, 5, 10, 20, 25, 50, 100]
 
 # ---------------------------------------------------------------------------
-# 07 Table styles (created in AutoCAD by ASG_Setup.lsp)
-# name, title (h, align), header (h, align), data (h, align), title supp, header supp, use
+# 07 Table styles (created in AutoCAD by ASG-SETUP)
+# name, title (h, align), header (h, align), data (h, align), title suppressed,
+# header suppressed, use.   align: TL top-left, ML middle-left, MC middle-centre
 # ---------------------------------------------------------------------------
 TABLE_STYLES = [
     ("ASG-TABLE-STANDARD", (3.5, "MC"), (2.5, "MC"), (2.5, "ML"), False, False, "Standard technical tables"),
@@ -275,22 +312,30 @@ TABLE_STYLES = [
     ("ASG-TABLE-REGISTER", (3.5, "MC"), (2.5, "MC"), (2.5, "ML"), False, False, "Drawing registers"),
     ("ASG-TABLE-NOTES", (3.5, "ML"), (2.5, "ML"), (2.5, "TL"), False, True, "General notes"),
 ]
+TABLE_ALIGN_CODE = {"TL": 1, "ML": 4, "MC": 5}  # AcCellAlignment
 
 # ---------------------------------------------------------------------------
-# 08 Sheets
+# 08 Sheets (ISO 216 sizes)
+# layout name, width, height, DWG To PDF media base name, title block, default vp scale
 # ---------------------------------------------------------------------------
 SHEETS = [
-    # layout / page setup name, w, h, paper base, title block, default vp scale
     ("A4-LANDSCAPE", 297.0, 210.0, "ISO_full_bleed_A4", "ASG-TB-A4", 10),
     ("A4-PORTRAIT", 210.0, 297.0, "ISO_full_bleed_A4", "ASG-TB-A4", 10),
     ("A3-LANDSCAPE", 420.0, 297.0, "ISO_full_bleed_A3", "ASG-TB-A3", 20),
     ("A3-PORTRAIT", 297.0, 420.0, "ISO_full_bleed_A3", "ASG-TB-A3", 20),
     ("A1-LANDSCAPE", 841.0, 594.0, "ISO_full_bleed_A1", "ASG-TB-A1", 50),
 ]
-MARGIN_LEFT, MARGIN = 20.0, 10.0
+ISO_216 = {(210.0, 297.0), (297.0, 420.0), (594.0, 841.0)}
+MARGIN_LEFT, MARGIN = 20.0, 10.0  # ISO 5457 practice: 20 mm filing margin, 10 mm others
+
+
+def media_name(base: str, w: float, h: float) -> str:
+    return f"{base}_({w:.2f}_x_{h:.2f}_MM)"
+
+
 TB_SPECS = {  # designed per sheet class - never stretched
-    "ASG-TB-A4": dict(w=180.0, r=7.0, cap=1.8, val=2.5, title=3.5, num=3.5, comp=2.8),
-    "ASG-TB-A3": dict(w=180.0, r=9.0, cap=2.0, val=2.5, title=5.0, num=3.5, comp=3.5),
+    "ASG-TB-A4": dict(w=180.0, r=7.5, cap=1.8, val=2.5, title=3.5, num=3.5, comp=2.5),
+    "ASG-TB-A3": dict(w=180.0, r=9.0, cap=1.8, val=2.5, title=5.0, num=3.5, comp=3.5),
     "ASG-TB-A1": dict(w=250.0, r=12.0, cap=2.5, val=3.5, title=7.0, num=5.0, comp=5.0),
 }
 TB_ATTRIBUTES = [  # tag, prompt, default
@@ -310,27 +355,47 @@ TB_ATTRIBUTES = [  # tag, prompt, default
     ("SHEET_NO", "Sheet number", "01 OF 01"),
     ("DWG_STATUS", "Drawing status", "PRELIMINARY"),
 ]
-
-HATCH_STANDARD = [  # material, pattern, scale @ paper, angle prop, layer, note
-    ("Glass (section)", "ANSI31", "0.5", "0", "ASG-HATCH", "Thin glass: two lines, no hatch"),
-    ("Aluminium (section)", "SOLID", "-", "-", "ASG-HATCH-FILL", "Plots dark grey"),
-    ("Mild steel (section)", "ANSI32", "1.0", "0", "ASG-HATCH", "Lines read 45 deg"),
-    ("Stainless steel (section)", "ANSI31", "0.75", "90", "ASG-HATCH", "Lines read 135 deg"),
-    ("Concrete", "AR-CONC", "0.05", "0", "ASG-REFERENCE", ""),
-    ("Masonry / blockwork", "ANSI31", "1.0", "0", "ASG-REFERENCE", "AR-B816 in elevation"),
-    ("Insulation", "INSUL", "0.05", "0", "ASG-INSULATION", "Fit to thickness"),
-    ("Sealant", "SOLID", "-", "-", "ASG-SEALANT", ""),
-    ("Generic fill", "ANSI37", "1.0", "0", "ASG-HATCH", ""),
+DRAWING_STATUS_CODES = ["PRELIMINARY", "FOR APPROVAL", "APPROVED", "FOR CONSTRUCTION",
+                        "FOR FABRICATION", "AS-BUILT", "SUPERSEDED"]
+NUMBERING = [
+    ("Format", "AS-[YYYY]-[NNN]-[DIS]-[TYP]-[SSS]  +  revision R0, R1, R2 ... in the REV field"),
+    ("Example", "AS-2026-014-ALU-SD-001, REV R0  ->  file AS-2026-014-ALU-SD-001-R0_MarinaTower.dwg"),
+    ("YYYY-NNN", "Al Siraj project code (year + project serial)"),
+    ("DIS", "ALU aluminium | GLZ glazing | MS mild steel | SS stainless steel | MISC other metal works"),
+    ("TYP", "GA general arrangement | EL elevation | SD shop drawing | SEC section | DT detail"),
+    ("SSS", "Sheet serial 001, 002 ..."),
 ]
+
+# ---------------------------------------------------------------------------
+# Hatch standard - pattern names verified against acadiso.pat definitions
+# material, pattern, AutoCAD angle property, scale rule, layer, note
+# Module values (acadiso, scale 1): ANSI31/37 spacing 3.175 mm, ANSI32 pair
+# spacing 9.525 mm, INSUL band 9.525 mm, AR-* real-size (mm).
+# ---------------------------------------------------------------------------
+HATCH_STANDARD = [
+    ("Glass (section)", "ANSI31", "0", "0.5 x drawing scale (1.6 mm on paper)", "ASG-HATCH",
+     "Thin monolithic glass may be left unhatched"),
+    ("Aluminium (section)", "SOLID", "-", "-", "ASG-HATCH-FILL", "Plots dark grey"),
+    ("Mild steel (section)", "ANSI32", "0", "1.0 x drawing scale", "ASG-HATCH", "Lines read 45 deg"),
+    ("Stainless steel (section)", "ANSI31", "90", "0.75 x drawing scale", "ASG-HATCH", "Lines read 135 deg"),
+    ("Thermal break / polyamide", "ANSI37", "0", "0.5 x drawing scale", "ASG-INSULATION", "Cross-hatch"),
+    ("Insulation board / batt", "INSUL", "0", "insulation thickness / 9.525 (real size)", "ASG-INSULATION",
+     "Pattern band fits the thickness"),
+    ("Concrete", "AR-CONC", "0", "real size: 1.0 up to 1:10, 2.0 at 1:20-1:25, 5.0 at 1:50-1:100", "ASG-REFERENCE", ""),
+    ("Masonry / blockwork (section)", "ANSI31", "0", "1.0 x drawing scale", "ASG-REFERENCE", "Plots light grey"),
+    ("Blockwork (elevation)", "AR-B816", "0", "real size 0.984 (= 200 x 400 block)", "ASG-REFERENCE", ""),
+    ("Sealant bead", "SOLID", "-", "-", "ASG-SEALANT", "Plots black"),
+    ("Generic / unspecified section", "ANSI31", "0", "1.0 x drawing scale", "ASG-HATCH", "Use only until material is confirmed"),
+]
+
 ATTRIBUTE_STANDARD = [
     ("ITEM_CODE", "Item / product code"), ("ITEM_NAME", "Item description"),
-    ("SYSTEM_NAME", "System / series"), ("MANUFACTURER", "Manufacturer / supplier (verified only)"),
+    ("SYSTEM_NAME", "System / series"), ("MANUFACTURER", "Manufacturer / supplier (verified data only)"),
     ("MATERIAL", "Base material"), ("FINISH", "Finish"), ("COLOUR", "Colour / RAL"),
     ("GLASS_SPEC", "Glass specification"), ("REVISION", "Block revision"),
 ]
 
 BYLAYER_RAW = colors.BY_LAYER_RAW_VALUE
-BYBLOCK_RAW = colors.BY_BLOCK_RAW_VALUE
 TB_HEIGHTS: dict[str, float] = {}
 
 
@@ -346,6 +411,15 @@ def _text(space, s, x, y, h, style, layer="0", align=TextEntityAlignment.BOTTOM_
     t = space.add_text(s, height=h, dxfattribs={"style": style, "layer": layer})
     t.set_placement((x, y), align=align)
     return t
+
+
+def header_value(var):
+    return next(v for k, v, _p in HEADER_VARS if k == var)
+
+
+def dim_values(name):
+    over = next(o for n, _a, o, _u in DIM_STYLES if n == name)
+    return dict(DIM_BASE, **over)
 
 
 def new_document(sheets=SHEETS):
@@ -375,26 +449,39 @@ def new_document(sheets=SHEETS):
         ds = doc.dimstyles.add(name, dxfattribs=dict(DIM_BASE, **over))
         if anno:
             _anno(ds)
+    # "Standard" cannot be removed from a drawing - make it harmless if picked
+    doc.dimstyles.get("Standard").dxf.update(dim_values("ASG-DIM-FIXED"))
     _mleader_styles(doc)
     _mline_styles(doc)
     for name, spec in TB_SPECS.items():
         if any(s[4] == name for s in sheets):
             _title_block(doc, name, **spec)
     _layouts(doc, sheets)
-    for var, val, _p in HEADER_VARS + HEADER_STYLE_VARS:  # re-apply: page setup resets limits
+    # page_setup() resets limits -> re-apply all header values last
+    for var, val, _p in HEADER_VARS + HEADER_STYLE_VARS:
         doc.header[var] = val
-    doc.layouts.get("Model").dxf.limmax = HEADER_VARS[9][1]  # $LIMMAX is synced from Model layout on save
-    doc.layouts.get("Model").dxf.limmin = HEADER_VARS[8][1]
+    _sync_header_dimvars(doc, "ASG-DIM-ANNO")
+    msp_layout = doc.layouts.get("Model")
+    msp_layout.dxf.limmin = header_value("$LIMMIN")  # $LIM* are synced from the Model layout on save
+    msp_layout.dxf.limmax = header_value("$LIMMAX")
     doc.set_modelspace_vport(height=20000, center=(10000, 7000))
     return doc
 
 
+def _sync_header_dimvars(doc, style):
+    """Current dimension variables in the header must equal the current style,
+    otherwise AutoCAD shows the style with '<style overrides>'."""
+    for k, v in dim_values(style).items():
+        if k in DIM_HEADER_EXCLUDE:
+            continue
+        doc.header["$" + k.upper()] = v
+
+
 def _mleader_styles(doc):
-    for name, anno, arrow, asz, tstyle, ch, frame, _u in MLEADER_STYLES:
-        ml = doc.mleader_styles.new(name)
+    def setup(ml, anno, arrow, asz, tstyle, ch, frame):
         d = ml.dxf
-        d.content_type = 2
-        d.leader_type = 1
+        d.content_type = 2  # MText
+        d.leader_type = 1  # straight
         d.max_leader_segments_points = 2
         d.leader_line_color = BYLAYER_RAW
         d.leader_lineweight = -2
@@ -409,11 +496,15 @@ def _mleader_styles(doc):
         d.text_color = BYLAYER_RAW
         d.char_height = ch
         d.has_text_frame = int(frame)
-        d.text_left_attachment_type = 1
+        d.text_left_attachment_type = 1  # middle of top line
         d.text_right_attachment_type = 1
-        d.text_angle_type = 1
+        d.text_angle_type = 1  # horizontal
         d.scale = 1.0
         d.is_annotative = int(anno)
+
+    for name, anno, arrow, asz, tstyle, ch, frame, _u in MLEADER_STYLES:
+        setup(doc.mleader_styles.new(name), anno, arrow, asz, tstyle, ch, frame)
+    setup(doc.mleader_styles.get("Standard"), False, "", 2.5, "ASG-TEXT-SHEET", 2.5, False)
 
 
 def _mline_styles(doc):
@@ -421,7 +512,7 @@ def _mline_styles(doc):
     m.dxf.description = "Two lines +/-0.5; MLINE scale = overall width"
     m.elements.append(0.5, 256, "BYLAYER")
     m.elements.append(-0.5, 256, "BYLAYER")
-    m.dxf.flags = 16 | 256
+    m.dxf.flags = 16 | 256  # square start / end caps
     m = doc.mline_styles.new("ASG-MLINE-3")
     m.dxf.description = "Two lines + CENTER2 axis"
     m.elements.append(0.5, 256, "BYLAYER")
@@ -431,8 +522,13 @@ def _mline_styles(doc):
 
 
 def _title_block(doc, name, w, r, cap, val, title, num, comp):
-    """Bottom-right title block. Base point = bottom-right corner (sheet margin)."""
+    """Bottom-right title block, base point = bottom-right corner of the border.
+    Geometry on layer 0 / ByLayer -> takes ASG-TITLEBLOCK when inserted."""
     blk = doc.blocks.new(name)
+    br = blk.block_record
+    br.dxf.units = 4  # millimetres
+    br.dxf.explode = 0  # not explodable (keeps attributes intact)
+    br.dxf.scale = 1  # uniform scaling only
     prompts = {t: p for t, p, _d in TB_ATTRIBUTES}
     defaults = {t: d for t, _p, d in TB_ATTRIBUTES}
     x0, pad = -w, 0.12 * r
@@ -457,11 +553,11 @@ def _title_block(doc, name, w, r, cap, val, title, num, comp):
     def att(tag, x, y, hh, style):
         a = blk.add_attdef(tag, insert=(x, y), text=defaults[tag],
                            dxfattribs={"height": hh, "style": style, "layer": "0",
-                                       "prompt": prompts[tag]})
+                                       "prompt": prompts[tag], "lock_position": 1})
         a.set_placement((x, y), align=TextEntityAlignment.BOTTOM_LEFT)
 
     y = 0.0
-    for height, cells in rows:
+    for i, (height, cells) in enumerate(rows):
         if height == "TITLE":
             hh = 2 * r
             _text(blk, "DRAWING TITLE", x0 + pad, y + hh - pad - cap, cap, "ASG-TEXT-SHEET")
@@ -481,10 +577,29 @@ def _title_block(doc, name, w, r, cap, val, title, num, comp):
                 att(tag, x + pad, y + pad, min(th, hh - cap - 3 * pad), style)
                 x += w * frac
         y += hh
-        blk.add_line((x0, y), (0, y), dxfattribs={"layer": "0"})
-    blk.add_lwpolyline([(x0, 0), (0, 0), (0, y), (x0, y)], close=True,
-                       dxfattribs={"layer": "0", "const_width": 0})
+        if i < len(rows) - 1:  # top edge is part of the outline
+            blk.add_line((x0, y), (0, y), dxfattribs={"layer": "0"})
+    blk.add_lwpolyline([(x0, 0), (0, 0), (0, y), (x0, y)], close=True, dxfattribs={"layer": "0"})
     TB_HEIGHTS[name] = y
+
+
+def title_block_height(name):
+    if name not in TB_HEIGHTS:
+        tmp = ezdxf.new("R2018", setup=False, units=4)
+        for st, ttf, *_ in TEXT_STYLES:
+            tmp.styles.add(st, font=ttf)
+        _title_block(tmp, name, **TB_SPECS[name])
+    return TB_HEIGHTS[name]
+
+
+def viewport_rect(name, w, h, tb):
+    """Default viewport rectangle: inside the border with 5 mm clearance,
+    never overlapping the title block."""
+    x1, y1 = MARGIN_LEFT + 5, MARGIN + title_block_height(tb) + 5
+    x2, y2 = w - MARGIN - 5, h - MARGIN - 5
+    if w > h:  # landscape: left of the title block, full height
+        x2, y1 = w - MARGIN - TB_SPECS[tb]["w"] - 5, MARGIN + 5
+    return x1, y1, x2, y2
 
 
 def _layouts(doc, sheets):
@@ -492,28 +607,27 @@ def _layouts(doc, sheets):
         if name in doc.layouts:  # idempotent
             continue
         lay = doc.layouts.new(name)
-        lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", scale=(1, 1),
-                       name=paper, device=PLOTTER)
+        # scale MUST be a tuple: an int selects an AutoCAD standard scale index
+        lay.page_setup(size=(w, h), margins=(0, 0, 0, 0), units="mm", offset=(0, 0),
+                       rotation=0, scale=(1, 1), name=paper, device=PLOTTER)
         lay.dxf.current_style_sheet = CTB_NAME
         lay.use_plot_styles(True)
         lay.print_lineweights(True)
         lay.scale_lineweights(False)
-        lay.plot_centered(True)
+        lay.plot_centered(False)  # not available for plot area "Layout"; offset 0,0 on full-bleed media
         lay.plot_viewport_borders(False)
         lay.show_plot_styles(False)
-        lay.dxf.shade_plot_resolution_level = 3
+        lay.plot_hidden(False)
+        lay.dxf.shade_plot_resolution_level = 3  # Presentation
         lay.add_lwpolyline([(MARGIN_LEFT, MARGIN), (w - MARGIN, MARGIN), (w - MARGIN, h - MARGIN),
                             (MARGIN_LEFT, h - MARGIN)], close=True, dxfattribs={"layer": "ASG-BORDER"})
         lay.add_blockref(tb, (w - MARGIN, MARGIN), dxfattribs={"layer": "ASG-TITLEBLOCK"}
                          ).add_auto_attribs({})
-        x1, y1 = MARGIN_LEFT + 5, MARGIN + TB_HEIGHTS[tb] + 5
-        x2, y2 = w - MARGIN - 5, h - MARGIN - 5
-        if w > h:
-            x2, y1 = w - MARGIN - TB_SPECS[tb]["w"] - 5, MARGIN + 5
+        x1, y1, x2, y2 = viewport_rect(name, w, h, tb)
         vp = lay.add_viewport(center=((x1 + x2) / 2, (y1 + y2) / 2), size=(x2 - x1, y2 - y1),
                               view_center_point=((x2 - x1) * vps / 2, (y2 - y1) * vps / 2),
                               view_height=(y2 - y1) * vps, dxfattribs={"layer": "ASG-VIEWPORT"})
-        vp.dxf.flags |= 16384
+        vp.dxf.flags |= 16384  # display locked
     if "Layout1" in doc.layouts and len(doc.layouts) > 2:
         doc.layouts.delete("Layout1")
 
@@ -527,9 +641,10 @@ _SCALE = ("  0\nSCALE\n  5\n{h}\n102\n{{ACAD_REACTORS\n330\n{o}\n102\n}}\n330\n{
 
 def inject_annotation_scales(path: Path):
     doc = ezdxf.readfile(path)
-    owner = doc.rootdict.get("ACAD_SCALELIST").dxf.handle
-    if len(doc.rootdict.get("ACAD_SCALELIST")):
-        return  # idempotent
+    sl = doc.rootdict.get("ACAD_SCALELIST")
+    if len(sl):
+        return  # idempotent: list already present
+    owner = sl.dxf.handle
     seed = int(doc.header["$HANDSEED"], 16)
     objs, entries = [], []
     for i, s in enumerate(ANNO_SCALES):
@@ -576,8 +691,9 @@ def save_dxf(doc, path: Path):
 
 
 # ---------------------------------------------------------------------------
-# CTB - ezdxf's writer packs the header with native longs (8 bytes on 64-bit
-# Linux), which AutoCAD cannot read; write three little-endian uint32 instead.
+# CTB.  ezdxf's writer packs the 3 header fields with native C longs, which are
+# 8 bytes on 64-bit Linux/macOS -> AutoCAD cannot read the file. CTB files use
+# three little-endian uint32 (60-byte header, as ezdxf's own reader expects).
 # ---------------------------------------------------------------------------
 def _compress_ctb(stream, content: str):
     body = zlib.compress(content.encode())
@@ -587,17 +703,22 @@ def _compress_ctb(stream, content: str):
 
 
 acadctb._compress = _compress_ctb
-CTB_GREYS = {250: 51, 251: 91, 252: 132, 253: 173, 254: 214}
+CTB_GREY_ACI = (250, 251, 252, 253, 254)  # plot in their own (grey) colour
 
 
 def build_ctb(path: Path):
+    """All colours plot black except ACI 250-254, which keep their own grey
+    ('Use object color', the same encoding as AutoCAD's acad.ctb). Lineweight
+    and linetype always 'Use object ...'."""
     ctb = acadctb.new_ctb()
-    ctb.description = "ASG monochrome: ACI 1-249,255 black; 250-254 grey; object lineweight/linetype"
+    ctb.description = "ASG monochrome: ACI 1-249,255 black; 250-254 object grey; object lineweight & linetype"
     for aci in range(1, 256):
         st = ctb[aci]
-        g = CTB_GREYS.get(aci, 0)
-        st.color = (g, g, g)
-        st.set_lineweight(0.0)
+        if aci in CTB_GREY_ACI:
+            st.set_object_color()
+        else:
+            st.color = (0, 0, 0)
+        st.set_lineweight(0.0)  # index 0 = use object lineweight
         st.linetype = acadctb.OBJECT_LINETYPE
         st.screen = 100
         st.description = ""

@@ -1,6 +1,6 @@
-Page setup / layout,Plot device,Paper size (canonical media name),Orientation,Plot area,Plot scale,Plot offset,Plot style table,Plot lineweights,Title block,Default viewport
-ASG-A4-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A4_(297.00_x_210.00_MM),Landscape,Layout,1:1,Centred,ASG_Monochrome.ctb,Yes (not scaled),ASG-TB-A4,"1:10, locked, ASG-VIEWPORT"
-ASG-A4-PORTRAIT,DWG To PDF.pc3,ISO_full_bleed_A4_(210.00_x_297.00_MM),Portrait,Layout,1:1,Centred,ASG_Monochrome.ctb,Yes (not scaled),ASG-TB-A4,"1:10, locked, ASG-VIEWPORT"
-ASG-A3-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A3_(420.00_x_297.00_MM),Landscape,Layout,1:1,Centred,ASG_Monochrome.ctb,Yes (not scaled),ASG-TB-A3,"1:20, locked, ASG-VIEWPORT"
-ASG-A3-PORTRAIT,DWG To PDF.pc3,ISO_full_bleed_A3_(297.00_x_420.00_MM),Portrait,Layout,1:1,Centred,ASG_Monochrome.ctb,Yes (not scaled),ASG-TB-A3,"1:20, locked, ASG-VIEWPORT"
-ASG-A1-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A1_(841.00_x_594.00_MM),Landscape,Layout,1:1,Centred,ASG_Monochrome.ctb,Yes (not scaled),ASG-TB-A1,"1:50, locked, ASG-VIEWPORT"
+Named page setup,Layout,Plot device,Paper (canonical media name),Paper size mm,Orientation,Plot area,Plot scale,Plot offset,Plot style table,Plot object lineweights,Scale lineweights,Title block,Default viewport
+ASG-A4-LANDSCAPE,A4-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A4_(297.00_x_210.00_MM),297 x 210,Landscape,Layout,1:1 (mm = units),"0,0",ASG_Monochrome.ctb,Yes,No,ASG-TB-A4,"1:10, display locked, layer ASG-VIEWPORT"
+ASG-A4-PORTRAIT,A4-PORTRAIT,DWG To PDF.pc3,ISO_full_bleed_A4_(210.00_x_297.00_MM),210 x 297,Portrait,Layout,1:1 (mm = units),"0,0",ASG_Monochrome.ctb,Yes,No,ASG-TB-A4,"1:10, display locked, layer ASG-VIEWPORT"
+ASG-A3-LANDSCAPE,A3-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A3_(420.00_x_297.00_MM),420 x 297,Landscape,Layout,1:1 (mm = units),"0,0",ASG_Monochrome.ctb,Yes,No,ASG-TB-A3,"1:20, display locked, layer ASG-VIEWPORT"
+ASG-A3-PORTRAIT,A3-PORTRAIT,DWG To PDF.pc3,ISO_full_bleed_A3_(297.00_x_420.00_MM),297 x 420,Portrait,Layout,1:1 (mm = units),"0,0",ASG_Monochrome.ctb,Yes,No,ASG-TB-A3,"1:20, display locked, layer ASG-VIEWPORT"
+ASG-A1-LANDSCAPE,A1-LANDSCAPE,DWG To PDF.pc3,ISO_full_bleed_A1_(841.00_x_594.00_MM),841 x 594,Landscape,Layout,1:1 (mm = units),"0,0",ASG_Monochrome.ctb,Yes,No,ASG-TB-A1,"1:50, display locked, layer ASG-VIEWPORT"
