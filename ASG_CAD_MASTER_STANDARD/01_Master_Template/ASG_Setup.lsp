@@ -68,11 +68,18 @@
 
 ;; ------------------------------------------------------------------ QA
 (setq asg:pass 0 asg:fail 0 asg:lines nil)
+;; Full template = ASG_Master_Template.*; single-size templates and project
+;; drawings legitimately miss some layouts / title blocks -> INFO, not FAIL.
+(defun asg:master () (wcmatch (strcase (getvar "DWGNAME")) "ASG_MASTER_TEMPLATE*"))
 (defun asg:out (s) (princ (strcat "\n" s)) (setq asg:lines (cons s asg:lines)))
 (defun asg:chk (label ok)
   (if ok (setq asg:pass (1+ asg:pass)) (setq asg:fail (1+ asg:fail)))
   (asg:out (strcat (if ok "PASS  " "FAIL  ") label))
   ok)
+(defun asg:missing (label)
+  (if (asg:master)
+    (asg:chk (strcat label " - MISSING") nil)
+    (asg:out (strcat "INFO  " label " - not in this drawing"))))
 (defun asg:same (a b)
   (cond ((and (numberp a) (numberp b)) (equal (float a) (float b) 1e-6))
         ((and (= (type a) 'STR) (= (type b) 'STR)) (= (strcase a) (strcase b)))
@@ -159,7 +166,7 @@
                     (= (vla-get-ScaleLineweights lay) :vlax-false)))
       (asg:chk (strcat name ": viewport borders not plotted")
                (= (vla-get-PlotViewportBorders lay) :vlax-false)))
-    (asg:chk (strcat "layout " name " - MISSING") nil)))
+    (asg:missing (strcat "layout " name))))
 
 (defun asg:tbattrs (blk tags / e found)
   (if (setq e (tblobjname "BLOCK" blk))
@@ -170,7 +177,7 @@
       (asg:chk (strcat "title block " blk ": " (itoa (length tags)) " attributes")
                (and (= (length found) (length tags))
                     (vl-every '(lambda (tg) (member tg found)) tags))))
-    (asg:chk (strcat "title block " blk " - MISSING") nil)))
+    (asg:missing (strcat "title block " blk))))
 
 (defun asg:noxrefs (/ b ok)
   (setq ok T b (tblnext "BLOCK" T))
@@ -208,6 +215,7 @@
   (setq asg:pass 0 asg:fail 0 asg:lines nil)
   (asg:out "ASG-QA  -  ASG CAD Master Standard R1  -  read-only check")
   (asg:out (strcat "Drawing: " (getvar "DWGPREFIX") (getvar "DWGNAME")))
+  (if (not (asg:master)) (asg:out "NOTE  Not the master template: ASG-QA checks TEMPLATE settings. In a project drawing FAIL on current layer / style / scale / model space is normal."))
   ;; units and drawing variables
   (asg:var "INSUNITS" 4)
   (asg:var "MEASUREMENT" 1)
@@ -330,15 +338,15 @@
   (asg:scales '("1:1" "1:2" "1:5" "1:10" "1:20" "1:25" "1:50" "1:100"))
   ;; layouts and page setups
   (asg:layout "A4-LANDSCAPE" "ISO_full_bleed_A4_(297.00_x_210.00_MM)" "ASG_Monochrome.ctb")
-  (asg:chk "named page setup ASG-A4-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A4-LANDSCAPE"))
+  (if (asg:item (vla-get-Layouts (asg:doc)) "A4-LANDSCAPE") (asg:chk "named page setup ASG-A4-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A4-LANDSCAPE")))
   (asg:layout "A4-PORTRAIT" "ISO_full_bleed_A4_(210.00_x_297.00_MM)" "ASG_Monochrome.ctb")
-  (asg:chk "named page setup ASG-A4-PORTRAIT" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A4-PORTRAIT"))
+  (if (asg:item (vla-get-Layouts (asg:doc)) "A4-PORTRAIT") (asg:chk "named page setup ASG-A4-PORTRAIT" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A4-PORTRAIT")))
   (asg:layout "A3-LANDSCAPE" "ISO_full_bleed_A3_(420.00_x_297.00_MM)" "ASG_Monochrome.ctb")
-  (asg:chk "named page setup ASG-A3-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A3-LANDSCAPE"))
+  (if (asg:item (vla-get-Layouts (asg:doc)) "A3-LANDSCAPE") (asg:chk "named page setup ASG-A3-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A3-LANDSCAPE")))
   (asg:layout "A3-PORTRAIT" "ISO_full_bleed_A3_(297.00_x_420.00_MM)" "ASG_Monochrome.ctb")
-  (asg:chk "named page setup ASG-A3-PORTRAIT" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A3-PORTRAIT"))
+  (if (asg:item (vla-get-Layouts (asg:doc)) "A3-PORTRAIT") (asg:chk "named page setup ASG-A3-PORTRAIT" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A3-PORTRAIT")))
   (asg:layout "A1-LANDSCAPE" "ISO_full_bleed_A1_(841.00_x_594.00_MM)" "ASG_Monochrome.ctb")
-  (asg:chk "named page setup ASG-A1-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A1-LANDSCAPE"))
+  (if (asg:item (vla-get-Layouts (asg:doc)) "A1-LANDSCAPE") (asg:chk "named page setup ASG-A1-LANDSCAPE" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-A1-LANDSCAPE")))
   ;; title blocks
   (asg:tbattrs "ASG-TB-A4" '("PROJECT" "LOCATION" "CLIENT" "CONSULTANT" "DWG_TITLE" "DWG_TITLE_2" "DWG_NO" "REV" "DATE" "DRAWN_BY" "CHECKED_BY" "APPROVED_BY" "SCALE" "SHEET_NO" "DWG_STATUS"))
   (asg:tbattrs "ASG-TB-A3" '("PROJECT" "LOCATION" "CLIENT" "CONSULTANT" "DWG_TITLE" "DWG_TITLE_2" "DWG_NO" "REV" "DATE" "DRAWN_BY" "CHECKED_BY" "APPROVED_BY" "SCALE" "SHEET_NO" "DWG_STATUS"))

@@ -137,11 +137,18 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
 
 ;; ------------------------------------------------------------------ QA
 (setq asg:pass 0 asg:fail 0 asg:lines nil)
+;; Full template = ASG_Master_Template.*; single-size templates and project
+;; drawings legitimately miss some layouts / title blocks -> INFO, not FAIL.
+(defun asg:master () (wcmatch (strcase (getvar "DWGNAME")) "ASG_MASTER_TEMPLATE*"))
 (defun asg:out (s) (princ (strcat "\n" s)) (setq asg:lines (cons s asg:lines)))
 (defun asg:chk (label ok)
   (if ok (setq asg:pass (1+ asg:pass)) (setq asg:fail (1+ asg:fail)))
   (asg:out (strcat (if ok "PASS  " "FAIL  ") label))
   ok)
+(defun asg:missing (label)
+  (if (asg:master)
+    (asg:chk (strcat label " - MISSING") nil)
+    (asg:out (strcat "INFO  " label " - not in this drawing"))))
 (defun asg:same (a b)
   (cond ((and (numberp a) (numberp b)) (equal (float a) (float b) 1e-6))
         ((and (= (type a) 'STR) (= (type b) 'STR)) (= (strcase a) (strcase b)))
@@ -228,7 +235,7 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
                     (= (vla-get-ScaleLineweights lay) :vlax-false)))
       (asg:chk (strcat name ": viewport borders not plotted")
                (= (vla-get-PlotViewportBorders lay) :vlax-false)))
-    (asg:chk (strcat "layout " name " - MISSING") nil)))
+    (asg:missing (strcat "layout " name))))
 
 (defun asg:tbattrs (blk tags / e found)
   (if (setq e (tblobjname "BLOCK" blk))
@@ -239,7 +246,7 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
       (asg:chk (strcat "title block " blk ": " (itoa (length tags)) " attributes")
                (and (= (length found) (length tags))
                     (vl-every '(lambda (tg) (member tg found)) tags))))
-    (asg:chk (strcat "title block " blk " - MISSING") nil)))
+    (asg:missing (strcat "title block " blk))))
 
 (defun asg:noxrefs (/ b ok)
   (setq ok T b (tblnext "BLOCK" T))
@@ -292,6 +299,8 @@ def build_lisp():
     L.append("  (setq asg:pass 0 asg:fail 0 asg:lines nil)")
     L.append(f'  (asg:out "ASG-QA  -  ASG CAD Master Standard {S.STANDARD_REV}  -  read-only check")')
     L.append('  (asg:out (strcat "Drawing: " (getvar "DWGPREFIX") (getvar "DWGNAME")))')
+    L.append('  (if (not (asg:master)) (asg:out "NOTE  Not the master template: ASG-QA checks TEMPLATE settings. '
+             'In a project drawing FAIL on current layer / style / scale / model space is normal."))')
     L.append("  ;; units and drawing variables")
     for var, val, _p in S.HEADER_VARS:
         if isinstance(val, tuple) or var in ("$UCSXDIR", "$UCSYDIR", "$UCSORG"):
@@ -328,7 +337,8 @@ def build_lisp():
     L.append("  ;; layouts and page setups")
     for name, w, h, paper, tb, vps in S.SHEETS:
         L.append(f"  (asg:layout {_s(name)} {_s(S.media_name(paper, w, h))} {_s(S.CTB_NAME)})")
-        L.append(f'  (asg:chk "named page setup ASG-{name}" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-{name}"))')
+        L.append(f'  (if (asg:item (vla-get-Layouts (asg:doc)) "{name}") '
+                 f'(asg:chk "named page setup ASG-{name}" (asg:item (vla-get-PlotConfigurations (asg:doc)) "ASG-{name}")))')
     L.append("  ;; title blocks")
     tags = " ".join(_s(t) for t, _p, _d in S.TB_ATTRIBUTES)
     for tb in S.TB_SPECS:

@@ -565,10 +565,11 @@ PACKAGE = [
     ["02_Drawing_Templates", "One single-layout template per sheet size (DXF)"],
     ["03_Page_Setups", "ASG_Page_Setups.csv - page setup definitions (created as named page setups by ASG-SETUP)"],
     ["04_Plotting_Standards", "ASG_Monochrome.ctb"],
-    ["05_CAD_Standards_Documentation", "ASG_CAD_Standards.pdf (this document) + layout previews"],
+    ["05_CAD_Standards_Documentation", "ASG_CAD_Standards.pdf (this document), ASG_CAD_Quick_SOP.pdf "
+                                       "(one-page drafting SOP for every draftsman) + layout previews"],
     ["06_Layer_Register", "ASG_Layer_Register.xlsx / .csv"],
     ["07_QA_Validation", "Validation report PDF / TXT, temporary QA drawing, QA renders"],
-    ["08_Automation_Source", "asg_standard.py (all definitions), build_all.py, qa_validate.py"],
+    ["08_Automation_Source", "asg_standard.py (all definitions), build_all.py, build_sop.py, qa_validate.py"],
 ]
 DIM_PARAMS = [
     ["Text", "ASG-TEXT-ANNO 2.5, above the dimension line (DIMTAD 1), aligned with it, gap 1.0"],
@@ -865,11 +866,13 @@ PACKAGE
 02_Drawing_Templates\\      ASG_<SIZE>.dxf - one layout each (A4 L/P, A3 L/P, A1 L)
 03_Page_Setups\\            ASG_Page_Setups.csv
 04_Plotting_Standards\\     ASG_Monochrome.ctb
-05_CAD_Standards_Documentation\\  ASG_CAD_Standards.pdf (+ previews)
+05_CAD_Standards_Documentation\\  ASG_CAD_Standards.pdf (full rules, + previews)
+                           ASG_CAD_Quick_SOP.pdf (one-page SOP - print for every draftsman)
 06_Layer_Register\\         ASG_Layer_Register.xlsx / .csv
 07_QA_Validation\\          ASG_Template_Validation_Report.pdf / .txt
                            QA_TEST_DRAWING_temporary.dxf (test file - NOT a template)
-08_Automation_Source\\      asg_standard.py (all definitions), build_all.py, qa_validate.py
+08_Automation_Source\\      asg_standard.py (all definitions), build_all.py, build_sop.py,
+                           qa_validate.py
 
 =========================================================================
 OPENING AND FINISHING IN AUTOCAD (CAD custodian, AutoCAD 2018 or later)
@@ -953,6 +956,11 @@ def main():
     pv = previews_of_master()
     write_standards_pdf(pv)
     rec("Deliverables", "ASG_CAD_Standards.pdf written", pf((D_DOC / "ASG_CAD_Standards.pdf").stat().st_size > 10000))
+    import build_sop
+    size = build_sop.build_one_page()
+    from pypdf import PdfReader
+    rec("Deliverables", f"ASG_CAD_Quick_SOP.pdf: one A4 page, every layer name on it exists",
+        pf(len(PdfReader(str(build_sop.OUT)).pages) == 1), f"auto-fitted at {size} pt")
     counts = write_validation()
     write_readme(counts)
     print(counts)

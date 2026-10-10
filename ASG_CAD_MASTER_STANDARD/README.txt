@@ -8,7 +8,7 @@ Supersedes: ASG-STD-CAD-001 R0 and the earlier folders now in /_superseded.
 STATUS
 =========================================================================
 Master template: genuine AutoCAD 2018 DXF, built and checked by re-opening.
-Validation: 150 PASS / 1 PARTIAL / 19 UNVERIFIED / 2 FAIL  (details: 07_QA_Validation)
+Validation: 151 PASS / 1 PARTIAL / 19 UNVERIFIED / 2 FAIL  (details: 07_QA_Validation)
 FAIL = the native .dwg / .dwt files only: no DWG writer exists in the build
 environment (CAD software found: none). Nothing was renamed to .dwg / .dwt.
 Step 5 below creates both in AutoCAD in about a minute.
@@ -21,11 +21,13 @@ PACKAGE
 02_Drawing_Templates\      ASG_<SIZE>.dxf - one layout each (A4 L/P, A3 L/P, A1 L)
 03_Page_Setups\            ASG_Page_Setups.csv
 04_Plotting_Standards\     ASG_Monochrome.ctb
-05_CAD_Standards_Documentation\  ASG_CAD_Standards.pdf (+ previews)
+05_CAD_Standards_Documentation\  ASG_CAD_Standards.pdf (full rules, + previews)
+                           ASG_CAD_Quick_SOP.pdf (one-page SOP - print for every draftsman)
 06_Layer_Register\         ASG_Layer_Register.xlsx / .csv
 07_QA_Validation\          ASG_Template_Validation_Report.pdf / .txt
                            QA_TEST_DRAWING_temporary.dxf (test file - NOT a template)
-08_Automation_Source\      asg_standard.py (all definitions), build_all.py, qa_validate.py
+08_Automation_Source\      asg_standard.py (all definitions), build_all.py, build_sop.py,
+                           qa_validate.py
 
 =========================================================================
 OPENING AND FINISHING IN AUTOCAD (CAD custodian, AutoCAD 2018 or later)

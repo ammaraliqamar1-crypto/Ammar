@@ -1,5 +1,5 @@
 ASG TEMPLATE VALIDATION REPORT - Standard R1 - 10.10.2026
-Summary: PASS 150 | PARTIAL 1 | UNVERIFIED 19 | FAIL 2
+Summary: PASS 151 | PARTIAL 1 | UNVERIFIED 19 | FAIL 2
 CAD software found: none. No test ran inside AutoCAD.
 
 FAIL        [Deliverables] ASG_Master_Template.dwt generated natively  -- Not generated: no DWG writer in this environment (acad, accoreconsole, ODAFileConverter, TeighaFileConverter, dwg2dxf, dxf2dwg, qcad, librecad, bricscad all absent). Not faked by renaming. Created in AutoCAD by README step 5.
@@ -174,3 +174,4 @@ UNVERIFIED  [Plotting] PDF via DWG To PDF.pc3 + CTB: margins, clipping, lineweig
 UNVERIFIED  [Annotation scales] Annotative text / dims / mleaders across viewport scales  -- No DXF library writes annotative scale contexts; test in AutoCAD (README 6b)
 PASS        [Deliverables] ASG_Layer_Register.xlsx written and re-opened (all layers listed)
 PASS        [Deliverables] ASG_CAD_Standards.pdf written
+PASS        [Deliverables] ASG_CAD_Quick_SOP.pdf: one A4 page, every layer name on it exists  -- auto-fitted at 7.9 pt
