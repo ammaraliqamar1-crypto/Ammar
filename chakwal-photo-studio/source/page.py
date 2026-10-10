@@ -1,5 +1,6 @@
 """Builds the brand presentation page from the outlined logo artwork."""
 import math, re, sys
+import ad
 from brand import (mark, horizontal, stacked, icon, watermark, svg, fmt,
                    SURMA, MALAI, SONA, MEHNDI, BLACK, WHITE, F_DISPLAY, F_SUB, NAME, SUB)
 
@@ -87,6 +88,9 @@ TOKENS = {
     "FOIL_MARK": inline(foil_mark, "art"), "FOIL_WORD": inline(foil_word, "art"),
     "CONCEPT_A": inline(concept_a, "art"), "CONCEPT_B": inline(concept_b, "art"), "CONCEPT_C": concept_c.replace("<svg ", '<svg class="art" ', 1),
     "SCENE": scene,
+    "AD_POST": inline(ad.ad_post(), "art"), "AD_STATUS": inline(ad.ad_tall(1920, None, "s2"), "art"),
+    "AD_FLYER": inline(ad.ad_tall(1527, None, "a2"), "art"),
+    "CARD_FRONT": inline(ad.card_front(), "art"), "CARD_BACK": inline(ad.card_back(), "art"),
 }
 
 html = open("template.html").read()

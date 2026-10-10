@@ -164,6 +164,7 @@ figure { margin: 0; }
 /* cards */
 .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; background: #E7DFD1; padding: clamp(20px, 5vw, 48px); }
 .card { aspect-ratio: 3.5 / 2; box-shadow: 0 12px 22px -12px rgba(0,0,0,.4); display: grid; }
+.card-real { box-shadow: 0 12px 22px -12px rgba(0,0,0,.4); line-height: 0; }
 .card.front { background: var(--surma); place-items: center; padding: 10%; }
 .card.front .art { width: 86%; }
 .card.back { background: var(--malai); padding: 8% 9%; grid-template-columns: minmax(0, 1fr) auto; align-content: space-between; gap: 10px; color: var(--surma); }
@@ -182,6 +183,11 @@ figure { margin: 0; }
 .sizes .art { width: auto; }
 .sizes span { white-space: nowrap; font-size: 11px; display: block; margin-top: 4px; }
 .bw .k span { color: #aaa; } .bw .w span { color: #666; }
+
+/* ads */
+.ads { display: grid; grid-template-columns: 1.15fr 0.95fr 1.05fr; gap: 20px; align-items: start; }
+.ad-shot { line-height: 0; box-shadow: 0 16px 30px -18px rgba(0,0,0,.5); }
+@media (max-width: 860px) { .ads { grid-template-columns: minmax(0, 1fr); } .ads .mock { max-width: 460px; } }
 
 /* rules */
 .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -214,7 +220,7 @@ figure { margin: 0; }
       <h1>Chakwal Photo Studio</h1>
       <p class="urdu" style="font-size:20px;margin-top:-6px">چکوال فوٹو اسٹوڈیو</p>
     </div>
-    <div class="meta">Pindi Road, Minhas Book Place<br>Chakwal, Punjab, Pakistan<br>October 2026</div>
+    <div class="meta">Minhas Book Palace, Pindi Road<br>Chakwal, Punjab, Pakistan<br>October 2026</div>
   </header>
 
   <!-- 1. The logo, plain -->
@@ -359,7 +365,7 @@ figure { margin: 0; }
         <div class="shop">
           <div class="board">
             {{SIGN}}
-            <div class="strip"><span>Weddings · Portraits · Passport Photos · Printing</span><span>Pindi Road, Minhas Book Place</span></div>
+            <div class="strip"><span>Weddings · Movies · Drone · All Size Prints, Frames &amp; Crystals</span><span>Minhas Book Palace, Pindi Road</span></div>
           </div>
           <div class="storefront" aria-hidden="true">
             <div class="glass">{{MARK_WHITE}}</div><div class="door"></div><div class="glass"></div>
@@ -421,7 +427,7 @@ figure { margin: 0; }
         <div class="fb">
           <div class="fb-cover">{{SCENE}}{{PRIMARY_DARK}}</div>
           <div class="fb-id"><div class="av">{{APP_ICON}}</div><div><b>Chakwal Photo Studio</b><span class="small muted">Photographer · Chakwal, Punjab</span></div></div>
-          <div class="fb-body">Weddings, engagements, family portraits, passport photos and printing. Pindi Road, Minhas Book Place, Chakwal.</div>
+          <div class="fb-body">Wedding photography &amp; movies, drone coverage, lighting &amp; stage decoration, sound system, album designing, studio portraits, and all size photo prints, frames &amp; crystals. Minhas Book Palace, Pindi Road, Chakwal.</div>
         </div>
         <figcaption><b>Facebook page.</b> Round profile icon with the horizontal logo on the cover.</figcaption>
       </figure>
@@ -429,14 +435,10 @@ figure { margin: 0; }
 
     <figure class="mock">
       <div class="cards">
-        <div class="card front">{{PRIMARY_DARK}}</div>
-        <div class="card back">
-          <div><div class="nm">Chakwal Photo Studio</div><div class="role">Weddings · Portraits · Printing</div></div>
-          <div class="mk">{{MARK}}</div>
-          <div class="info">Pindi Road, Minhas Book Place, Chakwal<br>Phone / WhatsApp: ____________<div class="ur">چکوال فوٹو اسٹوڈیو · پنڈی روڈ، چکوال</div></div>
-        </div>
+        <div class="card-real">{{CARD_FRONT}}</div>
+        <div class="card-real">{{CARD_BACK}}</div>
       </div>
-      <figcaption><b>Business card</b>, 3.5 × 2 in. Front in charcoal with the logo; back in ivory with contact details. The same layout works for receipts and the order slip.</figcaption>
+      <figcaption><b>Business card, print-ready.</b> 3.5 × 2 in with 3 mm bleed on all sides; trim on the inner edge. Front in charcoal, back in ivory with Zaigham Ali's numbers, the address in English and Urdu, and the services line including the new prints, frames and crystals.</figcaption>
     </figure>
 
     <figure class="mock">
@@ -462,6 +464,21 @@ figure { margin: 0; }
     </figure>
   </section>
 
+  <!-- Advertising -->
+  <section aria-labelledby="s-ads">
+    <div class="head">
+      <span class="eyebrow">Advertising</span>
+      <h2 id="s-ads">The ad, in three sizes</h2>
+      <p class="lead">Replaces the old poster. Same services, plus the new All Size Photo Prints, Frames &amp; Crystals, in English and Urdu, with both contact numbers large enough to read on a phone.</p>
+    </div>
+    <div class="ads">
+      <figure class="mock"><div class="ad-shot">{{AD_POST}}</div><figcaption><b>Feed post</b>, 1080 × 1350. Facebook, Instagram, WhatsApp chats.</figcaption></figure>
+      <figure class="mock"><div class="ad-shot">{{AD_STATUS}}</div><figcaption><b>WhatsApp status</b>, 1080 × 1920.</figcaption></figure>
+      <figure class="mock"><div class="ad-shot">{{AD_FLYER}}</div><figcaption><b>A4 flyer</b>, print-ready PDF. Also works for a counter poster.</figcaption></figure>
+    </div>
+    <p class="muted">The arch window shows the brand's Potohar illustration for now. Put the studio's own best wedding photo in it: customers trust real work far more than stock or AI pictures. The generator does this in one step with <code>--photo</code>.</p>
+  </section>
+
   <!-- 7. Rules -->
   <section aria-labelledby="s-rules">
     <div class="head">
@@ -485,6 +502,10 @@ figure { margin: 0; }
           <tr><td>icon-whatsapp-facebook.png</td><td>Profile picture, 1024 × 1024</td></tr>
           <tr><td>watermark-white.png / -black.png</td><td>Photo watermark, transparent background</td></tr>
           <tr><td>mark-only.svg</td><td>The doorway mark alone</td></tr>
+          <tr><td>../ads/ad-post-1080x1350.png</td><td>Facebook / Instagram / WhatsApp post</td></tr>
+          <tr><td>../ads/ad-status-1080x1920.png</td><td>WhatsApp status</td></tr>
+          <tr><td>../ads/ad-flyer-a4.pdf</td><td>A4 flyer for printing</td></tr>
+          <tr><td>../cards/card-front.pdf / card-back.pdf</td><td>Business card print files with bleed</td></tr>
         </tbody>
       </table>
     </div>
