@@ -92,48 +92,107 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
   (setq r (vl-catch-all-apply 'vla-Item (list coll name)))
   (if (vl-catch-all-error-p r) nil r))
 
+(setq asg:warn 0 asg:wlines nil)
+(defun asg:ok (r) (not (vl-catch-all-error-p r)))
+(defun asg:warnmsg (label err / s)
+  (setq asg:warn (1+ asg:warn)
+        s (strcat "WARN  " label " -> " (if err (vl-catch-all-error-message err) "failed"))
+        asg:wlines (cons s asg:wlines))
+  (princ (strcat "\n  " s)))
+
+;; run (fn . args) protected: returns the result (T for nil results) or nil + WARN
+(defun asg:try (label fn args / r)
+  (setq r (vl-catch-all-apply fn args))
+  (if (vl-catch-all-error-p r)
+    (progn (asg:warnmsg label r) nil)
+    (if r r T)))
+
+;; AcCmColor: 0 = ByBlock (via ColorMethod), otherwise ACI
 (defun asg:color (aci / c)
-  (setq c (vla-GetInterfaceObject (vlax-get-acad-object)
-            (strcat "AutoCAD.AcCmColor." (substr (getvar "ACADVER") 1 2))))
-  (vla-put-ColorIndex c aci)
-  c)
+  (setq c (vl-catch-all-apply 'vla-GetInterfaceObject
+            (list (vlax-get-acad-object) (strcat "AutoCAD.AcCmColor." (substr (getvar "ACADVER") 1 2)))))
+  (cond ((vl-catch-all-error-p c) nil)
+        ((= aci 0) (if (asg:ok (vl-catch-all-apply 'vla-put-ColorMethod (list c 193))) c nil))
+        (T (if (asg:ok (vl-catch-all-apply 'vla-put-ColorIndex (list c aci))) c nil))))
 
 ;; ---------------------------------------------------------------- tables
 ;; row types: 1 data, 2 title, 4 header | align: 1 TL, 4 ML, 5 MC
-(defun asg:ts (name desc tH tA hH hA dH dA tSup hSup / dict ts)
-  (setq dict (vla-Item (vla-get-Dictionaries (asg:doc)) "ACAD_TABLESTYLE"))
-  (or (setq ts (asg:item dict name))
-      (setq ts (vla-AddObject dict name "AcDbTableStyle")))
-  (vla-put-Description ts desc)
-  (vla-put-FlowDirection ts 0)
-  (vla-put-HorzCellMargin ts 1.5)
-  (vla-put-VertCellMargin ts 1.0)
-  (vla-put-TitleSuppressed ts (if tSup :vlax-true :vlax-false))
-  (vla-put-HeaderSuppressed ts (if hSup :vlax-true :vlax-false))
-  (vla-SetTextStyle ts 7 "ASG-TEXT-SHEET")
-  (vla-SetTextHeight ts 2 tH) (vla-SetAlignment ts 2 tA)
-  (vla-SetTextHeight ts 4 hH) (vla-SetAlignment ts 4 hA)
-  (vla-SetTextHeight ts 1 dH) (vla-SetAlignment ts 1 dA)
-  (vla-SetColor ts 7 (asg:color 0))               ; ByBlock
-  (vla-SetBackgroundColorNone ts 3 :vlax-true)    ; title + data: no fill
-  (vla-SetBackgroundColorNone ts 4 :vlax-false)
-  (vla-SetBackgroundColor ts 4 (asg:color 254))   ; header: light grey
-  (vla-SetGridLineWeight ts 18 7 18)              ; inside grid 0.18
-  (vla-SetGridLineWeight ts 45 7 35)              ; outline 0.35
-  (princ (strcat "\n  table style " name " ok"))
-  ts)
+;; Each property: legacy row-type API first, then the cell-style API
+;; (AutoCAD 2008+, cell styles _TITLE / _HEADER / _DATA). Failures -> WARN, never abort.
+(defun asg:cellstyles (rows / l)
+  (if (= 1 (logand rows 1)) (setq l (cons "_DATA" l)))
+  (if (= 4 (logand rows 4)) (setq l (cons "_HEADER" l)))
+  (if (= 2 (logand rows 2)) (setq l (cons "_TITLE" l)))
+  l)
+
+(defun asg:rowprop (ts label fn fn2 rows val / r)
+  (setq r (vl-catch-all-apply fn (list ts rows val)))
+  (cond ((asg:ok r) T)
+        ((and fn2 (vl-every '(lambda (cs) (asg:ok (vl-catch-all-apply fn2 (list ts cs val))))
+                            (asg:cellstyles rows)))
+         T)
+        (T (asg:warnmsg label r) nil)))
+
+(defun asg:gridlw (ts label grid rows lw / r ok)
+  (setq r (vl-catch-all-apply 'vla-SetGridLineWeight (list ts grid rows lw)))
+  (if (asg:ok r)
+    T
+    (progn
+      (setq ok T)
+      (foreach g '(1 2 4 8 16 32)
+        (if (= g (logand grid g))
+          (if (not (or (asg:ok (vl-catch-all-apply 'vla-SetGridLineWeight (list ts g rows lw)))
+                       (vl-every '(lambda (cs) (asg:ok (vl-catch-all-apply 'vla-SetGridLineWeight2 (list ts cs g lw))))
+                                 (asg:cellstyles rows))))
+            (setq ok nil))))
+      (if (not ok) (asg:warnmsg label r))
+      ok)))
+
+(defun asg:ts (name desc tH tA hH hA dH dA tSup hSup / dict ts c)
+  (setq dict (asg:try "open ACAD_TABLESTYLE dictionary" 'vla-Item
+               (list (vla-get-Dictionaries (asg:doc)) "ACAD_TABLESTYLE")))
+  (if (= (type dict) 'VLA-OBJECT)
+    (or (setq ts (asg:item dict name))
+        (setq ts (asg:try (strcat name ": create") 'vla-AddObject (list dict name "AcDbTableStyle")))))
+  (if (= (type ts) 'VLA-OBJECT)
+    (progn
+      (asg:try (strcat name ": description") 'vla-put-Description (list ts desc))
+      (asg:try (strcat name ": flow direction") 'vla-put-FlowDirection (list ts 0))
+      (asg:try (strcat name ": horizontal cell margin") 'vla-put-HorzCellMargin (list ts 1.5))
+      (asg:try (strcat name ": vertical cell margin") 'vla-put-VertCellMargin (list ts 1.0))
+      (asg:try (strcat name ": title row on/off") 'vla-put-TitleSuppressed (list ts (if tSup :vlax-true :vlax-false)))
+      (asg:try (strcat name ": header row on/off") 'vla-put-HeaderSuppressed (list ts (if hSup :vlax-true :vlax-false)))
+      (asg:rowprop ts (strcat name ": text style") 'vla-SetTextStyle 'vla-SetTextStyle2 7 "ASG-TEXT-SHEET")
+      (asg:rowprop ts (strcat name ": title height") 'vla-SetTextHeight 'vla-SetTextHeight2 2 tH)
+      (asg:rowprop ts (strcat name ": header height") 'vla-SetTextHeight 'vla-SetTextHeight2 4 hH)
+      (asg:rowprop ts (strcat name ": data height") 'vla-SetTextHeight 'vla-SetTextHeight2 1 dH)
+      (asg:rowprop ts (strcat name ": title alignment") 'vla-SetAlignment 'vla-SetAlignment2 2 tA)
+      (asg:rowprop ts (strcat name ": header alignment") 'vla-SetAlignment 'vla-SetAlignment2 4 hA)
+      (asg:rowprop ts (strcat name ": data alignment") 'vla-SetAlignment 'vla-SetAlignment2 1 dA)
+      (if (setq c (asg:color 0))
+        (asg:rowprop ts (strcat name ": text colour ByBlock") 'vla-SetColor 'vla-SetColor2 7 c))
+      (asg:rowprop ts (strcat name ": no fill title/data") 'vla-SetBackgroundColorNone nil 3 :vlax-true)
+      (asg:rowprop ts (strcat name ": header fill on") 'vla-SetBackgroundColorNone nil 4 :vlax-false)
+      (if (setq c (asg:color 254))
+        (asg:rowprop ts (strcat name ": header fill grey") 'vla-SetBackgroundColor 'vla-SetBackgroundColor2 4 c))
+      (asg:gridlw ts (strcat name ": inside grid 0.18") 18 7 18)
+      (asg:gridlw ts (strcat name ": outline 0.35") 45 7 35)
+      (princ (strcat "\n  table style " name " done")))
+    (princ (strcat "\n  table style " name " NOT created - see WARN above"))))
 
 ;; ---------------------------------------------------------- page setups
 (defun asg:pagesetups (/ pcs name pc)
-  (setq pcs (vla-get-PlotConfigurations (asg:doc)))
-  (vlax-for lay (vla-get-Layouts (asg:doc))
-    (if (= (vla-get-ModelType lay) :vlax-false)
-      (progn
-        (setq name (strcat "ASG-" (vla-get-Name lay)))
-        (or (setq pc (asg:item pcs name))
-            (setq pc (vla-Add pcs name :vlax-false)))
-        (vla-CopyFrom pc lay)
-        (princ (strcat "\n  page setup " name " ok"))))))
+  (setq pcs (asg:try "open page setups" 'vla-get-PlotConfigurations (list (asg:doc))))
+  (if (= (type pcs) 'VLA-OBJECT)
+    (vlax-for lay (vla-get-Layouts (asg:doc))
+      (if (= (vla-get-ModelType lay) :vlax-false)
+        (progn
+          (setq name (strcat "ASG-" (vla-get-Name lay)))
+          (or (setq pc (asg:item pcs name))
+              (setq pc (asg:try (strcat name ": create") 'vla-Add (list pcs name :vlax-false))))
+          (if (and (= (type pc) 'VLA-OBJECT)
+                   (asg:try (strcat name ": copy from layout") 'vla-CopyFrom (list pc lay)))
+            (princ (strcat "\n  page setup " name " ok"))))))))
 
 ;; ------------------------------------------------------------------ QA
 (setq asg:pass 0 asg:fail 0 asg:lines nil)
@@ -211,30 +270,35 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
   (asg:chk (strcat "annotation scale list: " (itoa (length names)) " entries, no duplicates")
            (= (length names) (length (asg:uniq names)))))
 
+(defun asg:get (fn obj / r) (setq r (vl-catch-all-apply fn (list obj))) (if (asg:ok r) r nil))
+(defun asg:list (fn obj / r)
+  (setq r (vl-catch-all-apply '(lambda () (vlax-safearray->list (vlax-variant-value (apply fn (list obj)))))))
+  (if (asg:ok r) r nil))
+
 (defun asg:layout (name media ctb / lay names num den std)
   (if (setq lay (asg:item (vla-get-Layouts (asg:doc)) name))
     (progn
-      (vla-RefreshPlotDeviceInfo lay)
+      (vl-catch-all-apply 'vla-RefreshPlotDeviceInfo (list lay))
       (asg:chk (strcat name ": plot device DWG To PDF.pc3")
-               (asg:same (vla-get-ConfigName lay) "DWG To PDF.pc3"))
-      (setq names (vl-catch-all-apply
-                    '(lambda () (vlax-safearray->list (vlax-variant-value (vla-GetCanonicalMediaNames lay))))))
+               (asg:same (asg:get 'vla-get-ConfigName lay) "DWG To PDF.pc3"))
+      (setq names (asg:list 'vla-GetCanonicalMediaNames lay))
       (asg:chk (strcat name ": paper " media " exists on device and is selected")
-               (and (listp names) (member media names) (= (vla-get-CanonicalMediaName lay) media)))
-      (asg:chk (strcat name ": plot area = Layout") (= (vla-get-PlotType lay) 5))
-      (vla-GetCustomScale lay 'num 'den)
-      (setq std (and (= (vla-get-UseStandardScale lay) :vlax-true) (= (vla-get-StandardScale lay) 16)))
-      (asg:chk (strcat name ": plot scale 1:1") (or std (and den (/= den 0) (equal (/ num den) 1.0 1e-9))))
-      (asg:chk (strcat name ": plot style table " ctb) (asg:same (vla-get-StyleSheet lay) ctb))
-      (setq names (vl-catch-all-apply
-                    '(lambda () (vlax-safearray->list (vlax-variant-value (vla-GetPlotStyleTableNames lay))))))
+               (and (member media names) (asg:same (asg:get 'vla-get-CanonicalMediaName lay) media)))
+      (asg:chk (strcat name ": plot area = Layout") (equal (asg:get 'vla-get-PlotType lay) 5))
+      (vl-catch-all-apply 'vla-GetCustomScale (list lay 'num 'den))
+      (setq std (and (equal (asg:get 'vla-get-UseStandardScale lay) :vlax-true)
+                     (equal (asg:get 'vla-get-StandardScale lay) 16)))
+      (asg:chk (strcat name ": plot scale 1:1")
+               (or std (and (numberp num) (numberp den) (/= den 0) (equal (/ (float num) den) 1.0 1e-9))))
+      (asg:chk (strcat name ": plot style table " ctb) (asg:same (asg:get 'vla-get-StyleSheet lay) ctb))
+      (setq names (asg:list 'vla-GetPlotStyleTableNames lay))
       (asg:chk (strcat name ": " ctb " installed in Plot Styles folder")
-               (and (listp names) (vl-some '(lambda (x) (asg:same x ctb)) names)))
+               (vl-some '(lambda (x) (asg:same x ctb)) names))
       (asg:chk (strcat name ": plot object lineweights on, not scaled")
-               (and (= (vla-get-PlotWithLineweights lay) :vlax-true)
-                    (= (vla-get-ScaleLineweights lay) :vlax-false)))
+               (and (equal (asg:get 'vla-get-PlotWithLineweights lay) :vlax-true)
+                    (equal (asg:get 'vla-get-ScaleLineweights lay) :vlax-false)))
       (asg:chk (strcat name ": viewport borders not plotted")
-               (= (vla-get-PlotViewportBorders lay) :vlax-false)))
+               (equal (asg:get 'vla-get-PlotViewportBorders lay) :vlax-false)))
     (asg:missing (strcat "layout " name))))
 
 (defun asg:tbattrs (blk tags / e found)
@@ -256,9 +320,15 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
   (asg:chk "no external references" ok))
 
 (defun asg:writelog (/ fn f)
-  (setq fn (strcat (getvar "DWGPREFIX") "ASG_QA_Log.txt"))
-  (if (setq f (open fn "w"))
+  (setq fn (strcat (getvar "DWGPREFIX") "ASG_QA_Log.txt")
+        f (vl-catch-all-apply 'open (list fn "w")))
+  (if (and f (asg:ok f))
     (progn
+      (if asg:wlines
+        (progn
+          (write-line (strcat "ASG-SETUP warnings: " (itoa (length asg:wlines))) f)
+          (foreach l (reverse asg:wlines) (write-line l f))
+          (write-line "" f)))
       (foreach l (reverse asg:lines) (write-line l f))
       (close f)
       (princ (strcat "\nQA log written: " fn)))
@@ -266,13 +336,18 @@ LISP_HEAD = r''';;; ASG_Setup.lsp  -  ASG CAD Master Standard {rev}
 '''
 
 LISP_TAIL = r'''
-(defun c:ASG-SETUP ()
+(defun c:ASG-SETUP (/ r)
+  (setq asg:warn 0 asg:wlines nil)
   (princ "\nASG-SETUP ---------------------------------------------")
-  (asg:tablestyles)
-  (asg:pagesetups)
-  (asg:setvars)
+  (foreach step '(("Table styles" . asg:tablestyles) ("Page setups" . asg:pagesetups)
+                  ("Drawing variables" . asg:setvars))
+    (princ (strcat "\n" (car step) ":"))
+    (setq r (vl-catch-all-apply (cdr step) nil))
+    (if (vl-catch-all-error-p r) (asg:warnmsg (car step) r)))
   (c:ASG-QA)
-  (princ "\nASG-SETUP complete. If FAIL = 0: SAVEAS DWG, then SAVEAS DWT.")
+  (princ (strcat "\nASG-SETUP complete with " (itoa asg:warn) " warning(s)."
+                 "\nIf RESULT shows 0 FAIL: SAVEAS DWG, then SAVEAS DWT."
+                 "\nOtherwise send ASG_QA_Log.txt to the CAD in-charge."))
   (princ))
 
 (princ "\nASG_Setup loaded: ASG-SETUP, ASG-QA, ASG-PROFILE (optional).")
@@ -295,8 +370,7 @@ def build_lisp():
     L.append('    (princ (strcat "\\n  " (car p) (if (vl-catch-all-error-p r) " NOT SET (not supported in this release)" " set"))))')
     L.append("  (princ))\n")
     # QA
-    L.append("(defun c:ASG-QA ()")
-    L.append("  (setq asg:pass 0 asg:fail 0 asg:lines nil)")
+    L.append("(defun asg:qa-body ()")
     L.append(f'  (asg:out "ASG-QA  -  ASG CAD Master Standard {S.STANDARD_REV}  -  read-only check")')
     L.append('  (asg:out (strcat "Drawing: " (getvar "DWGPREFIX") (getvar "DWGNAME")))')
     L.append('  (if (not (asg:master)) (asg:out "NOTE  Not the master template: ASG-QA checks TEMPLATE settings. '
@@ -346,6 +420,11 @@ def build_lisp():
     L.append("  ;; content")
     L.append('  (asg:chk "model space is empty" (null (ssget "_X" (list (cons 410 "Model")))))')
     L.append("  (asg:noxrefs)")
+    L.append("  T)\n")
+    L.append("(defun c:ASG-QA (/ r)")
+    L.append("  (setq asg:pass 0 asg:fail 0 asg:lines nil)")
+    L.append("  (setq r (vl-catch-all-apply 'asg:qa-body nil))")
+    L.append('  (if (vl-catch-all-error-p r) (asg:chk (strcat "QA stopped early: " (vl-catch-all-error-message r)) nil))')
     L.append('  (asg:out (strcat "RESULT: " (itoa asg:pass) " PASS, " (itoa asg:fail) " FAIL"))')
     L.append("  (asg:writelog)")
     L.append("  (princ))\n")
