@@ -1,0 +1,19 @@
+ASG CAD TEMPLATE - TEAM KIT  (CAD Standard R1)
+Saeed Al Siraj Glass & Aluminium Works L.L.C.
+
+INSTALL ON YOUR PC (once, 1 minute) - pictures: 00_START_HERE.pdf, part B
+  1. Copy this whole folder to your PC (or use it from the shared drive).
+  2. Open AutoCAD. Drag ASG_Install.lsp into the AutoCAD window.
+     If AutoCAD asks, click "Load Once".
+  3. When asked, select ASG_Master_Template.dwt from this folder.
+  -> ASG INSTALL COMPLETE. Press Ctrl+N - new drawings start from the template.
+
+IN THIS FOLDER
+  ASG_Master_Template.dwt   company template (put here by the CAD in-charge's installer)
+  ASG_Install.lsp           installer
+  ASG_Monochrome.ctb        print setting (black plot, correct line thickness)
+  ASG_CAD_Quick_SOP.pdf     one-page drafting rules - print it, keep it at your desk
+  00_START_HERE.pdf         picture guide
+
+If ASG_Master_Template.dwt is missing, ask the CAD in-charge: it is created when
+the installer runs on ASG_Master_Template.dxf.

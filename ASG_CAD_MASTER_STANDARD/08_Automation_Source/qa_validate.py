@@ -96,7 +96,7 @@ def test_environment():
     for ext in ("dwt", "dwg"):
         rec("Deliverables", f"ASG_Master_Template.{ext} generated natively", "FAIL",
             "Not generated: no DWG writer in this environment (" + ", ".join(tools) +
-            " all absent). Not faked by renaming. Created in AutoCAD by README step 5.")
+            " all absent). Not faked by renaming. The installer saves both in AutoCAD (00_START_HERE.pdf).")
 
 
 def test_master(path):
@@ -112,7 +112,8 @@ def test_master(path):
                        capture_output=True, timeout=180)
         ok = (Path(td) / (path.stem + ".pdf")).exists()
     rec("File", "Master DXF opened by an independent second reader", pf(ok), ENV["second_reader"])
-    rec("File", "Opens in AutoCAD; ASG-QA reports 0 FAIL", "UNVERIFIED", "AutoCAD not available - README step 3-4")
+    rec("File", "Opens in AutoCAD; installer reports ASG INSTALL COMPLETE", "UNVERIFIED",
+        "AutoCAD not available - 00_START_HERE.pdf part A")
 
     h = doc.header
     for var, val, purpose in S.HEADER_VARS + S.HEADER_STYLE_VARS:
@@ -123,7 +124,7 @@ def test_master(path):
         pf(all(h.get("$" + k.upper()) == v for k, v in S.dim_values("ASG-DIM-ANNO").items()
                if k not in S.DIM_HEADER_EXCLUDE)),
         f"{len(S.dim_values('ASG-DIM-ANNO')) - len(S.DIM_HEADER_EXCLUDE)} variables compared")
-    rec("Units & variables", "Drawing variables set by ASG-SETUP (CANNOSCALE, MSLTSCALE, HPLAYER ...)",
+    rec("Units & variables", "Drawing variables set by the installer (CANNOSCALE, MSLTSCALE, HPLAYER ...)",
         "UNVERIFIED", "Not writable by DXF libraries; ASG-QA checks them in AutoCAD")
     rec("Units & variables", "Profile variables (OSMODE, grips, autosave ...)", "UNVERIFIED",
         "Registry, not drawing-resident; applied only by opt-in ASG-PROFILE")
@@ -164,7 +165,7 @@ def test_master(path):
     rec("Text styles", "Recommended plotted heights in ISO 3098 series",
         pf(all(h_ in S.ISO_3098_HEIGHTS for _u, h_, _s in S.TEXT_HEIGHTS)))
     rec("Text styles", "Annotative text behaviour at viewport scales", "UNVERIFIED",
-        "Annotative flag written and re-read; scaling needs AutoCAD (README step 6b)")
+        "Annotative flag written and re-read; scaling needs AutoCAD (standards PDF section 17)")
 
     for n, a, over, _u in S.DIM_STYLES:
         d = doc.dimstyles.get(n)
@@ -200,9 +201,9 @@ def test_master(path):
 
     have = [k for k, _ in doc.rootdict.get("ACAD_TABLESTYLE").items()]
     rec("Table styles", f"{len(S.TABLE_STYLES)} ASG-TABLE-* styles", "UNVERIFIED",
-        f"No DXF library can write TABLESTYLE; created by ASG-SETUP. In DXF now: {have or 'none'}")
+        f"No DXF library can write TABLESTYLE; created by the installer. In DXF now: {have or 'none'}")
     rec("Page setups", "Named page setups ASG-<layout>", "UNVERIFIED",
-        "Named PLOTSETTINGS not writable here; ASG-SETUP copies them from the layouts")
+        "Named PLOTSETTINGS not writable here; the installer copies them from the layouts")
 
     lnames = doc.layouts.names_in_taborder()
     want_l = ["Model"] + [s[0] for s in S.SHEETS]
@@ -228,7 +229,7 @@ def test_master(path):
         okb = (len(ins) == 1 and ins[0].dxf.name == tb and ins[0].dxf.xscale == 1 == ins[0].dxf.yscale
                and (round(ins[0].dxf.insert.x, 6), round(ins[0].dxf.insert.y, 6)) == (w - S.MARGIN, S.MARGIN))
         rec("Title blocks", f"{name}: {tb} at scale 1 (not stretched) on border corner, {len(tags)} attributes",
-            pf(okb and tags == sorted(t for t, _p, _d in S.TB_ATTRIBUTES)))
+            pf(okb and tags == sorted(t for t, *_r in S.TB_ATTRIBUTES)))
         bx = [e for e in lay if e.dxftype() == "LWPOLYLINE" and e.dxf.layer == "ASG-BORDER"]
         pts = [tuple(round(c, 3) for c in p[:2]) for p in bx[0].get_points()] if bx else []
         okx = pts == [(S.MARGIN_LEFT, S.MARGIN), (w - S.MARGIN, S.MARGIN), (w - S.MARGIN, hh - S.MARGIN),
@@ -244,26 +245,39 @@ def test_master(path):
             vx2 = v.dxf.center.x + v.dxf.width / 2
             vy1 = v.dxf.center.y - v.dxf.height / 2
             vy2 = v.dxf.center.y + v.dxf.height / 2
-            tb_x1, tb_y2 = w - S.MARGIN - S.TB_SPECS[tb]["w"], S.MARGIN + S.title_block_height(tb)
+            spec = S.TB_SPECS[tb]
             inside = vx1 >= S.MARGIN_LEFT and vy1 >= S.MARGIN and vx2 <= w - S.MARGIN and vy2 <= hh - S.MARGIN
-            rec("Viewports", f"{name}: viewport inside border and clear of title block",
-                pf(inside and (vx2 <= tb_x1 or vy1 >= tb_y2)))
+            clear = (vx2 <= w - S.MARGIN - spec["w"] if spec["kind"] == "strip"
+                     else vy1 >= S.MARGIN + S.title_block_height(tb))
+            rec("Viewports", f"{name}: viewport inside border and clear of title block", pf(inside and clear))
+        if S.TB_SPECS[tb]["kind"] == "strip":
+            rec("Title blocks", f"{name}: title strip fills the full border height",
+                pf(abs(S.title_block_height(tb) - (hh - 2 * S.MARGIN)) < 1e-6))
     for tb, spec in S.TB_SPECS.items():
         blk = doc.blocks.get(tb)
         br = blk.block_record
         a = list(blk.query("ATTDEF"))
         bb = ezdxf.bbox.extents(blk.query("LWPOLYLINE"))
         rec("Title blocks", f"{tb}: {len(a)} attributes, {bb.size.x:.0f} x {bb.size.y:.1f} mm, own design",
-            pf(sorted(x.dxf.tag for x in a) == sorted(t for t, _p, _d in S.TB_ATTRIBUTES)
-               and abs(bb.size.x - spec["w"]) < 1e-6))
+            pf(sorted(x.dxf.tag for x in a) == sorted(t for t, *_r in S.TB_ATTRIBUTES)
+               and abs(bb.size.x - spec["w"]) < 1e-6
+               and [x.dxf.tag for x in a] == [t for t, *_r in S.TB_ATTRIBUTES]))
+        S.title_block_height(tb)
+        over = [(lab, round(S.text_width(t, h, st) - av, 2)) for lab, t, h, st, av in S.TB_FIT[tb]
+                if S.text_width(t, h, st) > av - S.FIT_SPARE + 1e-6]
+        rec("Title blocks", f"{tb}: every text / design-length field value fits its cell with >= "
+                            f"{S.FIT_SPARE:.0f} mm spare (Arial metrics)", pf(not over),
+            f"{len(S.TB_FIT[tb])} texts measured" + (f"; overflow {over}" if over else ""))
         rec("Title blocks", f"{tb}: block units mm, not explodable, uniform scale, attributes position-locked",
             pf(br.dxf.units == 4 and br.dxf.explode == 0 and br.dxf.scale == 1
                and all(x.dxf.lock_position == 1 for x in a)))
         hts = sorted({round(x.dxf.height, 2) for x in a} | {round(t.dxf.height, 2) for t in blk.query("TEXT")})
         rec("Title blocks", f"{tb}: text heights >= 1.8 mm on paper", pf(min(hts) >= 1.8), str(hts))
-    rec("Title blocks", "A4 / A3 / A1 title blocks are separate designs (row heights differ)",
-        pf(len({round(S.title_block_height(t), 3) for t in S.TB_SPECS}) == 3),
-        ", ".join(f"{t}: {S.title_block_height(t):.1f} mm" for t in S.TB_SPECS))
+    sizes = {t: (S.TB_SPECS[t]["w"], round(S.title_block_height(t), 1)) for t in S.TB_SPECS}
+    rec("Title blocks", f"{len(S.TB_SPECS)} title blocks, one designed per sheet (no stretching)",
+        pf(len(set(sizes.values())) == len(S.TB_SPECS)
+           and sorted(S.TB_SPECS) == sorted({sh[4] for sh in S.SHEETS})),
+        ", ".join(f"{t}: {w:.0f} x {h:.1f} mm" for t, (w, h) in sizes.items()))
 
     # ByLayer discipline - every entity in layouts and blocks
     offenders = []
@@ -318,10 +332,10 @@ def test_idempotency():
         parens = True
     except ValueError:
         parens = False
-    rec("Automation", "ASG_Setup.lsp generated: balanced, covers every layer / style / layout / variable",
+    rec("Automation", "ASG_Install.lsp generated: balanced, covers every layer / style / layout / variable",
         pf(parens and not miss), f"{len(need)} names checked; missing {miss}" if miss else f"{len(need)} names checked")
-    rec("Automation", "ASG_Setup.lsp runs in AutoCAD (ASG-SETUP / ASG-QA)", "UNVERIFIED",
-        "Written without AutoCAD; get-or-create logic, read-only QA")
+    rec("Automation", "ASG_Install.lsp runs in AutoCAD (installer, ASG-SETUP, ASG-QA)", "UNVERIFIED",
+        "Written without AutoCAD. Every ActiveX call protected; failing steps print a manual fix")
 
 
 def test_templates():
@@ -349,8 +363,8 @@ def test_ctb():
     rec("Plot style", "ACI 1-249,255 -> black; 250-254 -> object colour (grey); object lineweight & linetype",
         pf(blacks and greys and lw and lt))
     rec("Plot style", "CTB opens in AutoCAD Plot Style Table Editor with 'Use object lineweight'", "UNVERIFIED",
-        "Lineweight code per ezdxf/acad.ctb convention; ASG-QA checks the CTB is installed; README step 2 "
-        "checks the editor; fallback monochrome.ctb")
+        "Lineweight code per ezdxf/acad.ctb convention; ASG-QA checks the CTB is installed; open it once "
+        "in the Plot Style Table Editor to confirm; fallback monochrome.ctb")
 
 
 def lineweight_test():
@@ -560,16 +574,18 @@ PHILOSOPHY = [
     "Easy to learn, hard to misuse: few styles, clear names, one setup command, one QA command.",
 ]
 PACKAGE = [
-    ["01_Master_Template", "ASG_Master_Template.dxf (master) + ASG_Setup.lsp (setup & QA). DWG / DWT are saved "
-                           "here from AutoCAD (README step 5)."],
+    ["00_START_HERE.pdf", "Two-page picture guide: install in 2 minutes, then every new drawing in 6 steps"],
+    ["01_Master_Template", "ASG_Master_Template.dxf (master) + ASG_Install.lsp (one-drag installer, setup and QA). "
+                           "The installer saves ASG_Master_Template.dwg here and the DWT in AutoCAD's Template folder."],
     ["02_Drawing_Templates", "One single-layout template per sheet size (DXF)"],
-    ["03_Page_Setups", "ASG_Page_Setups.csv - page setup definitions (created as named page setups by ASG-SETUP)"],
+    ["03_Page_Setups", "ASG_Page_Setups.csv - page setup definitions (created as named page setups by the installer)"],
     ["04_Plotting_Standards", "ASG_Monochrome.ctb"],
     ["05_CAD_Standards_Documentation", "ASG_CAD_Standards.pdf (this document), ASG_CAD_Quick_SOP.pdf "
                                        "(one-page drafting SOP for every draftsman) + layout previews"],
     ["06_Layer_Register", "ASG_Layer_Register.xlsx / .csv"],
     ["07_QA_Validation", "Validation report PDF / TXT, temporary QA drawing, QA renders"],
-    ["08_Automation_Source", "asg_standard.py (all definitions), build_all.py, build_sop.py, qa_validate.py"],
+    ["08_Automation_Source", "asg_standard.py (all definitions), build_all.py, build_sop.py, build_guide.py, qa_validate.py"],
+    ["09_Team_Kit", "What every team member needs: installer, print setting, SOP, guide - the installer adds the DWT"],
 ]
 DIM_PARAMS = [
     ["Text", "ASG-TEXT-ANNO 2.5, above the dimension line (DIMTAD 1), aligned with it, gap 1.0"],
@@ -611,7 +627,7 @@ PLOT_STD = [
 RESOURCES = [
     ["Layers, styles, scales, layouts, title blocks, header variables", "Inside the DWT", "Copy DWT to shared Templates folder"],
     ["Table styles, named page setups, CANNOSCALE / MSLTSCALE / HPLAYER / DIMLAYER ...",
-     "Inside the DWT after ASG-SETUP", "Travel with the DWT"],
+     "Inside the DWT after the installer", "Travel with the DWT"],
     ["ASG_Monochrome.ctb", "Plot Styles folder (external)", "Copy to each PC or a shared support path"],
     ["DWG To PDF.pc3", "Plotters folder (ships with AutoCAD)", "None"],
     ["arial.ttf / arialbd.ttf", "Windows Fonts (external)", "Present on Windows; FONTALT = arial.ttf as fallback"],
@@ -622,22 +638,22 @@ RESOURCES = [
 ]
 PORTABILITY = [
     "AutoCAD 2018 or later installed; DWG To PDF.pc3 present (default).",
-    "ASG_Monochrome.ctb copied to the Plot Styles folder - ASG-QA confirms it is found.",
-    "ASG_Master_Template.dwt on the shared Templates path; QNEW points to it.",
+    "09_Team_Kit copied to the PC or reachable on the shared drive.",
+    "ASG_Install.lsp dragged into AutoCAD, ASG_Master_Template.dwt selected: popup reads ASG INSTALL COMPLETE.",
+    "Ctrl+N opens a drawing with ASG- layers and the five sheet tabs.",
     "Arial installed (Windows default); FONTALT = arial.ttf.",
-    "Open a new drawing from the DWT and run ASG-QA: RESULT must be 0 FAIL.",
     "Optional: user runs ASG-PROFILE once (snaps, grips, autosave).",
 ]
 AUTOCAD_PROCEDURE = [
-    "Copy ASG_Monochrome.ctb to the Plot Styles folder; open it in the Plot Style Table Editor: Lineweight "
-    "column must read 'Use object lineweight', Color = Black (250-254 'Use object color').",
-    "OPEN ASG_Master_Template.dxf, AUDIT Y, APPLOAD ASG_Setup.lsp, run ASG-SETUP.",
-    "Read RESULT line / ASG_QA_Log.txt: every line PASS.",
-    "SAVEAS AutoCAD 2018 DWG, then SAVEAS DWT (Measurement Metric).",
+    "Extract the package zip. Double-click 01_Master_Template\\ASG_Master_Template.dxf to open it in AutoCAD.",
+    "Drag 01_Master_Template\\ASG_Install.lsp into the AutoCAD window; click 'Load Once' if AutoCAD asks.",
+    "The installer copies the CTB, creates table styles / page setups / settings, runs ASG-QA, saves the DWT "
+    "into AutoCAD's Template folder and the DWG master copy, fills 09_Team_Kit and sets Ctrl+N.",
+    "Read the popup: ASG INSTALL COMPLETE, or the exact items to do by hand. Log: ASG_QA_Log.txt.",
     "Open QA_TEST_DRAWING_temporary.dxf, plot A3-LANDSCAPE to PDF: check dims, no 'NOPLOT' text / diagonal, "
     "no viewport frames, 6 lineweights distinguishable, text legible.",
-    "In a new drawing from the DWT: annotative text / dim / leader at 1:20 then add 1:5 via OBJECTSCALE - "
-    "confirm 2.5 mm on paper in both viewports. Do not save the test.",
+    "Ctrl+N: annotative text / dim / leader at 1:20, then add 1:5 via OBJECTSCALE - confirm 2.5 mm on paper. "
+    "Do not save the test.",
 ]
 
 
@@ -662,7 +678,7 @@ def write_standards_pdf(previews):
               tbl([["Variable", "Value", "Purpose"]] + [[v[1:], str(x), p] for v, x, p in S.HEADER_VARS + S.HEADER_STYLE_VARS],
                   (35, 45, 180), st),
               Spacer(1, 3),
-              Paragraph("Drawing-resident variables set inside AutoCAD by ASG-SETUP (saved with the DWG / DWT):", P),
+              Paragraph("Drawing-resident variables set inside AutoCAD by the installer (saved with the DWG / DWT):", P),
               tbl([["Variable", "Value", "Purpose"]] + [[v, str(x), p] for v, x, p in S.SETUP_DRAWING_VARS], (35, 45, 180), st),
               Paragraph("Precision: ordinary dimensions 0 dp; fabrication details ASG-DIM-DETAIL 0.0; angles 0.00. "
                         "INSUNITS = mm on the drawing and every block - no unit conversion on insertion.", P)]
@@ -728,7 +744,7 @@ def write_standards_pdf(previews):
               Paragraph("Common: ASG-TEXT-SHEET, cell margins horizontal 1.5 / vertical 1.0, flow top-down, inside "
                         "grid 0.18, outline 0.35, header fill ACI 254 (light grey), no data fill, colour ByBlock. "
                         "Alignment codes: MC middle-centre, ML middle-left, TL top-left. Numbers centred, "
-                        "descriptions left. Tables go in paper space on ASG-TABLE. Created by ASG-SETUP.", P)]
+                        "descriptions left. Tables go in paper space on ASG-TABLE. Created by the installer.", P)]
         s += [PageBreak(), Paragraph("12. Layouts, page setups, title block and numbering", H2),
               tbl([["Layout / named page setup", "Paper (canonical media name)", "Orient.", "Title block", "Default viewport"]] +
                   [[f"{n} / ASG-{n}", S.media_name(p, w, h), "L" if w > h else "P", tb, f"1:{v}, locked"]
@@ -738,14 +754,22 @@ def write_standards_pdf(previews):
                         "OFF, paper space last, viewport borders not plotted. Border: 20 mm filing margin left, "
                         "10 mm other sides. Viewports on ASG-VIEWPORT, scale from the controlled list, Display "
                         "Locked = Yes; unlock only to change the scale, then lock again.", P),
-              Paragraph(esc("Title blocks: separate A4 (180 x {:.1f} mm), A3 (180 x {:.1f} mm) and A1 (250 x {:.1f} mm) "
-                            "designs inserted at scale 1 at the border corner - never stretched. Not explodable, "
-                            "uniform scale, mm units, attributes position-locked (edit values with EATTEDIT). "
-                            "Hierarchy bottom-up: drawing number / revision / sheet; scale / date / status; "
-                            "signatures; drawing title; client / consultant; project / location; company heading "
-                            "(text - no logo invented). Attributes: ".format(
-                                S.title_block_height("ASG-TB-A4"), S.title_block_height("ASG-TB-A3"),
-                                S.title_block_height("ASG-TB-A1")) + ", ".join(t for t, _p, _d in S.TB_ATTRIBUTES) +
+              tbl([["Title block", "Type", "Size mm", "Sections (top to bottom)"]] +
+                  [[t, "Full-height strip (landscape)" if sp["kind"] == "strip" else "Bottom block (portrait)",
+                    f"{sp['w']:.0f} x {S.title_block_height(t):.1f}",
+                    ("Company - key plan / approval stamp - general notes + copyright - revisions (5 rows) - "
+                     "project, location, client, consultant - drawing title - drawn / checked / approved - status - "
+                     "scale / date - rev / sheet - drawing number") if sp["kind"] == "strip" else
+                    ("Company | approval stamp - notes + copyright | revisions (5 rows) - project | location - "
+                     "client | consultant - drawing title - drawn | checked | approved - scale | date | status - "
+                     "drawing number | rev | sheet")]
+                   for t, sp in S.TB_SPECS.items()], (28, 42, 25, 165), st),
+              Paragraph(esc("Each title block is designed for its sheet - never stretched - and inserted at scale 1 "
+                            "at the border corner. Not explodable, uniform scale, mm units, attributes "
+                            "position-locked (edit with a double-click / EATTEDIT). Every caption, note and a "
+                            "design-length value for every field is measured with Arial metrics and fits its cell "
+                            "with at least 1 mm to spare. Company heading is text - no logo invented. "
+                            f"{len(S.TB_ATTRIBUTES)} attributes: " + ", ".join(t for t, *_r in S.TB_ATTRIBUTES) +
                             ". Drawing status values: " + ", ".join(S.DRAWING_STATUS_CODES) + "."), P),
               tbl([["Drawing numbering", ""]] + [list(r) for r in S.NUMBERING], (35, 225), st)]
         s += [Paragraph("13. Hatch, block and attribute standards", H2),
@@ -764,7 +788,7 @@ def write_standards_pdf(previews):
               tbl([["Resource", "Where it lives", "Deploy"]] + RESOURCES, (75, 70, 115), st),
               Paragraph("16. Portability checklist (each PC)", H2)]
         s += [Paragraph(f"[ ] {esc(t)}", P) for t in PORTABILITY]
-        s += [Paragraph("17. Finishing and verifying in AutoCAD", H2)]
+        s += [Paragraph("17. Installing and verifying in AutoCAD", H2)]
         s += [Paragraph(f"{i}. {esc(t)}", P) for i, t in enumerate(AUTOCAD_PROCEDURE, 1)]
         s += [PageBreak(), Paragraph("Appendix - layout previews (rendered from the saved master DXF)", H2)]
         for p in previews:
@@ -788,8 +812,8 @@ PROCEDURE = [
     "Re-open each single-size template and the CTB (binary header + all 255 entries).",
     "Separate temporary QA drawing: dimensions of known geometry, viewports 1:20 / 1:5, no-plot objects, "
     "lineweight matrix, text heights. Check measured values and displayed precision; render and measure lineweights.",
-    "Pending in AutoCAD: ASG-SETUP / ASG-QA (0 FAIL), AutoCAD PDF plot of the QA drawing, annotative scaling test, "
-    "SAVEAS DWG / DWT.",
+    "Pending in AutoCAD: installer run (ASG INSTALL COMPLETE, ASG-QA 0 FAIL), AutoCAD PDF plot of the QA drawing, "
+    "annotative scaling test.",
 ]
 
 
@@ -809,7 +833,7 @@ def write_validation():
              Paragraph("<b>Summary:</b> " + " | ".join(f"{k} {v}" for k, v in counts.items()) +
                        ". AutoCAD was NOT available: no test below ran inside AutoCAD. PASS = tested by re-opening "
                        "the saved file; PARTIAL = tested with a non-AutoCAD renderer; UNVERIFIED = needs AutoCAD "
-                       "(ASG-QA and README step 6 cover each one); FAIL = test failed or deliverable missing.", st["P"]),
+                       "(the installer's ASG-QA and standards PDF section 17 cover each one); FAIL = test failed or deliverable missing.", st["P"]),
              Paragraph("<b>FAIL items:</b> " + ("; ".join(esc(f"{a}: {t}") for a, t, _s, _e in fails) or "none"), st["P"]),
              Paragraph("Test procedure", st["H2"])] + [Paragraph(f"{i}. {esc(t)}", st["P"]) for i, t in enumerate(PROCEDURE, 1)]
         s += [Paragraph("Results", st["H2"]),
@@ -845,87 +869,60 @@ def previews_of_master():
 
 README = """ASG CAD MASTER STANDARD  -  Standard {rev}  ({date})
 Saeed Al Siraj Glass & Aluminium Works L.L.C. | Al Siraj Group | UAE
-Blank master AutoCAD environment for aluminium, glass and facade engineering.
-No product libraries, profiles, sample doors / windows or project drawings.
-Supersedes: ASG-STD-CAD-001 R0 and the earlier folders now in /_superseded.
 
 =========================================================================
-STATUS
+START HERE  ->  open 00_START_HERE.pdf  (2 pages, with pictures)
 =========================================================================
-Master template: genuine AutoCAD 2018 DXF, built and checked by re-opening.
-Validation: {counts}  (details: 07_QA_Validation)
-FAIL = the native .dwg / .dwt files only: no DWG writer exists in the build
-environment (CAD software found: {cad}). Nothing was renamed to .dwg / .dwt.
-Step 5 below creates both in AutoCAD in about a minute.
+
+INSTALL - CAD IN-CHARGE (once, 2 minutes)
+  1. Extract this zip (right-click > Extract All). Do not run it from inside the zip.
+  2. Double-click  01_Master_Template\\ASG_Master_Template.dxf  (opens in AutoCAD).
+  3. Drag  01_Master_Template\\ASG_Install.lsp  into the AutoCAD window.
+     If AutoCAD asks, click "Load Once".
+  -> A window says  ASG INSTALL COMPLETE.  Done:
+     - print setting installed, template saved, Ctrl+N uses it,
+     - folder 09_Team_Kit is ready to share with your team.
+  If a step says NOT DONE, the window tells you exactly what to do by hand.
+
+INSTALL - EACH TEAM MEMBER (once per PC, 1 minute)
+  1. Copy the folder 09_Team_Kit to the PC (or open it on the shared drive).
+  2. Open AutoCAD and drag  ASG_Install.lsp  from the kit into the window.
+  3. Select  ASG_Master_Template.dwt  from the kit when asked.
+  -> ASG INSTALL COMPLETE. Press Ctrl+N.
+
+EVERY NEW DRAWING
+  Ctrl+N - draw 1:1 in mm on ASG layers - pick a sheet tab - set the viewport
+  scale and lock it - double-click the title strip and fill it - Ctrl+P.
+  Rules on one page: 05_CAD_Standards_Documentation\\ASG_CAD_Quick_SOP.pdf
 
 =========================================================================
-PACKAGE
+WHAT IS IN THE PACKAGE
 =========================================================================
-01_Master_Template\\        ASG_Master_Template.dxf  (master, DXF R2018 / AC1032)
-                           ASG_Setup.lsp            (ASG-SETUP, ASG-QA, ASG-PROFILE)
-02_Drawing_Templates\\      ASG_<SIZE>.dxf - one layout each (A4 L/P, A3 L/P, A1 L)
-03_Page_Setups\\            ASG_Page_Setups.csv
-04_Plotting_Standards\\     ASG_Monochrome.ctb
-05_CAD_Standards_Documentation\\  ASG_CAD_Standards.pdf (full rules, + previews)
-                           ASG_CAD_Quick_SOP.pdf (one-page SOP - print for every draftsman)
-06_Layer_Register\\         ASG_Layer_Register.xlsx / .csv
-07_QA_Validation\\          ASG_Template_Validation_Report.pdf / .txt
-                           QA_TEST_DRAWING_temporary.dxf (test file - NOT a template)
-08_Automation_Source\\      asg_standard.py (all definitions), build_all.py, build_sop.py,
-                           qa_validate.py
+00_START_HERE.pdf              picture guide (install + daily use)
+01_Master_Template\\           ASG_Master_Template.dxf + ASG_Install.lsp
+02_Drawing_Templates\\         one-sheet templates (A4 L/P, A3 L/P, A1 L)
+03_Page_Setups\\               page setup list
+04_Plotting_Standards\\        ASG_Monochrome.ctb (print setting)
+05_CAD_Standards_Documentation\\  full rules (PDF) + one-page SOP
+06_Layer_Register\\            all layers (Excel)
+07_QA_Validation\\             test report ({counts})
+08_Automation_Source\\         source - change the standard here only
+09_Team_Kit\\                  share this folder with the team
+
+Template: {layers} layers, {ts} text styles, {ds} dimension styles, {ml} leader
+styles, {tb} table styles, {sc} annotation scales, {lo} sheets ({layouts}),
+{tbk} professional title blocks with {attrs} fields (key plan, approval stamp,
+notes, 5-row revision table, project data, signatures, drawing number).
 
 =========================================================================
-OPENING AND FINISHING IN AUTOCAD (CAD custodian, AutoCAD 2018 or later)
+GOOD TO KNOW
 =========================================================================
-1. Copy 04_Plotting_Standards\\ASG_Monochrome.ctb into the Plot Styles folder
-   (Options > Files > Printer Support File Path > Plot Style Table Search Path).
-2. Open it there (double-click in the Plot Styles folder): every colour must show
-   Lineweight = "Use object lineweight"; colours 1-249 and 255 Color = Black;
-   250-254 Color = "Use object color". If not, fix it in the editor and save
-   (or use AutoCAD's monochrome.ctb meanwhile).
-3. OPEN > Files of type DXF > 01_Master_Template\\ASG_Master_Template.dxf.
-   Type AUDIT > Y.
-4. Type APPLOAD > 01_Master_Template\\ASG_Setup.lsp > Load > Close.
-   Type ASG-SETUP. It creates the 7 table styles and 5 named page setups,
-   sets the drawing variables, then runs ASG-QA.
-   The last line must read  RESULT: nnn PASS, 0 FAIL  (also in ASG_QA_Log.txt).
-5. Click the Model tab, confirm layer ASG-OUTLINE-PRIMARY is current, then
-     SAVEAS > AutoCAD 2018 Drawing (*.dwg)     > ASG_Master_Template.dwg
-     SAVEAS > AutoCAD Drawing Template (*.dwt) > ASG_Master_Template.dwt
-              Description "ASG CAD Master Standard {rev}", Measurement: Metric.
-   Save both in 01_Master_Template.
-6. Remaining checks (UNVERIFIED items in the report):
-   a. OPEN 07_QA_Validation\\QA_TEST_DRAWING_temporary.dxf, plot layout
-      A3-LANDSCAPE to PDF. Check: dimensions 1200 / 2400 / 50.0 / 30.00 / R40 /
-      D80; the diagonal line and "NOPLOT" text do NOT print; no viewport frames;
-      the 6 lineweights are distinguishable; all text legible. Close without saving.
-   b. NEW from ASG_Master_Template.dwt: in the A3 viewport (1:20) add text with
-      ASG-TEXT-ANNO (2.5), a dimension (ASG-DIM-ANNO) and a leader (ASG-ML-ANNO);
-      set a second viewport to 1:5 and add that scale with OBJECTSCALE; both
-      viewports must show 2.5 mm text on paper. Close without saving.
-7. Deploy: DWT + CTB to the shared drive; on each PC set Options > Files >
-   Template Settings > Default Template File Name for QNEW. Users may run
-   ASG-PROFILE (asks first) for snap / grip / autosave defaults - these live
-   in each PC's profile, not in the DWT.
-
-=========================================================================
-COUNTS (from asg_standard.py)
-=========================================================================
-Layers {layers} ASG (+ system 0, Defpoints) | Linetypes {lts} + Continuous
-Text styles {ts} | Dimension styles {ds} | Multileader styles {ml} | Multiline 2
-Table styles {tb} (ASG-SETUP) | Annotation scales {sc}: {scales}
-Layouts {lo}: {layouts}
-Title blocks {tbk} (A4, A3, A1 - separate designs), {attrs} attributes each.
-
-=========================================================================
-CHANGING THE STANDARD
-=========================================================================
-Change ONLY 08_Automation_Source\\asg_standard.py, then:
-  pip install ezdxf openpyxl reportlab matplotlib
-  python build_all.py
-  python qa_validate.py
-Templates, LISP, register, documentation, QA report and this README are
-regenerated together, so they always agree.
+- The .dwg / .dwt files are made by the installer inside AutoCAD (this
+  package was built without AutoCAD; nothing was renamed to look like DWG).
+- Problems: send ASG_QA_Log.txt (next to the template) to the CAD in-charge.
+- To change the standard: edit 08_Automation_Source\\asg_standard.py, then
+  run  python build_all.py  and  python qa_validate.py  - every file,
+  document and test is regenerated together.
 """
 
 
@@ -938,6 +935,46 @@ def write_readme(counts):
         scales=", ".join(f"1:{s}" for s in S.ANNO_SCALES), lo=len(S.SHEETS),
         layouts=", ".join(s[0] for s in S.SHEETS), tbk=len(S.TB_SPECS), attrs=len(S.TB_ATTRIBUTES))
     (ROOT / "README.txt").write_text(text.replace("\n", "\r\n"), encoding="ascii")
+
+
+TEAM_KIT_FILES = ["ASG_Install.lsp", S.CTB_NAME, "ASG_CAD_Quick_SOP.pdf", "00_START_HERE.pdf"]
+TEAM_KIT_TXT = """ASG CAD TEMPLATE - TEAM KIT  (CAD Standard {rev})
+Saeed Al Siraj Glass & Aluminium Works L.L.C.
+
+INSTALL ON YOUR PC (once, 1 minute) - pictures: 00_START_HERE.pdf, part B
+  1. Copy this whole folder to your PC (or use it from the shared drive).
+  2. Open AutoCAD. Drag ASG_Install.lsp into the AutoCAD window.
+     If AutoCAD asks, click "Load Once".
+  3. When asked, select ASG_Master_Template.dwt from this folder.
+  -> ASG INSTALL COMPLETE. Press Ctrl+N - new drawings start from the template.
+
+IN THIS FOLDER
+  ASG_Master_Template.dwt   company template (put here by the CAD in-charge's installer)
+  ASG_Install.lsp           installer
+  {ctb}        print setting (black plot, correct line thickness)
+  ASG_CAD_Quick_SOP.pdf     one-page drafting rules - print it, keep it at your desk
+  00_START_HERE.pdf         picture guide
+
+If ASG_Master_Template.dwt is missing, ask the CAD in-charge: it is created when
+the installer runs on ASG_Master_Template.dxf.
+"""
+
+
+def build_team_kit():
+    """09_Team_Kit: everything a team member needs except the DWT, which the
+    CAD in-charge's installer copies in after building it in AutoCAD."""
+    import shutil
+    kit = BA.D_KIT
+    kit.mkdir(parents=True, exist_ok=True)
+    for f in kit.iterdir():
+        if f.name != "ASG_Master_Template.dwt":
+            f.unlink()
+    src = {"ASG_Install.lsp": BA.SETUP_LSP, S.CTB_NAME: BA.D_PLOT / S.CTB_NAME,
+           "ASG_CAD_Quick_SOP.pdf": D_DOC / "ASG_CAD_Quick_SOP.pdf", "00_START_HERE.pdf": ROOT / "00_START_HERE.pdf"}
+    for name in TEAM_KIT_FILES:
+        shutil.copyfile(src[name], kit / name)
+    (kit / "00_INSTALL_INSTRUCTIONS.txt").write_text(
+        TEAM_KIT_TXT.format(rev=S.STANDARD_REV, ctb=S.CTB_NAME).replace("\n", "\r\n"), encoding="ascii")
 
 
 def main():
@@ -956,11 +993,20 @@ def main():
     pv = previews_of_master()
     write_standards_pdf(pv)
     rec("Deliverables", "ASG_CAD_Standards.pdf written", pf((D_DOC / "ASG_CAD_Standards.pdf").stat().st_size > 10000))
+    import build_guide
+    build_guide.build(D_DOC / "previews" / "A3-LANDSCAPE.png", BA.MASTER_DXF)
+    from pypdf import PdfReader
+    rec("Deliverables", "00_START_HERE.pdf: 2-page picture guide (install + daily use)",
+        pf(len(PdfReader(str(build_guide.OUT)).pages) == 2))
     import build_sop
     size = build_sop.build_one_page()
     from pypdf import PdfReader
     rec("Deliverables", f"ASG_CAD_Quick_SOP.pdf: one A4 page, every layer name on it exists",
         pf(len(PdfReader(str(build_sop.OUT)).pages) == 1), f"auto-fitted at {size} pt")
+    build_team_kit()
+    kit_files = sorted(p.name for p in BA.D_KIT.iterdir())
+    rec("Deliverables", "09_Team_Kit: installer, print setting, SOP, guide, instructions (DWT added by installer)",
+        pf(kit_files == sorted(TEAM_KIT_FILES + ["00_INSTALL_INSTRUCTIONS.txt"])), ", ".join(kit_files))
     counts = write_validation()
     write_readme(counts)
     print(counts)

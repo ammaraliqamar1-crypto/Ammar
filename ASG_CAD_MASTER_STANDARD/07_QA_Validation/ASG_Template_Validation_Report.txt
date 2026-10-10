@@ -1,13 +1,13 @@
 ASG TEMPLATE VALIDATION REPORT - Standard R1 - 10.10.2026
-Summary: PASS 151 | PARTIAL 1 | UNVERIFIED 19 | FAIL 2
+Summary: PASS 167 | PARTIAL 1 | UNVERIFIED 19 | FAIL 2
 CAD software found: none. No test ran inside AutoCAD.
 
-FAIL        [Deliverables] ASG_Master_Template.dwt generated natively  -- Not generated: no DWG writer in this environment (acad, accoreconsole, ODAFileConverter, TeighaFileConverter, dwg2dxf, dxf2dwg, qcad, librecad, bricscad all absent). Not faked by renaming. Created in AutoCAD by README step 5.
-FAIL        [Deliverables] ASG_Master_Template.dwg generated natively  -- Not generated: no DWG writer in this environment (acad, accoreconsole, ODAFileConverter, TeighaFileConverter, dwg2dxf, dxf2dwg, qcad, librecad, bricscad all absent). Not faked by renaming. Created in AutoCAD by README step 5.
+FAIL        [Deliverables] ASG_Master_Template.dwt generated natively  -- Not generated: no DWG writer in this environment (acad, accoreconsole, ODAFileConverter, TeighaFileConverter, dwg2dxf, dxf2dwg, qcad, librecad, bricscad all absent). Not faked by renaming. The installer saves both in AutoCAD (00_START_HERE.pdf).
+FAIL        [Deliverables] ASG_Master_Template.dwg generated natively  -- Not generated: no DWG writer in this environment (acad, accoreconsole, ODAFileConverter, TeighaFileConverter, dwg2dxf, dxf2dwg, qcad, librecad, bricscad all absent). Not faked by renaming. The installer saves both in AutoCAD (00_START_HERE.pdf).
 PASS        [File] Master DXF re-opened from disk (recover + audit)  -- 0 errors, 0 fixes, AC1032 = AutoCAD 2018 DXF
 PASS        [File] Master DXF strict parse  -- ezdxf.readfile without exception
 PASS        [File] Master DXF opened by an independent second reader  -- LibreOffice 24.2.7.2 420(Build:2)
-UNVERIFIED  [File] Opens in AutoCAD; ASG-QA reports 0 FAIL  -- AutoCAD not available - README step 3-4
+UNVERIFIED  [File] Opens in AutoCAD; installer reports ASG INSTALL COMPLETE  -- AutoCAD not available - 00_START_HERE.pdf part A
 PASS        [Units & variables] $INSUNITS = 4  -- read back 4
 PASS        [Units & variables] $MEASUREMENT = 1  -- read back 1
 PASS        [Units & variables] $LUNITS = 2  -- read back 2
@@ -42,7 +42,7 @@ PASS        [Units & variables] $TEXTSTYLE = ASG-TEXT-ANNO  -- read back ASG-TEX
 PASS        [Units & variables] $DIMSTYLE = ASG-DIM-ANNO  -- read back ASG-DIM-ANNO
 PASS        [Units & variables] $CMLSTYLE = ASG-MLINE-2  -- read back ASG-MLINE-2
 PASS        [Units & variables] Header dimension variables = ASG-DIM-ANNO (no '<style overrides>')  -- 43 variables compared
-UNVERIFIED  [Units & variables] Drawing variables set by ASG-SETUP (CANNOSCALE, MSLTSCALE, HPLAYER ...)  -- Not writable by DXF libraries; ASG-QA checks them in AutoCAD
+UNVERIFIED  [Units & variables] Drawing variables set by the installer (CANNOSCALE, MSLTSCALE, HPLAYER ...)  -- Not writable by DXF libraries; ASG-QA checks them in AutoCAD
 UNVERIFIED  [Units & variables] Profile variables (OSMODE, grips, autosave ...)  -- Registry, not drawing-resident; applied only by opt-in ASG-PROFILE
 PASS        [Linetypes] HIDDEN loaded
 PASS        [Linetypes] HIDDEN2 loaded
@@ -71,7 +71,7 @@ PASS        [Text styles] ASG-TEXT-TITLE: arialbd.ttf, height 0, width 1, annota
 PASS        [Text styles] ASG-TEXT-HEADING: arialbd.ttf, height 0, width 1, annotative=False
 PASS        [Text styles] ASG-TEXT-SHEET: arial.ttf, height 0, width 1, annotative=False
 PASS        [Text styles] Recommended plotted heights in ISO 3098 series
-UNVERIFIED  [Text styles] Annotative text behaviour at viewport scales  -- Annotative flag written and re-read; scaling needs AutoCAD (README step 6b)
+UNVERIFIED  [Text styles] Annotative text behaviour at viewport scales  -- Annotative flag written and re-read; scaling needs AutoCAD (standards PDF section 17)
 PASS        [Dimension styles] ASG-DIM-ANNO  -- all 44 variables match; annotative=True
 PASS        [Dimension styles] ASG-DIM-FIXED  -- all 44 variables match; annotative=False
 PASS        [Dimension styles] ASG-DIM-DETAIL  -- all 44 variables match; annotative=True
@@ -89,68 +89,82 @@ PASS        [Multiline styles] ASG-MLINE-3
 PASS        [Annotation scales] Scale list = 1:1, 1:2, 1:5, 1:10, 1:20, 1:25, 1:50, 1:100  -- read back ['1:1', '1:2', '1:5', '1:10', '1:20', '1:25', '1:50', '1:100'], paper:drawing units verified
 PASS        [Annotation scales] No duplicate scales
 UNVERIFIED  [Annotation scales] Scale list accepted by AutoCAD  -- ASG-QA re-checks it in AutoCAD
-UNVERIFIED  [Table styles] 7 ASG-TABLE-* styles  -- No DXF library can write TABLESTYLE; created by ASG-SETUP. In DXF now: none
-UNVERIFIED  [Page setups] Named page setups ASG-<layout>  -- Named PLOTSETTINGS not writable here; ASG-SETUP copies them from the layouts
+UNVERIFIED  [Table styles] 7 ASG-TABLE-* styles  -- No DXF library can write TABLESTYLE; created by the installer. In DXF now: none
+UNVERIFIED  [Page setups] Named page setups ASG-<layout>  -- Named PLOTSETTINGS not writable here; the installer copies them from the layouts
 PASS        [Layouts] Layouts: A4-LANDSCAPE, A4-PORTRAIT, A3-LANDSCAPE, A3-PORTRAIT, A1-LANDSCAPE  -- ['Model', 'A4-LANDSCAPE', 'A4-PORTRAIT', 'A3-LANDSCAPE', 'A3-PORTRAIT', 'A1-LANDSCAPE']
 PASS        [Sheets] A4-LANDSCAPE: ISO 216 size 297 x 210
 PASS        [Layouts] A4-LANDSCAPE: DWG To PDF.pc3, media, Layout area, 1:1 mm, offset 0,0, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A4_(297.00_x_210.00_MM)
 UNVERIFIED  [Layouts] A4-LANDSCAPE: paper media name recognised by DWG To PDF.pc3  -- ASG-QA checks it against the device's media list in AutoCAD
-PASS        [Title blocks] A4-LANDSCAPE: ASG-TB-A4 at scale 1 (not stretched) on border corner, 15 attributes
+PASS        [Title blocks] A4-LANDSCAPE: ASG-TB-A4-L at scale 1 (not stretched) on border corner, 35 attributes
 PASS        [Sheets] A4-LANDSCAPE: border, 20 mm filing margin / 10 mm others
 PASS        [Viewports] A4-LANDSCAPE: 1 viewport, display locked, ASG-VIEWPORT (no plot), 1:10
 PASS        [Viewports] A4-LANDSCAPE: viewport inside border and clear of title block
+PASS        [Title blocks] A4-LANDSCAPE: title strip fills the full border height
 PASS        [Sheets] A4-PORTRAIT: ISO 216 size 210 x 297
 PASS        [Layouts] A4-PORTRAIT: DWG To PDF.pc3, media, Layout area, 1:1 mm, offset 0,0, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A4_(210.00_x_297.00_MM)
 UNVERIFIED  [Layouts] A4-PORTRAIT: paper media name recognised by DWG To PDF.pc3  -- ASG-QA checks it against the device's media list in AutoCAD
-PASS        [Title blocks] A4-PORTRAIT: ASG-TB-A4 at scale 1 (not stretched) on border corner, 15 attributes
+PASS        [Title blocks] A4-PORTRAIT: ASG-TB-A4-P at scale 1 (not stretched) on border corner, 35 attributes
 PASS        [Sheets] A4-PORTRAIT: border, 20 mm filing margin / 10 mm others
 PASS        [Viewports] A4-PORTRAIT: 1 viewport, display locked, ASG-VIEWPORT (no plot), 1:10
 PASS        [Viewports] A4-PORTRAIT: viewport inside border and clear of title block
 PASS        [Sheets] A3-LANDSCAPE: ISO 216 size 420 x 297
 PASS        [Layouts] A3-LANDSCAPE: DWG To PDF.pc3, media, Layout area, 1:1 mm, offset 0,0, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A3_(420.00_x_297.00_MM)
 UNVERIFIED  [Layouts] A3-LANDSCAPE: paper media name recognised by DWG To PDF.pc3  -- ASG-QA checks it against the device's media list in AutoCAD
-PASS        [Title blocks] A3-LANDSCAPE: ASG-TB-A3 at scale 1 (not stretched) on border corner, 15 attributes
+PASS        [Title blocks] A3-LANDSCAPE: ASG-TB-A3-L at scale 1 (not stretched) on border corner, 35 attributes
 PASS        [Sheets] A3-LANDSCAPE: border, 20 mm filing margin / 10 mm others
 PASS        [Viewports] A3-LANDSCAPE: 1 viewport, display locked, ASG-VIEWPORT (no plot), 1:20
 PASS        [Viewports] A3-LANDSCAPE: viewport inside border and clear of title block
+PASS        [Title blocks] A3-LANDSCAPE: title strip fills the full border height
 PASS        [Sheets] A3-PORTRAIT: ISO 216 size 297 x 420
 PASS        [Layouts] A3-PORTRAIT: DWG To PDF.pc3, media, Layout area, 1:1 mm, offset 0,0, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A3_(297.00_x_420.00_MM)
 UNVERIFIED  [Layouts] A3-PORTRAIT: paper media name recognised by DWG To PDF.pc3  -- ASG-QA checks it against the device's media list in AutoCAD
-PASS        [Title blocks] A3-PORTRAIT: ASG-TB-A3 at scale 1 (not stretched) on border corner, 15 attributes
+PASS        [Title blocks] A3-PORTRAIT: ASG-TB-A3-P at scale 1 (not stretched) on border corner, 35 attributes
 PASS        [Sheets] A3-PORTRAIT: border, 20 mm filing margin / 10 mm others
 PASS        [Viewports] A3-PORTRAIT: 1 viewport, display locked, ASG-VIEWPORT (no plot), 1:20
 PASS        [Viewports] A3-PORTRAIT: viewport inside border and clear of title block
 PASS        [Sheets] A1-LANDSCAPE: ISO 216 size 841 x 594
 PASS        [Layouts] A1-LANDSCAPE: DWG To PDF.pc3, media, Layout area, 1:1 mm, offset 0,0, ASG_Monochrome.ctb, plot lineweights  -- ISO_full_bleed_A1_(841.00_x_594.00_MM)
 UNVERIFIED  [Layouts] A1-LANDSCAPE: paper media name recognised by DWG To PDF.pc3  -- ASG-QA checks it against the device's media list in AutoCAD
-PASS        [Title blocks] A1-LANDSCAPE: ASG-TB-A1 at scale 1 (not stretched) on border corner, 15 attributes
+PASS        [Title blocks] A1-LANDSCAPE: ASG-TB-A1-L at scale 1 (not stretched) on border corner, 35 attributes
 PASS        [Sheets] A1-LANDSCAPE: border, 20 mm filing margin / 10 mm others
 PASS        [Viewports] A1-LANDSCAPE: 1 viewport, display locked, ASG-VIEWPORT (no plot), 1:50
 PASS        [Viewports] A1-LANDSCAPE: viewport inside border and clear of title block
-PASS        [Title blocks] ASG-TB-A4: 15 attributes, 180 x 68.2 mm, own design
-PASS        [Title blocks] ASG-TB-A4: block units mm, not explodable, uniform scale, attributes position-locked
-PASS        [Title blocks] ASG-TB-A4: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5]
-PASS        [Title blocks] ASG-TB-A3: 15 attributes, 180 x 81.9 mm, own design
-PASS        [Title blocks] ASG-TB-A3: block units mm, not explodable, uniform scale, attributes position-locked
-PASS        [Title blocks] ASG-TB-A3: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5, 5.0]
-PASS        [Title blocks] ASG-TB-A1: 15 attributes, 250 x 109.2 mm, own design
-PASS        [Title blocks] ASG-TB-A1: block units mm, not explodable, uniform scale, attributes position-locked
-PASS        [Title blocks] ASG-TB-A1: text heights >= 1.8 mm on paper  -- [2.5, 3.5, 5.0, 7.0]
-PASS        [Title blocks] A4 / A3 / A1 title blocks are separate designs (row heights differ)  -- ASG-TB-A4: 68.2 mm, ASG-TB-A3: 81.9 mm, ASG-TB-A1: 109.2 mm
+PASS        [Title blocks] A1-LANDSCAPE: title strip fills the full border height
+PASS        [Title blocks] ASG-TB-A4-L: 35 attributes, 70 x 190.0 mm, own design
+PASS        [Title blocks] ASG-TB-A4-L: every text / design-length field value fits its cell with >= 1 mm spare (Arial metrics)  -- 70 texts measured
+PASS        [Title blocks] ASG-TB-A4-L: block units mm, not explodable, uniform scale, attributes position-locked
+PASS        [Title blocks] ASG-TB-A4-L: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5]
+PASS        [Title blocks] ASG-TB-A3-L: 35 attributes, 98 x 277.0 mm, own design
+PASS        [Title blocks] ASG-TB-A3-L: every text / design-length field value fits its cell with >= 1 mm spare (Arial metrics)  -- 66 texts measured
+PASS        [Title blocks] ASG-TB-A3-L: block units mm, not explodable, uniform scale, attributes position-locked
+PASS        [Title blocks] ASG-TB-A3-L: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5, 5.0]
+PASS        [Title blocks] ASG-TB-A1-L: 35 attributes, 160 x 574.0 mm, own design
+PASS        [Title blocks] ASG-TB-A1-L: every text / design-length field value fits its cell with >= 1 mm spare (Arial metrics)  -- 65 texts measured
+PASS        [Title blocks] ASG-TB-A1-L: block units mm, not explodable, uniform scale, attributes position-locked
+PASS        [Title blocks] ASG-TB-A1-L: text heights >= 1.8 mm on paper  -- [2.5, 3.5, 5.0, 7.0]
+PASS        [Title blocks] ASG-TB-A4-P: 35 attributes, 180 x 106.5 mm, own design
+PASS        [Title blocks] ASG-TB-A4-P: every text / design-length field value fits its cell with >= 1 mm spare (Arial metrics)  -- 67 texts measured
+PASS        [Title blocks] ASG-TB-A4-P: block units mm, not explodable, uniform scale, attributes position-locked
+PASS        [Title blocks] ASG-TB-A4-P: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5]
+PASS        [Title blocks] ASG-TB-A3-P: 35 attributes, 267 x 120.2 mm, own design
+PASS        [Title blocks] ASG-TB-A3-P: every text / design-length field value fits its cell with >= 1 mm spare (Arial metrics)  -- 63 texts measured
+PASS        [Title blocks] ASG-TB-A3-P: block units mm, not explodable, uniform scale, attributes position-locked
+PASS        [Title blocks] ASG-TB-A3-P: text heights >= 1.8 mm on paper  -- [1.8, 2.5, 3.5, 5.0]
+PASS        [Title blocks] 5 title blocks, one designed per sheet (no stretching)  -- ASG-TB-A4-L: 70 x 190.0 mm, ASG-TB-A3-L: 98 x 277.0 mm, ASG-TB-A1-L: 160 x 574.0 mm, ASG-TB-A4-P: 180 x 106.5 mm, ASG-TB-A3-P: 267 x 120.2 mm
 PASS        [Properties] All layout / title-block objects ByLayer (colour, linetype, lineweight)  -- []
 PASS        [Model space] Model space empty  -- 0 entities
 PASS        [References] No external references
 PASS        [References] No image / PDF underlay dependencies
 PASS        [Interoperability] No proxy / custom objects
-PASS        [Scope] Only title-block blocks (no product blocks / libraries)  -- ['ASG-TB-A1', 'ASG-TB-A3', 'ASG-TB-A4']
+PASS        [Scope] Only title-block blocks (no product blocks / libraries)  -- ['ASG-TB-A1-L', 'ASG-TB-A3-L', 'ASG-TB-A3-P', 'ASG-TB-A4-L', 'ASG-TB-A4-P']
 PASS        [Interoperability] Fonts referenced: Arial TrueType only  -- ['arial.ttf', 'arialbd.ttf']
 PASS        [Interoperability] Every layer linetype embedded in the file (no .lin dependency)
 PASS        [Hatch standard] All hatch pattern names exist in AutoCAD acadiso.pat  -- []
 PASS        [Automation] Re-running scale injection changes nothing
 PASS        [Automation] Rebuild produces identical layer / style / layout sets
 PASS        [Automation] Re-running layout creation creates no duplicate layouts
-PASS        [Automation] ASG_Setup.lsp generated: balanced, covers every layer / style / layout / variable  -- 73 names checked
-UNVERIFIED  [Automation] ASG_Setup.lsp runs in AutoCAD (ASG-SETUP / ASG-QA)  -- Written without AutoCAD; get-or-create logic, read-only QA
+PASS        [Automation] ASG_Install.lsp generated: balanced, covers every layer / style / layout / variable  -- 75 names checked
+UNVERIFIED  [Automation] ASG_Install.lsp runs in AutoCAD (installer, ASG-SETUP, ASG-QA)  -- Written without AutoCAD. Every ActiveX call protected; failing steps print a manual fix
 PASS        [Drawing templates] ASG_A4-LANDSCAPE.dxf: opens, single layout, full standard, empty model
 PASS        [Drawing templates] ASG_A4-PORTRAIT.dxf: opens, single layout, full standard, empty model
 PASS        [Drawing templates] ASG_A3-LANDSCAPE.dxf: opens, single layout, full standard, empty model
@@ -158,7 +172,7 @@ PASS        [Drawing templates] ASG_A3-PORTRAIT.dxf: opens, single layout, full 
 PASS        [Drawing templates] ASG_A1-LANDSCAPE.dxf: opens, single layout, full standard, empty model
 PASS        [Plot style] ASG_Monochrome.ctb: 60-byte header (3 x uint32) + zlib body re-read  -- ezdxf writer defect on 64-bit Linux (8-byte fields) worked around and verified
 PASS        [Plot style] ACI 1-249,255 -> black; 250-254 -> object colour (grey); object lineweight & linetype
-UNVERIFIED  [Plot style] CTB opens in AutoCAD Plot Style Table Editor with 'Use object lineweight'  -- Lineweight code per ezdxf/acad.ctb convention; ASG-QA checks the CTB is installed; README step 2 checks the editor; fallback monochrome.ctb
+UNVERIFIED  [Plot style] CTB opens in AutoCAD Plot Style Table Editor with 'Use object lineweight'  -- Lineweight code per ezdxf/acad.ctb convention; ASG-QA checks the CTB is installed; open it once in the Plot Style Table Editor to confirm; fallback monochrome.ctb
 PARTIAL     [Lineweights] Lineweight matrix rendered at 2400 dpi: 6 classes distinct, ordered, proportional  -- rendered/nominal: 0.50:1.02, 0.35:1.03, 0.25:0.96, 0.18:1.00, 0.13:0.92, 0.09:1.00 (1.00 = exact). Hierarchy proven; absolute plotted mm needs an AutoCAD PDF plot.
 PASS        [QA drawing] Temporary QA drawing is a separate file  -- QA_TEST_DRAWING_temporary.dxf
 PASS        [Dimensions] Linear dims measure true geometry 1200 / 2400  -- [1200.0, 2400.0]
@@ -174,4 +188,6 @@ UNVERIFIED  [Plotting] PDF via DWG To PDF.pc3 + CTB: margins, clipping, lineweig
 UNVERIFIED  [Annotation scales] Annotative text / dims / mleaders across viewport scales  -- No DXF library writes annotative scale contexts; test in AutoCAD (README 6b)
 PASS        [Deliverables] ASG_Layer_Register.xlsx written and re-opened (all layers listed)
 PASS        [Deliverables] ASG_CAD_Standards.pdf written
+PASS        [Deliverables] 00_START_HERE.pdf: 2-page picture guide (install + daily use)
 PASS        [Deliverables] ASG_CAD_Quick_SOP.pdf: one A4 page, every layer name on it exists  -- auto-fitted at 7.9 pt
+PASS        [Deliverables] 09_Team_Kit: installer, print setting, SOP, guide, instructions (DWT added by installer)  -- 00_INSTALL_INSTRUCTIONS.txt, 00_START_HERE.pdf, ASG_CAD_Quick_SOP.pdf, ASG_Install.lsp, ASG_Monochrome.ctb

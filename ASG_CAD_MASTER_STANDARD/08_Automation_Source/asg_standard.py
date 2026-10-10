@@ -319,11 +319,11 @@ TABLE_ALIGN_CODE = {"TL": 1, "ML": 4, "MC": 5}  # AcCellAlignment
 # layout name, width, height, DWG To PDF media base name, title block, default vp scale
 # ---------------------------------------------------------------------------
 SHEETS = [
-    ("A4-LANDSCAPE", 297.0, 210.0, "ISO_full_bleed_A4", "ASG-TB-A4", 10),
-    ("A4-PORTRAIT", 210.0, 297.0, "ISO_full_bleed_A4", "ASG-TB-A4", 10),
-    ("A3-LANDSCAPE", 420.0, 297.0, "ISO_full_bleed_A3", "ASG-TB-A3", 20),
-    ("A3-PORTRAIT", 297.0, 420.0, "ISO_full_bleed_A3", "ASG-TB-A3", 20),
-    ("A1-LANDSCAPE", 841.0, 594.0, "ISO_full_bleed_A1", "ASG-TB-A1", 50),
+    ("A4-LANDSCAPE", 297.0, 210.0, "ISO_full_bleed_A4", "ASG-TB-A4-L", 10),
+    ("A4-PORTRAIT", 210.0, 297.0, "ISO_full_bleed_A4", "ASG-TB-A4-P", 10),
+    ("A3-LANDSCAPE", 420.0, 297.0, "ISO_full_bleed_A3", "ASG-TB-A3-L", 20),
+    ("A3-PORTRAIT", 297.0, 420.0, "ISO_full_bleed_A3", "ASG-TB-A3-P", 20),
+    ("A1-LANDSCAPE", 841.0, 594.0, "ISO_full_bleed_A1", "ASG-TB-A1-L", 50),
 ]
 ISO_216 = {(210.0, 297.0), (297.0, 420.0), (594.0, 841.0)}
 MARGIN_LEFT, MARGIN = 20.0, 10.0  # ISO 5457 practice: 20 mm filing margin, 10 mm others
@@ -333,28 +333,57 @@ def media_name(base: str, w: float, h: float) -> str:
     return f"{base}_({w:.2f}_x_{h:.2f}_MM)"
 
 
-TB_SPECS = {  # designed per sheet class - never stretched
-    "ASG-TB-A4": dict(w=180.0, r=7.5, cap=1.8, val=2.5, title=3.5, num=3.5, comp=2.5),
-    "ASG-TB-A3": dict(w=180.0, r=9.0, cap=1.8, val=2.5, title=5.0, num=3.5, comp=3.5),
-    "ASG-TB-A1": dict(w=250.0, r=12.0, cap=2.5, val=3.5, title=7.0, num=5.0, comp=5.0),
+# Title blocks - designed per sheet, never stretched.
+#   strip  = full-height title strip on the right of landscape sheets
+#   bottom = full-width title block at the foot of portrait sheets
+# r: info row height, rr: revision row height, cap: caption text, val: value
+# text, title / num: drawing title / number text, comp: company name, note: notes
+TB_SPECS = {
+    "ASG-TB-A4-L": dict(kind="strip", w=70.0, h=190.0, r=6.8, rr=4.5, cap=1.8, val=2.5, title=3.5,
+                        num=3.5, comp=2.5, note=1.8, stamp_min=24.0),
+    "ASG-TB-A3-L": dict(kind="strip", w=98.0, h=277.0, r=8.5, rr=5.5, cap=1.8, val=2.5, title=5.0,
+                        num=5.0, comp=3.5, note=1.8, stamp_min=40.0),
+    "ASG-TB-A1-L": dict(kind="strip", w=160.0, h=574.0, r=13.0, rr=8.0, cap=2.5, val=3.5, title=7.0,
+                        num=7.0, comp=5.0, note=2.5, stamp_min=80.0),
+    "ASG-TB-A4-P": dict(kind="bottom", w=180.0, r=7.0, rr=4.4, cap=1.8, val=2.5, title=3.5,
+                        num=3.5, comp=2.5, note=1.8, stamp_min=20.0),
+    "ASG-TB-A3-P": dict(kind="bottom", w=267.0, r=8.5, rr=5.2, cap=1.8, val=2.5, title=5.0,
+                        num=5.0, comp=3.5, note=1.8, stamp_min=26.0),
 }
-TB_ATTRIBUTES = [  # tag, prompt, default
-    ("PROJECT", "Project", "PROJECT NAME"),
-    ("LOCATION", "Location", "LOCATION, UAE"),
-    ("CLIENT", "Client", "CLIENT"),
-    ("CONSULTANT", "Consultant", "CONSULTANT"),
-    ("DWG_TITLE", "Drawing title", "DRAWING TITLE"),
-    ("DWG_TITLE_2", "Drawing title - second line (optional)", ""),
-    ("DWG_NO", "Drawing number", "AS-YYYY-NNN-DIS-TYP-001"),
-    ("REV", "Revision", "R0"),
-    ("DATE", "Date (DD.MM.YYYY)", "DD.MM.YYYY"),
-    ("DRAWN_BY", "Drawn by", "-"),
-    ("CHECKED_BY", "Checked by", "-"),
-    ("APPROVED_BY", "Approved by", "-"),
-    ("SCALE", "Scale", "AS SHOWN"),
-    ("SHEET_NO", "Sheet number", "01 OF 01"),
-    ("DWG_STATUS", "Drawing status", "PRELIMINARY"),
+REV_ROWS = 5
+TB_ATTRIBUTES = [  # tag, prompt, default, design sample (longest value the field must hold)
+    ("PROJECT", "Project", "PROJECT NAME", "MARINA TOWER - PODIUM FACADE"),
+    ("LOCATION", "Location", "LOCATION, UAE", "DUBAI MARINA, DUBAI, UAE"),
+    ("CLIENT", "Client", "CLIENT", "ABC REAL ESTATE DEVELOPMENT"),
+    ("CONSULTANT", "Consultant", "CONSULTANT", "XYZ ENGINEERING CONSULTANTS"),
+    ("DWG_TITLE", "Drawing title", "DRAWING TITLE", "CURTAIN WALL ELEVATION"),
+    ("DWG_TITLE_2", "Drawing title - second line (optional)", "", "GRID A-D, LEVEL 01 TO 05"),
+    ("DWG_NO", "Drawing number", "AS-YYYY-NNN-DIS-TYP-001", "AS-2026-014-ALU-SD-001"),
+    ("REV", "Current revision", "R0", "R12"),
+    ("SHEET_NO", "Sheet number", "01 OF 01", "12 OF 12"),
+    ("SCALE", "Scale", "AS SHOWN", "1:20, 1:5"),
+    ("DATE", "Date (DD.MM.YYYY)", "DD.MM.YYYY", "28.10.2026"),
+    ("DWG_STATUS", "Drawing status", "PRELIMINARY", "FOR CONSTRUCTION"),
+    ("DRAWN_BY", "Drawn by", "-", "A. A. QAMAR"),
+    ("CHECKED_BY", "Checked by", "-", "A. A. QAMAR"),
+    ("APPROVED_BY", "Approved by", "-", "A. A. QAMAR"),
+] + [
+    att for n in range(1, REV_ROWS + 1) for att in (
+        (f"REV{n}_NO", f"Revision row {n} - revision", "R0" if n == 1 else "", "R12"),
+        (f"REV{n}_DATE", f"Revision row {n} - date", "DD.MM.YYYY" if n == 1 else "", "28.10.2026"),
+        (f"REV{n}_DESC", f"Revision row {n} - description", "FIRST ISSUE" if n == 1 else "",
+         "ISSUED FOR APPROVAL"),
+        (f"REV{n}_BY", f"Revision row {n} - by", "-" if n == 1 else "", "AAQ"),
+    )
 ]
+TB_NOTES = [
+    "ALL DIMENSIONS ARE IN MILLIMETRES UNLESS NOTED OTHERWISE.",
+    "DO NOT SCALE THIS DRAWING - USE FIGURED DIMENSIONS ONLY.",
+    "VERIFY ALL DIMENSIONS ON SITE BEFORE FABRICATION.",
+    "READ WITH ARCHITECTURAL, STRUCTURAL DRAWINGS AND SPECIFICATIONS.",
+]
+TB_COPYRIGHT = ("\u00a9 SAEED AL SIRAJ GLASS & ALUMINIUM WORKS L.L.C. - CONFIDENTIAL. "
+                "NOT TO BE COPIED OR USED WITHOUT WRITTEN PERMISSION.")
 DRAWING_STATUS_CODES = ["PRELIMINARY", "FOR APPROVAL", "APPROVED", "FOR CONSTRUCTION",
                         "FOR FABRICATION", "AS-BUILT", "SUPERSEDED"]
 NUMBERING = [
@@ -396,7 +425,6 @@ ATTRIBUTE_STANDARD = [
 ]
 
 BYLAYER_RAW = colors.BY_LAYER_RAW_VALUE
-TB_HEIGHTS: dict[str, float] = {}
 
 
 # ===========================================================================
@@ -521,66 +549,274 @@ def _mline_styles(doc):
     m.dxf.flags = 16 | 256
 
 
-def _title_block(doc, name, w, r, cap, val, title, num, comp):
-    """Bottom-right title block, base point = bottom-right corner of the border.
-    Geometry on layer 0 / ByLayer -> takes ASG-TITLEBLOCK when inserted."""
-    blk = doc.blocks.new(name)
-    br = blk.block_record
-    br.dxf.units = 4  # millimetres
-    br.dxf.explode = 0  # not explodable (keeps attributes intact)
-    br.dxf.scale = 1  # uniform scaling only
-    prompts = {t: p for t, p, _d in TB_ATTRIBUTES}
-    defaults = {t: d for t, _p, d in TB_ATTRIBUTES}
-    x0, pad = -w, 0.12 * r
-    rows = [
-        (1.5 * r, [(0.60, "DRAWING No.", "DWG_NO", num, "ASG-TEXT-HEADING"),
-                   (0.15, "REV", "REV", num, "ASG-TEXT-HEADING"),
-                   (0.25, "SHEET No.", "SHEET_NO", val, "ASG-TEXT-SHEET")]),
-        (r, [(1 / 3, "SCALE", "SCALE", val, "ASG-TEXT-SHEET"),
-             (1 / 3, "DATE", "DATE", val, "ASG-TEXT-SHEET"),
-             (1 / 3, "DRAWING STATUS", "DWG_STATUS", val, "ASG-TEXT-SHEET")]),
-        (r, [(1 / 3, "DRAWN BY", "DRAWN_BY", val, "ASG-TEXT-SHEET"),
-             (1 / 3, "CHECKED BY", "CHECKED_BY", val, "ASG-TEXT-SHEET"),
-             (1 / 3, "APPROVED BY", "APPROVED_BY", val, "ASG-TEXT-SHEET")]),
-        ("TITLE", None),
-        (r, [(0.5, "CLIENT", "CLIENT", val, "ASG-TEXT-SHEET"),
-             (0.5, "CONSULTANT", "CONSULTANT", val, "ASG-TEXT-SHEET")]),
-        (r, [(0.5, "PROJECT", "PROJECT", val, "ASG-TEXT-SHEET"),
-             (0.5, "LOCATION", "LOCATION", val, "ASG-TEXT-SHEET")]),
-        ("COMPANY", None),
-    ]
+# ---------------------------------------------------------------------------
+# Text measurement (Liberation Sans = Arial metrics). AutoCAD TrueType text
+# height is the capital height (Arial cap height = 0.716 em).
+# ---------------------------------------------------------------------------
+_FONT_FILES = {False: "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+               True: "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"}
+_BOLD_STYLES = {n for n, _f, bold, *_r in TEXT_STYLES if bold}
+_FONT_CACHE = {}
 
-    def att(tag, x, y, hh, style):
-        a = blk.add_attdef(tag, insert=(x, y), text=defaults[tag],
-                           dxfattribs={"height": hh, "style": style, "layer": "0",
-                                       "prompt": prompts[tag], "lock_position": 1})
-        a.set_placement((x, y), align=TextEntityAlignment.BOTTOM_LEFT)
 
-    y = 0.0
-    for i, (height, cells) in enumerate(rows):
-        if height == "TITLE":
-            hh = 2 * r
-            _text(blk, "DRAWING TITLE", x0 + pad, y + hh - pad - cap, cap, "ASG-TEXT-SHEET")
-            att("DWG_TITLE", x0 + pad, y + hh * 0.40, title, "ASG-TEXT-HEADING")
-            att("DWG_TITLE_2", x0 + pad, y + pad, val, "ASG-TEXT-TITLE")
-        elif height == "COMPANY":
-            hh = 1.6 * r
-            _text(blk, COMPANY, x0 + pad, y + hh * 0.50, comp, "ASG-TEXT-HEADING")
-            _text(blk, f"{GROUP}  |  {DIVISION}", x0 + pad, y + pad, cap, "ASG-TEXT-SHEET")
+def text_width(s, h, style):
+    from PIL import ImageFont
+    bold = style in _BOLD_STYLES
+    if bold not in _FONT_CACHE:
+        _FONT_CACHE[bold] = ImageFont.truetype(_FONT_FILES[bold], 1000)
+    return _FONT_CACHE[bold].getlength(s) / 1000.0 * h / 0.716
+
+
+def wrap(text, h, style, width, indent=""):
+    """Greedy word wrap by measured width; continuation lines get `indent`."""
+    words, lines, cur = text.split(), [], ""
+    for w_ in words:
+        trial = (cur + " " + w_).strip() if cur else w_
+        if text_width((indent if lines else "") + trial, h, style) <= width or not cur:
+            cur = trial
         else:
-            hh = height
-            x = x0
-            for frac, caption, tag, th, style in cells:
-                if x > x0:
-                    blk.add_line((x, y), (x, y + hh), dxfattribs={"layer": "0"})
-                _text(blk, caption, x + pad, y + hh - pad - cap, cap, "ASG-TEXT-SHEET")
-                att(tag, x + pad, y + pad, min(th, hh - cap - 3 * pad), style)
-                x += w * frac
-        y += hh
-        if i < len(rows) - 1:  # top edge is part of the outline
-            blk.add_line((x0, y), (0, y), dxfattribs={"layer": "0"})
-    blk.add_lwpolyline([(x0, 0), (0, 0), (0, y), (x0, y)], close=True, dxfattribs={"layer": "0"})
-    TB_HEIGHTS[name] = y
+            lines.append(cur)
+            cur = w_
+    lines.append(cur)
+    return [lines[0]] + [indent + ln for ln in lines[1:]]
+
+
+TB_HEIGHTS: dict[str, float] = {}
+TB_FIT: dict[str, list] = {}  # name -> [(label, text, height, style, available width)]
+_ATT = {t: (p, d, smp) for t, p, d, smp in TB_ATTRIBUTES}
+FIT_SPARE = 1.0  # mm kept free at the end of every title-block text line
+
+
+class _TB:
+    """Title-block drawing helper: geometry on layer 0 / ByLayer (takes the
+    ASG-TITLEBLOCK layer when inserted); attributes added in TB_ATTRIBUTES order."""
+
+    def __init__(self, doc, name, spec):
+        self.blk = doc.blocks.new(name)
+        br = self.blk.block_record
+        br.dxf.units = 4      # millimetres
+        br.dxf.explode = 0    # not explodable - keeps attributes intact
+        br.dxf.scale = 1      # uniform scaling only
+        self.name, self.s = name, spec
+        self.pad = max(0.8, 0.12 * spec["r"])
+        self.atts = {}
+        TB_FIT[name] = []
+
+    def line(self, p1, p2):
+        self.blk.add_line(p1, p2, dxfattribs={"layer": "0"})
+
+    def rect(self, x, y, w, h):
+        self.blk.add_lwpolyline([(x, y), (x + w, y), (x + w, y + h), (x, y + h)], close=True,
+                                dxfattribs={"layer": "0"})
+
+    def text(self, s, x, y, h, style, avail, label=None, align=TextEntityAlignment.BOTTOM_LEFT):
+        if s:
+            _text(self.blk, s, x, y, h, style)
+            TB_FIT[self.name].append((label or s[:24], s, h, style, avail))
+
+    def att(self, tag, x, y, h, style, avail):
+        self.atts[tag] = (x, y, h, style)
+        TB_FIT[self.name].append((tag, _ATT[tag][2], h, style, avail))
+
+    def cell(self, x, y, w, h, caption, tag, vh, vstyle="ASG-TEXT-SHEET"):
+        """Caption top-left, value bottom-left."""
+        s, p = self.s, self.pad
+        assert s["cap"] + vh + 3 * p <= h + 1e-9, f"{self.name}: cell {caption} too low"
+        self.text(caption, x + p, y + h - p - s["cap"], s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+        self.att(tag, x + p, y + p, vh, vstyle, w - 2 * p)
+
+    def row(self, x, y, w, h, cells):
+        """cells: [(fraction, caption, tag, value height, value style)]"""
+        cx = x
+        for i, (frac, caption, tag, vh, vstyle) in enumerate(cells):
+            cw = w * frac
+            if i:
+                self.line((cx, y), (cx, y + h))
+            self.cell(cx, y, cw, h, caption, tag, vh, vstyle)
+            cx += cw
+        return h
+
+    # ------------------------------------------------------------ sections
+    def company_lines(self, w):
+        s = self.s
+        if text_width(COMPANY, s["comp"], "ASG-TEXT-HEADING") <= w - 2 * self.pad - FIT_SPARE:
+            names = [COMPANY]
+        else:
+            names = ["SAEED AL SIRAJ GLASS &", "ALUMINIUM WORKS L.L.C."]
+        sub = wrap(f"{GROUP} - ALUMINIUM, GLASS & FACADE DIVISION - UAE", s["cap"], "ASG-TEXT-SHEET",
+                   w - 2 * self.pad - FIT_SPARE)
+        return names, sub
+
+    def company_height(self, w):
+        s = self.s
+        names, sub = self.company_lines(w)
+        return 2.6 * self.pad + len(names) * s["comp"] * 1.45 + 0.6 * s["comp"] + len(sub) * s["cap"] * 1.55
+
+    def company(self, x, y, w, h):
+        s, p = self.s, self.pad
+        names, sub = self.company_lines(w)
+        ty = y + h - 1.6 * p - s["comp"]
+        for n in names:
+            self.text(n, x + p, ty, s["comp"], "ASG-TEXT-HEADING", w - 2 * p)
+            ty -= s["comp"] * 1.45
+        ty -= 0.6 * s["comp"] - s["comp"] * 1.45 + s["cap"] * 1.55
+        for ln in sub:
+            self.text(ln, x + p, ty, s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+            ty -= s["cap"] * 1.55
+
+    def stamp(self, x, y, w, h, key_plan=False):
+        """Approval stamp box; tall strips also get a KEY PLAN box above it."""
+        s, p = self.s, self.pad
+        assert h >= s["stamp_min"] - 1e-9, f"{self.name}: stamp box {h:.1f} < {s['stamp_min']}"
+        if key_plan and h >= 2 * s["stamp_min"]:
+            hs = max(s["stamp_min"], 0.5 * h)
+            self.line((x, y + hs), (x + w, y + hs))
+            self.text("KEY PLAN", x + p, y + h - p - s["cap"], s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+            h = hs
+        self.text("APPROVAL STAMP", x + p, y + h - p - s["cap"], s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+
+    def note_lines(self, w):
+        s = self.s
+        out = []
+        for i, n in enumerate(TB_NOTES, 1):
+            out += wrap(f"{i}. {n}", s["note"], "ASG-TEXT-SHEET", w - 2 * self.pad - FIT_SPARE, indent="    ")
+        cr = wrap(TB_COPYRIGHT, s["note"], "ASG-TEXT-SHEET", w - 2 * self.pad - FIT_SPARE)
+        return out, cr
+
+    def notes_height(self, w):
+        s = self.s
+        out, cr = self.note_lines(w)
+        return 2 * self.pad + s["cap"] * 1.9 + (len(out) + len(cr)) * s["note"] * 1.55 + s["note"] * 0.8
+
+    def notes(self, x, y, w, h):
+        s, p = self.s, self.pad
+        out, cr = self.note_lines(w)
+        self.text("GENERAL NOTES", x + p, y + h - p - s["cap"], s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+        ty = y + h - p - s["cap"] * 1.9 - s["note"]
+        for ln in out:
+            self.text(ln, x + p, ty, s["note"], "ASG-TEXT-SHEET", w - 2 * p, label="note")
+            ty -= s["note"] * 1.55
+        ty -= s["note"] * 0.8
+        for ln in cr:
+            self.text(ln, x + p, ty, s["note"], "ASG-TEXT-SHEET", w - 2 * p, label="copyright")
+            ty -= s["note"] * 1.55
+
+    REV_COLS = [(0.13, "REV", "NO"), (0.25, "DATE", "DATE"), (0.46, "DESCRIPTION", "DESC"), (0.16, "BY", "BY")]
+
+    def revisions_height(self):
+        return (REV_ROWS + 1) * self.s["rr"]
+
+    def revisions(self, x, y, w, h=None):
+        """Header row on top, rows 1..REV_ROWS below it (row 1 = first issue).
+        `h` stretches the rows to fill a band exactly."""
+        s, p = self.s, self.pad
+        rr = (h or self.revisions_height()) / (REV_ROWS + 1)
+        top = y + rr * (REV_ROWS + 1)
+        th = min(s["cap"], rr - 2 * p * 0.8)
+        cx = x
+        for i, (frac, caption, _k) in enumerate(self.REV_COLS):
+            cw = w * frac
+            if i:
+                self.line((cx, y), (cx, top))
+            self.text(caption, cx + p, top - rr + (rr - th) / 2, th, "ASG-TEXT-SHEET", cw - 2 * p)
+            for n in range(1, REV_ROWS + 1):
+                ry = top - (n + 1) * rr
+                self.att(f"REV{n}_{_k}", cx + p, ry + (rr - th) / 2, th, "ASG-TEXT-SHEET", cw - 2 * p)
+            cx += cw
+        for n in range(1, REV_ROWS + 1):
+            self.line((x, top - n * rr), (x + w, top - n * rr))
+
+    def title(self, x, y, w, h):
+        s, p = self.s, self.pad
+        assert s["cap"] + s["title"] + s["val"] + 5 * p <= h + 1e-9, f"{self.name}: title row too low"
+        self.text("DRAWING TITLE", x + p, y + h - p - s["cap"], s["cap"], "ASG-TEXT-SHEET", w - 2 * p)
+        self.att("DWG_TITLE", x + p, y + p + s["val"] + 1.5 * p, s["title"], "ASG-TEXT-HEADING", w - 2 * p)
+        self.att("DWG_TITLE_2", x + p, y + p, s["val"], "ASG-TEXT-TITLE", w - 2 * p)
+
+    def finish(self, width, height):
+        self.rect(-width, 0, width, height)
+        for tag, _p, _d, _smp in TB_ATTRIBUTES:  # prompt order = this order
+            x, y, h, style = self.atts[tag]
+            a = self.blk.add_attdef(tag, insert=(x, y), text=_ATT[tag][1],
+                                    dxfattribs={"height": h, "style": style, "layer": "0",
+                                                "prompt": _ATT[tag][0], "lock_position": 1})
+            a.set_placement((x, y), align=TextEntityAlignment.BOTTOM_LEFT)
+        TB_HEIGHTS[self.name] = height
+
+
+def _title_block(doc, name, **spec):
+    """Base point = bottom-right corner of the border."""
+    tb = _TB(doc, name, spec)
+    s, W, r = spec, spec["w"], spec["r"]
+    x0 = -W
+    num_row = 1.6 * r
+    if s["kind"] == "strip":
+        H = s["h"]
+        y = 0.0
+        y += tb.row(x0, y, W, num_row, [(1.0, "DRAWING No.", "DWG_NO", s["num"], "ASG-TEXT-HEADING")])
+        tb.line((x0, y), (0, y))
+        # bottom-up: REV|SHEET, SCALE|DATE, STATUS, APPROVED, DRAWN|CHECKED
+        for cells in ([(0.35, "REV", "REV", s["val"], "ASG-TEXT-HEADING"), (0.65, "SHEET No.", "SHEET_NO", s["val"], "ASG-TEXT-SHEET")],
+                      [(0.5, "SCALE", "SCALE", s["val"], "ASG-TEXT-SHEET"), (0.5, "DATE", "DATE", s["val"], "ASG-TEXT-SHEET")],
+                      [(1.0, "DRAWING STATUS", "DWG_STATUS", s["val"], "ASG-TEXT-SHEET")],
+                      [(1.0, "APPROVED BY", "APPROVED_BY", s["val"], "ASG-TEXT-SHEET")],
+                      [(0.5, "DRAWN BY", "DRAWN_BY", s["val"], "ASG-TEXT-SHEET"), (0.5, "CHECKED BY", "CHECKED_BY", s["val"], "ASG-TEXT-SHEET")]):
+            y += tb.row(x0, y, W, r, cells)
+            tb.line((x0, y), (0, y))
+        th = s["cap"] + s["title"] + s["val"] + 6 * tb.pad
+        tb.title(x0, y, W, th)
+        y += th
+        tb.line((x0, y), (0, y))
+        for cap_, tag in (("CONSULTANT", "CONSULTANT"), ("CLIENT", "CLIENT"), ("LOCATION", "LOCATION"),
+                          ("PROJECT", "PROJECT")):
+            y += tb.row(x0, y, W, r, [(1.0, cap_, tag, s["val"], "ASG-TEXT-SHEET")])
+            tb.line((x0, y), (0, y))
+        tb.revisions(x0, y, W)
+        y += tb.revisions_height()
+        tb.line((x0, y), (0, y))
+        nh = tb.notes_height(W)
+        tb.notes(x0, y, W, nh)
+        y += nh
+        tb.line((x0, y), (0, y))
+        ch = tb.company_height(W)
+        tb.stamp(x0, y, W, H - y - ch, key_plan=True)
+        tb.line((x0, H - ch), (0, H - ch))
+        tb.company(x0, H - ch, W, ch)
+        tb.finish(W, H)
+    else:  # bottom block for portrait sheets
+        y = 0.0
+        y += tb.row(x0, y, W, num_row, [(0.55, "DRAWING No.", "DWG_NO", s["num"], "ASG-TEXT-HEADING"),
+                                        (0.15, "REV", "REV", s["num"], "ASG-TEXT-HEADING"),
+                                        (0.30, "SHEET No.", "SHEET_NO", s["val"], "ASG-TEXT-SHEET")])
+        tb.line((x0, y), (0, y))
+        for cells in ([(1 / 3, "SCALE", "SCALE", s["val"], "ASG-TEXT-SHEET"), (1 / 3, "DATE", "DATE", s["val"], "ASG-TEXT-SHEET"),
+                       (1 / 3, "DRAWING STATUS", "DWG_STATUS", s["val"], "ASG-TEXT-SHEET")],
+                      [(1 / 3, "DRAWN BY", "DRAWN_BY", s["val"], "ASG-TEXT-SHEET"), (1 / 3, "CHECKED BY", "CHECKED_BY", s["val"], "ASG-TEXT-SHEET"),
+                       (1 / 3, "APPROVED BY", "APPROVED_BY", s["val"], "ASG-TEXT-SHEET")]):
+            y += tb.row(x0, y, W, r, cells)
+            tb.line((x0, y), (0, y))
+        th = s["cap"] + s["title"] + s["val"] + 6 * tb.pad
+        tb.title(x0, y, W, th)
+        y += th
+        tb.line((x0, y), (0, y))
+        for cells in ([(0.5, "CLIENT", "CLIENT", s["val"], "ASG-TEXT-SHEET"), (0.5, "CONSULTANT", "CONSULTANT", s["val"], "ASG-TEXT-SHEET")],
+                      [(0.5, "PROJECT", "PROJECT", s["val"], "ASG-TEXT-SHEET"), (0.5, "LOCATION", "LOCATION", s["val"], "ASG-TEXT-SHEET")]):
+            y += tb.row(x0, y, W, r, cells)
+            tb.line((x0, y), (0, y))
+        wn, wr = 0.45 * W, 0.55 * W
+        bh = max(tb.notes_height(wn), tb.revisions_height())
+        tb.notes(x0, y, wn, bh)
+        tb.revisions(x0 + wn, y, wr, bh)
+        tb.line((x0 + wn, y), (x0 + wn, y + bh))
+        y += bh
+        tb.line((x0, y), (0, y))
+        wc = 0.55 * W
+        ch = max(tb.company_height(wc), s["stamp_min"])
+        tb.company(x0, y, wc, ch)
+        tb.line((x0 + wc, y), (x0 + wc, y + ch))
+        tb.stamp(x0 + wc, y, W - wc, ch)
+        y += ch
+        tb.finish(W, y)
 
 
 def title_block_height(name):
@@ -593,12 +829,14 @@ def title_block_height(name):
 
 
 def viewport_rect(name, w, h, tb):
-    """Default viewport rectangle: inside the border with 5 mm clearance,
-    never overlapping the title block."""
-    x1, y1 = MARGIN_LEFT + 5, MARGIN + title_block_height(tb) + 5
-    x2, y2 = w - MARGIN - 5, h - MARGIN - 5
-    if w > h:  # landscape: left of the title block, full height
-        x2, y1 = w - MARGIN - TB_SPECS[tb]["w"] - 5, MARGIN + 5
+    """Default viewport: inside the border with 5 mm clearance, never over the
+    title block (left of a strip, above a bottom block)."""
+    spec = TB_SPECS[tb]
+    x1, y1, x2, y2 = MARGIN_LEFT + 5, MARGIN + 5, w - MARGIN - 5, h - MARGIN - 5
+    if spec["kind"] == "strip":
+        x2 = w - MARGIN - spec["w"] - 5
+    else:
+        y1 = MARGIN + title_block_height(tb) + 5
     return x1, y1, x2, y2
 
 

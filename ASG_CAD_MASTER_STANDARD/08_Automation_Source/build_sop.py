@@ -114,7 +114,7 @@ def build(font_size=7.6):
         f"Unlock the viewport, set its scale from the list ({vp_scales}), <b>lock</b> it again.",
         "Double-click inside the viewport and add notes, dimensions and leaders with the ASG styles "
         "(table 3). Type the <b>paper height</b> (2.5) - AutoCAD sizes it for the viewport scale.",
-        "Double-click the title block and fill every field. Never explode or move it.",
+        "Double-click the title strip / block and fill every field. Never explode or move it.",
         "Plot: the page setup is ready (DWG To PDF, A-size paper, 1:1, " + S.CTB_NAME + "). Click Plot, "
         "then <b>open the PDF and check it</b>.",
     ])
@@ -150,7 +150,7 @@ def build(font_size=7.6):
     ])
     story += [h("5. BEFORE YOU ISSUE - CHECKLIST")]
     story += checks([
-        "All title block fields filled; drawing number in the company format; REV correct.",
+        "All title block fields filled; drawing number in the company format; REV = latest row of the revision table.",
         "Every changed area has a revision cloud + delta, and the REV / revision list is updated.",
         "Nothing on layer 0; no object with its own colour / linetype / lineweight.",
         "Viewport scales correct, locked, and written in the SCALE field.",
@@ -174,13 +174,14 @@ def build(font_size=7.6):
     story += [Paragraph(f"<b>{fmt['Format'].split('  +')[0]}</b> + REV R0, R1, R2 ...<br/>"
                         f"DIS: {fmt['DIS']}<br/>TYP: {fmt['TYP']}<br/>"
                         f"Status: {', '.join(S.DRAWING_STATUS_CODES)}", P)]
-    story += [h("8. ONE-TIME SETUP (CAD IN-CHARGE ONLY)")]
+    story += [h("8. INSTALL (ONCE PER PC) - SEE 00_START_HERE.pdf")]
     story += steps([
-        f"Copy <b>{S.CTB_NAME}</b> to the Plot Styles folder; open it: every colour = 'Use object lineweight'.",
-        "OPEN ASG_Master_Template.dxf &gt; AUDIT &gt; APPLOAD ASG_Setup.lsp &gt; type <b>ASG-SETUP</b>.",
-        "Last line must read <b>0 FAIL</b> (log: ASG_QA_Log.txt). ASG-QA checks the <b>template</b> only - "
-        "it is not a check for project drawings.",
-        "SAVEAS .dwg, then SAVEAS .dwt; put DWT + CTB on the shared drive; set QNEW on every PC.",
+        "<b>CAD in-charge:</b> extract the zip, double-click <b>ASG_Master_Template.dxf</b>, drag "
+        "<b>ASG_Install.lsp</b> into AutoCAD, click 'Load Once'. Wait for <b>ASG INSTALL COMPLETE</b>.",
+        "<b>Team member:</b> drag <b>ASG_Install.lsp</b> from 09_Team_Kit into AutoCAD and select "
+        "ASG_Master_Template.dwt. Then Ctrl+N.",
+        "A step marked NOT DONE shows its manual fix. Log: ASG_QA_Log.txt. ASG-QA checks the "
+        "<b>template</b>, not project drawings.",
     ])
     story += [Spacer(1, 2),
               Paragraph(f"Full rules: <b>ASG_CAD_Standards.pdf</b> (Standard {S.STANDARD_REV}). "
