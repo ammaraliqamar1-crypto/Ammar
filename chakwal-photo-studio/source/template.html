@@ -189,6 +189,28 @@ figure { margin: 0; }
 .ad-shot { line-height: 0; box-shadow: 0 16px 30px -18px rgba(0,0,0,.5); }
 @media (max-width: 860px) { .ads { grid-template-columns: minmax(0, 1fr); } .ads .mock { max-width: 460px; } }
 
+/* kit */
+.dps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+.dps img, .ills img, .posts img, .hls img, .albums img, .slip-row img, img.wide { display: block; width: 100%; height: auto; }
+.ills { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+.posts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.posts img { box-shadow: 0 14px 26px -16px rgba(0,0,0,.5); }
+.hls { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 16px; }
+.hls img { border-radius: 50%; }
+.albums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.albums img { box-shadow: 0 18px 30px -18px rgba(0,0,0,.55); }
+.slip-row { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 32px; }
+.callout { border: 1px solid var(--line); background: #fff; padding: 20px 22px; display: grid; gap: 8px; }
+.callout code, p code { font-size: 13.5px; }
+@media (max-width: 860px) {
+  .dps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ills { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hls { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .posts, .albums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .slip-row { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) { .posts, .albums { grid-template-columns: minmax(0, 1fr); } .dps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 /* rules */
 .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .rule { border-top: 2px solid var(--surma); padding-top: 14px; display: grid; gap: 6px; align-content: start; font-size: 15px; }
@@ -334,6 +356,22 @@ figure { margin: 0; }
     </div>
   </section>
 
+  <!-- DP -->
+  <section aria-labelledby="s-dp">
+    <div class="head">
+      <span class="eyebrow">Profile picture</span>
+      <h2 id="s-dp">Round logo for WhatsApp, Facebook and Instagram</h2>
+      <p class="lead">Every app crops the profile picture into a circle, so the logo now has a round version. Use the badge on Facebook and Instagram, and the simple icon on WhatsApp, where the picture is shown very small.</p>
+    </div>
+    <div class="dps">
+      <figure class="mock"><img src="{{IMG:dp/dp-badge-dark.png:520}}" alt="Round badge, charcoal"><figcaption><b>Badge · charcoal</b>. Main DP.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:dp/dp-badge-light.png:520}}" alt="Round badge, ivory"><figcaption><b>Badge · ivory</b>. Light feeds.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:dp/dp-badge-mehndi.png:520}}" alt="Round badge, maroon"><figcaption><b>Badge · mehndi</b>. Wedding season.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:dp/dp-icon-circle.png:520}}" alt="Round icon"><figcaption><b>Icon</b>. WhatsApp DP.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:dp/stamp-badge-black.png:520}}" alt="Stamp badge" style="background:#fff;border-radius:50%"><figcaption><b>Stamp</b>. Rubber stamp, frame backs, stickers.</figcaption></figure>
+    </div>
+  </section>
+
   <!-- 5. Colour + type -->
   <section aria-labelledby="s-colour">
     <div class="head">
@@ -350,6 +388,23 @@ figure { margin: 0; }
       <div class="face"><span class="eyebrow">Name</span><span class="spec" style="font-family:var(--display)">CHAKWAL</span><span class="small muted">Marcellus. Classical capitals with soft flared ends: dignified, never cold.</span></div>
       <div class="face"><span class="eyebrow">Descriptor</span><span class="spec" style="font-family:var(--body);font-weight:500;letter-spacing:.32em;font-size:26px;padding-block:10px">PHOTO STUDIO</span><span class="small muted">Jost Medium, widely spaced and justified to the width of CHAKWAL.</span></div>
       <div class="face"><span class="eyebrow">Urdu</span><span class="spec urdu" style="font-size:32px;line-height:1.9">چکوال فوٹو اسٹوڈیو</span><span class="small muted">Noto Nastaliq Urdu. Proper Nastaliq, the script customers read every day.</span></div>
+    </div>
+  </section>
+
+  <!-- Illustrations -->
+  <section aria-labelledby="s-ill">
+    <div class="head">
+      <span class="eyebrow">Service illustrations</span>
+      <h2 id="s-ill">A picture for every service</h2>
+      <p class="lead">Drawn in the same line as the logo, so every post, highlight and album looks like one family. Used wherever a real photo is not yet available.</p>
+    </div>
+    <div class="ills">
+      <figure class="mock"><img src="{{IMG:illustrations/wedding-dark.png:400}}" alt="Wedding couple"><figcaption><b>Wedding couple</b></figcaption></figure>
+      <figure class="mock"><img src="{{IMG:illustrations/baby-dark.png:400}}" alt="Baby"><figcaption><b>Newborn &amp; babies</b></figcaption></figure>
+      <figure class="mock"><img src="{{IMG:illustrations/family-dark.png:400}}" alt="Family"><figcaption><b>Family portraits</b></figcaption></figure>
+      <figure class="mock"><img src="{{IMG:illustrations/passport-dark.png:400}}" alt="Passport photo"><figcaption><b>Passport &amp; ID</b></figcaption></figure>
+      <figure class="mock"><img src="{{IMG:illustrations/prints-dark.png:400}}" alt="Frames and crystals"><figcaption><b>Prints, frames &amp; crystals</b></figcaption></figure>
+      <figure class="mock"><img src="{{IMG:illustrations/drone-dark.png:400}}" alt="Drone"><figcaption><b>Drone &amp; movies</b></figcaption></figure>
     </div>
   </section>
 
@@ -479,11 +534,73 @@ figure { margin: 0; }
     <p class="muted">The arch window shows the brand's Potohar illustration for now. Put the studio's own best wedding photo in it: customers trust real work far more than stock or AI pictures. The generator does this in one step with <code>--photo</code>.</p>
   </section>
 
+  <!-- Social kit -->
+  <section aria-labelledby="s-social">
+    <div class="head">
+      <span class="eyebrow">Social media kit</span>
+      <h2 id="s-social">Six service posts, ready to publish</h2>
+      <p class="lead">One post per service, each ending with the same call to action: <span style="font-family:var(--urdu)">آج ہی تشریف لائیں</span> (visit us today), with both numbers and the address. Post one a day, then repeat.</p>
+    </div>
+    <div class="posts">
+      <img src="{{IMG:social/post-1-wedding.png:560}}" alt="Wedding post">
+      <img src="{{IMG:social/post-2-baby.png:560}}" alt="Baby photoshoot post">
+      <img src="{{IMG:social/post-3-family.png:560}}" alt="Family portraits post">
+      <img src="{{IMG:social/post-4-passport.png:560}}" alt="Passport photos post">
+      <img src="{{IMG:social/post-5-prints.png:560}}" alt="Prints, frames and crystals post">
+      <img src="{{IMG:social/post-6-drone.png:560}}" alt="Drone coverage post">
+    </div>
+    <div class="callout">
+      <h3>Add the studio's own photos</h3>
+      <p class="muted">Each arch window takes a real photo. Save the best pictures as <code>wedding.jpg</code>, <code>baby.jpg</code>, <code>family.jpg</code>, <code>passport.jpg</code>, <code>prints.jpg</code> and <code>drone.jpg</code> in <code>source/photos/</code> and run the generator again: every post updates in one step. Real work from Chakwal families builds far more trust than stock or AI pictures. Take written consent before posting a client's photo, especially of women and children.</p>
+    </div>
+    <div class="head" style="margin-top:12px">
+      <h3>Story highlight covers</h3>
+    </div>
+    <div class="hls">
+      <img src="{{IMG:social/highlight-weddings.png:300}}" alt="Weddings">
+      <img src="{{IMG:social/highlight-babies.png:300}}" alt="Babies">
+      <img src="{{IMG:social/highlight-family.png:300}}" alt="Family">
+      <img src="{{IMG:social/highlight-passport.png:300}}" alt="Passport">
+      <img src="{{IMG:social/highlight-frames.png:300}}" alt="Frames">
+      <img src="{{IMG:social/highlight-drone.png:300}}" alt="Drone">
+      <img src="{{IMG:social/highlight-studio.png:300}}" alt="Studio">
+    </div>
+    <figure class="mock">
+      <img src="{{IMG:social/facebook-cover-1640x624.png:1200}}" alt="Facebook cover" class="wide">
+      <figcaption><b>Facebook cover</b>, 1640 × 624. Logo, headline and numbers on the left, wedding, baby and family on the right.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Print kit -->
+  <section aria-labelledby="s-print">
+    <div class="head">
+      <span class="eyebrow">Print kit</span>
+      <h2 id="s-print">Album covers, signboard and order slip</h2>
+    </div>
+    <div class="albums">
+      <figure class="mock"><img src="{{IMG:album-covers/album-wedding.png:520}}" alt="Wedding album cover"><figcaption><b>Wedding album</b>. Mehndi cloth, gold foil.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:album-covers/album-baby.png:520}}" alt="Baby album cover"><figcaption><b>Baby album</b>. Ivory, antique gold.</figcaption></figure>
+      <figure class="mock"><img src="{{IMG:album-covers/album-family.png:520}}" alt="Family album cover"><figcaption><b>Family album</b>. Charcoal, gold foil.</figcaption></figure>
+    </div>
+    <p class="small muted">12 × 12 in print PDFs. Names and dates are samples; change them per client in the generator (<code>ALBUMS</code> in <code>kit.py</code>).</p>
+    <figure class="mock">
+      <img src="{{IMG:signboard/signboard-flex-12x3ft.png:1200}}" alt="Signboard flex" class="wide">
+      <figcaption><b>Signboard flex</b>, 12 × 3 ft, vector PDF for the panaflex printer. Bilingual name, both numbers, address and the full services line.</figcaption>
+    </figure>
+    <div class="slip-row">
+      <figure class="mock"><img src="{{IMG:stationery/order-slip-a5.png:600}}" alt="Order slip" style="box-shadow:0 12px 24px -14px rgba(0,0,0,.4)"></figure>
+      <div style="display:grid;gap:10px;align-content:center">
+        <h3>Order slip / receipt</h3>
+        <p class="muted">A5, English and Urdu labels: customer, phone, event, date, venue, items with size, quantity and rate, total, advance, balance and delivery date. Print as a numbered book in duplicate so every order has a record.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 7. Rules -->
   <section aria-labelledby="s-rules">
     <div class="head">
       <span class="eyebrow">Usage</span>
-      <h2 id="s-rules">Three rules for the printer and the designer</h2>
+      <h2 id="s-rules">Rules and files</h2>
     </div>
     <div class="rules">
       <div class="rule"><h3>Clear space</h3><p class="muted">Keep empty space around the logo equal to the height of the "C" in CHAKWAL. No text, borders or photos inside it.</p></div>
@@ -492,20 +609,18 @@ figure { margin: 0; }
     </div>
     <div class="files">
       <table>
-        <thead><tr><th>File (in the repository, folder chakwal-photo-studio/logo)</th><th>Use</th></tr></thead>
+        <thead><tr><th>Folder (in Chakwal-Photo-Studio-Brand-Kit.zip)</th><th>Contents</th></tr></thead>
         <tbody>
-          <tr><td>logo-primary.svg / .png</td><td>Main logo on light backgrounds</td></tr>
-          <tr><td>logo-primary-on-dark.svg</td><td>Charcoal background version</td></tr>
-          <tr><td>logo-bilingual-signboard.svg</td><td>Shop sign and banners (English + Urdu)</td></tr>
-          <tr><td>logo-stacked.svg / -on-dark.svg</td><td>Square spaces, album back page, posters</td></tr>
-          <tr><td>logo-black.svg / logo-white.svg</td><td>One-colour printing, stamps, receipts</td></tr>
-          <tr><td>icon-whatsapp-facebook.png</td><td>Profile picture, 1024 × 1024</td></tr>
-          <tr><td>watermark-white.png / -black.png</td><td>Photo watermark, transparent background</td></tr>
-          <tr><td>mark-only.svg</td><td>The doorway mark alone</td></tr>
-          <tr><td>../ads/ad-post-1080x1350.png</td><td>Facebook / Instagram / WhatsApp post</td></tr>
-          <tr><td>../ads/ad-status-1080x1920.png</td><td>WhatsApp status</td></tr>
-          <tr><td>../ads/ad-flyer-a4.pdf</td><td>A4 flyer for printing</td></tr>
-          <tr><td>../cards/card-front.pdf / card-back.pdf</td><td>Business card print files with bleed</td></tr>
+          <tr><td>logo/</td><td>Primary, stacked, bilingual signboard, black, white, mark only, watermarks (SVG + PNG)</td></tr>
+          <tr><td>dp/</td><td>Round badges (charcoal, ivory, mehndi), WhatsApp icon, stamp</td></tr>
+          <tr><td>illustrations/</td><td>Six service illustrations, dark and light</td></tr>
+          <tr><td>social/</td><td>Six service posts, seven highlight covers, Facebook cover</td></tr>
+          <tr><td>ads/</td><td>Feed post, WhatsApp status, A4 flyer PDF</td></tr>
+          <tr><td>cards/</td><td>Business card front and back, print PDF with bleed</td></tr>
+          <tr><td>album-covers/</td><td>Wedding, baby and family covers, 12 × 12 in PDF</td></tr>
+          <tr><td>signboard/</td><td>12 × 3 ft flex, vector PDF</td></tr>
+          <tr><td>stationery/</td><td>A5 order slip / receipt PDF</td></tr>
+          <tr><td>source/</td><td>Generator scripts; photos/ folder for real photos</td></tr>
         </tbody>
       </table>
     </div>

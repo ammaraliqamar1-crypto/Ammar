@@ -1,5 +1,5 @@
 """Builds the brand presentation page from the outlined logo artwork."""
-import math, re, sys
+import base64, io, math, os, re, sys
 import ad
 from brand import (mark, horizontal, stacked, icon, watermark, svg, fmt,
                    SURMA, MALAI, SONA, MEHNDI, BLACK, WHITE, F_DISPLAY, F_SUB, NAME, SUB)
@@ -93,7 +93,26 @@ TOKENS = {
     "CARD_FRONT": inline(ad.card_front(), "art"), "CARD_BACK": inline(ad.card_back(), "art"),
 }
 
+KIT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "kitout")
+
+
+def img_uri(m):
+    rel, w = m.group(1), int(m.group(2))
+    from PIL import Image
+    im = Image.open(os.path.join(KIT, rel))
+    im.thumbnail((w, w * 4))
+    buf = io.BytesIO()
+    if im.mode == "RGBA" and im.getextrema()[3][0] < 255:
+        im.save(buf, "PNG", optimize=True)
+        mime = "png"
+    else:
+        im.convert("RGB").save(buf, "JPEG", quality=86)
+        mime = "jpeg"
+    return f"data:image/{mime};base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 html = open("template.html").read()
+html = re.sub(r"\{\{IMG:([^:}]+):(\d+)\}\}", img_uri, html)
 for k, v in TOKENS.items():
     html = html.replace("{{" + k + "}}", v)
 left = re.findall(r"\{\{[A-Z_]+\}\}", html)
