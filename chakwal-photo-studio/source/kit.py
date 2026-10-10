@@ -219,13 +219,13 @@ POSTS = [
     dict(key="wedding", theme="mehndi", ur=["آپ کی شادی،", "ہماری ذمہ داری"], en="WEDDING PHOTOGRAPHY & MOVIES",
          points=["Barat · Walima · Mehndi · Nikah", "HD movie, drone, lighting & stage", "Male & female staff available"]),
     dict(key="baby", theme="light", ur=["ننھی مسکراہٹیں،", "ہمیشہ کے لیے"], en="NEWBORN & BABY PHOTOSHOOT",
-         points=["Newborn, birthday & aqiqa shoots", "Safe, gentle studio setup", "Female staff on request"]),
+         points=["Newborn, birthday & aqiqa shoots", "Studio & event shoots", "Female staff available"]),
     dict(key="family", theme="dark", ur=["پورا خاندان،", "ایک تصویر میں"], en="FAMILY PORTRAITS",
-         points=["Studio & home family portraits", "Three generations, one frame", "Large prints for your wall"]),
-    dict(key="passport", theme="light", ur=["پاسپورٹ اور آئی ڈی فوٹو", "منٹوں میں تیار"], en="PASSPORT & ID PHOTOS",
-         points=["Passport, CNIC, visa & admission", "Correct size & background", "Ready while you wait"]),
+         points=["Studio family portraits", "Three generations, one frame", "Large prints for your wall"]),
+    dict(key="passport", theme="light", ur=["پاسپورٹ اور آئی ڈی فوٹو", "فوری سروس"], en="PASSPORT & ID PHOTOS",
+         points=["Passport, CNIC, visa & admission", "Correct size & background", "Quick service"]),
     dict(key="prints", theme="dark", ur=["ہر سائز کے فوٹو پرنٹ،", "فریم اور کرسٹل"], en="PRINTS, FRAMES & CRYSTALS",
-         points=["All size photo prints", "Wall frames & table frames", "3D crystal photo gifts"]),
+         points=["All size photo prints", "Wall frames & table frames", "Photo crystals"]),
     dict(key="drone", theme="dark", ur=["اوپر سے دیکھیں", "اپنی خوشیاں"], en="DRONE COVERAGE & HD MOVIES",
          points=["Aerial video & photos", "Cinematic wedding highlights", "Album designing & mixing"]),
 ]
@@ -258,7 +258,7 @@ def service_post(p):
     yy = 452
     for ln in p["ur"]:
         body += t(F_URDU, ln, 46, W - 76, yy, th["text"], anchor="end", max_w=W - x - 76)
-        yy += 94
+        yy += 102
     yy += 20
     for pt in p["points"]:
         body += (f'<path d="M{x + 7} {yy - 17}L{x + 14} {yy - 10}L{x + 7} {yy - 3}L{x} {yy - 10}Z" fill="{th["gold"]}"/>')

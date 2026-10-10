@@ -69,6 +69,13 @@ details > summary { cursor: pointer; font-size: 13px; }
 .toast.err { background: var(--bad); }
 .empty-note { font-size: 12.5px; color: var(--ink-2); }
 #printArea { display: none; }
+dialog#help { border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; max-width: min(560px, calc(100vw - 32px)); color: var(--ink); background: var(--card); }
+dialog#help::backdrop { background: rgba(38,35,31,.55); }
+.help-body h2 { font-family: var(--urdu); font-weight: 600; font-size: 20px; line-height: 2; margin: 0 0 4px; }
+.help-body ol { margin: 0 0 8px; padding-inline-start: 22px; }
+.help-body li, .help-body p { font-family: var(--urdu); font-size: 15px; line-height: 2.3; margin: 0; }
+.help-body b { white-space: nowrap; font-family: var(--sans); font-weight: 500; font-size: 13px; background: var(--surma); color: var(--malai); padding: 1px 6px; border-radius: 4px; unicode-bidi: isolate; }
+dialog#help form { display: flex; justify-content: flex-end; margin-top: 10px; }
 @media print {
   .app, .toast { display: none !important; }
   #printArea { display: block !important; }
@@ -99,6 +106,7 @@ details > summary { cursor: pointer; font-size: 13px; }
     <div class="title">Studio Designer<small>Chakwal Photo Studio</small></div>
     <div class="spacer"></div>
     <div class="actions">
+      <button class="btn" id="btnHelp" type="button"><span style="font-family:var(--urdu);line-height:1.4">مدد</span>&nbsp;Help</button>
       <button class="btn" id="btnOpen" type="button" title="Open a saved project file">Open project</button>
       <button class="btn" id="btnSave" type="button" title="Save photos and text to a project file">Save project</button>
       <button class="btn gold" id="btnAll" type="button">Export all (ZIP)</button>
@@ -116,6 +124,20 @@ details > summary { cursor: pointer; font-size: 13px; }
   </div>
 </div>
 <div id="printArea"></div>
+<dialog id="help" aria-labelledby="helpTitle">
+  <div class="help-body" dir="rtl">
+    <h2 id="helpTitle">ایپ استعمال کرنے کا طریقہ</h2>
+    <ol>
+      <li>بائیں طرف کی فہرست سے ڈیزائن چنیں۔</li>
+      <li><b dir="ltr">Add photo</b> دبائیں یا ڈیزائن میں تصویر کی جگہ پر کلک کریں۔ تصویر کو ماؤس سے کھینچ کر جگہ درست کریں، <b dir="ltr">Zoom</b> سے چھوٹا بڑا کریں۔</li>
+      <li><b dir="ltr">Text</b> کے خانوں میں نام، تاریخ یا نمبر بدلیں۔</li>
+      <li>واٹس ایپ اور فیس بک کے لیے <b dir="ltr">PNG</b> یا <b dir="ltr">JPG</b>، پرنٹنگ پریس کے لیے <b dir="ltr">PDF</b> ڈاؤن لوڈ کریں۔</li>
+      <li>کام کا بیک اپ رکھنے کے لیے <b dir="ltr">Save project</b> دبائیں۔ دوبارہ کھولنے کے لیے <b dir="ltr">Open project</b>۔</li>
+    </ol>
+    <p>تفصیل کے لیے اردو گائیڈ (PDF) دیکھیں۔</p>
+  </div>
+  <form method="dialog"><button class="btn primary" type="submit">Close · بند کریں</button></form>
+</dialog>
 
 <script id="appdata" type="application/json">{{DATA}}</script>
 <script>
@@ -547,6 +569,8 @@ details > summary { cursor: pointer; font-size: 13px; }
       if (v && v.state) { for (const [k, s] of Object.entries(v.state)) if (byId[k]) state[k] = s; if (byId[v.current]) current = v.current; }
     } catch (e) { /* start fresh */ }
   }
+
+  $("#btnHelp").addEventListener("click", () => { const d = $("#help"); if (d.showModal) d.showModal(); else d.setAttribute("open", ""); });
 
   // ---------- boot ----------
   render();

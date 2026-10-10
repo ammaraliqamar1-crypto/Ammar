@@ -1,30 +1,48 @@
-# Chakwal Photo Studio – Logo Identity
+# Chakwal Photo Studio – Brand System
 
-Logo system for Chakwal Photo Studio, Minhas Book Palace, Pindi Road, Chakwal. Contact: Zaigham Ali, 0316-5549338 / 0336-9145512.
+Minhas Book Palace, Pindi Road, Chakwal. Contact: Zaigham Ali, 0316-5549338 / 0336-9145512.
 
-- `brand-presentation.html` – concepts, final logo, colours, type and mockups (signboard, album, watermark, WhatsApp, cards).
-- `app/Chakwal-Studio-Designer.html` – **Studio Designer app** (single file, works offline). Open it in Chrome/Edge on a
-  computer or phone: pick a design, add your own photos (drag to position, zoom), edit names/text in English or Urdu,
-  then export PNG / JPG / print-size PDF, print, export everything as a ZIP, or save/open a project file.
-  Work is also kept automatically in that browser. Rebuild: `python3 studio_app.py templates && node app_thumbs.js && python3 studio_app.py html OUT`.
-- `app/Studio-Designer-Guide-Urdu.pdf` – Urdu user guide for the app (A4, 5 pages); `app/guide/` has the same pages as images for WhatsApp.
-- `Chakwal-Photo-Studio-Brand-Kit.zip` – everything below in one file, for sending on WhatsApp / to the printer.
-- `dp/` – round profile pictures: badges (charcoal, ivory, mehndi), WhatsApp icon, stamp.
-- `illustrations/` – six service illustrations (wedding, baby, family, passport, prints/frames/crystals, drone).
-- `social/` – six service posts 1080×1350, seven story-highlight covers, Facebook cover 1640×624.
-- `album-covers/` – wedding, baby, family covers, 12×12 in print PDF (sample names; edit `ALBUMS` in `source/kit.py`).
-- `signboard/` – 12×3 ft panaflex, vector PDF.
-- `stationery/` – A5 bilingual order slip / receipt PDF.
-- `logo/` – final artwork. All lettering in the SVGs is outlined, so they open in CorelDRAW / Illustrator without fonts.
-- `ads/` – advertisement: feed post 1080×1350, WhatsApp status 1080×1920, A4 flyer (PDF for print).
-- `cards/` – business card front/back, 3.5×2 in + 0.125 in bleed (PDF for print, PNG at 300 dpi).
-- `source/` – generator scripts. Real photos go in `source/photos/` (see README there); `python3 kit.py ..` then `node kitrender.js ../social` rebuilds the posts. Ads/cards: `python3 ad.py ../ads [--photo wedding.jpg]` then `node render.js ../ads`
-  (puts a real photo in the arch window). To rebuild, put Marcellus, Jost Medium and Noto Nastaliq Urdu (SemiBold) TTFs in `source/fonts/`
-  (`Marcellus.ttf`, `Jost500.ttf`, `Nastaliq600.ttf`), then run `pip install fonttools uharfbuzz && python3 brand.py ../logo`.
+**Logo: the "Darwaza camera"** – a clear camera whose top is the arched doorway of a Punjabi home, with the sun
+rising over the Potohar ridge inside the lens. Gold is used only for the sun.
 
 | Colour | HEX | Use |
 |---|---|---|
 | Surma (charcoal) | #26231F | Main colour, signboard, text |
 | Malai (ivory) | #F4EDE0 | Backgrounds |
 | Sona (muted gold) | #B08D57 | The sun only; gold foil in print |
-| Mehndi (maroon) | #6E2B2A | Wedding albums only |
+| Mehndi (maroon) | #6E2B2A | Wedding albums and wedding posts |
+
+## What is here
+
+| Path | Contents |
+|---|---|
+| `Chakwal-Photo-Studio-Brand-Kit.zip` | Everything below in one file, for WhatsApp or the printer |
+| `brand-presentation.html` | Logo, idea, versions, colours, mockups, ads, social kit, print kit |
+| `app/Chakwal-Studio-Designer.html` | **Studio Designer app** – one offline file. Open in Chrome/Edge, add your own photos (drag, zoom), edit English/Urdu text, export PNG / JPG / print-size PDF, print, export all as ZIP, save/open projects. Urdu help button inside. |
+| `app/Studio-Designer-Guide-Urdu.pdf` | Urdu user guide (A4, 5 pages); `app/guide/` has the pages as images |
+| `logo/` | Primary, stacked, bilingual signboard, black, white, mark only, WhatsApp icon, watermarks (SVG + PNG) |
+| `dp/` | Round profile badges (charcoal, ivory, mehndi), round WhatsApp icon, stamp |
+| `illustrations/` | Six service illustrations, dark and light |
+| `social/` | Six service posts 1080×1350, seven highlight covers, Facebook cover 1640×624 |
+| `ads/` | Feed post 1080×1350, WhatsApp status 1080×1920, A4 flyer (PDF) |
+| `cards/` | Business card front/back, 3.5×2 in + 0.125 in bleed (PDF) |
+| `album-covers/` | Wedding, baby, family covers, 12×12 in PDF (sample names – change them in the app) |
+| `signboard/` | 12×3 ft panaflex, vector PDF |
+| `stationery/` | A5 bilingual order slip / receipt PDF |
+| `source/` | Generators and checks (see below) |
+
+All lettering in the SVG and PDF files is converted to outlines, so they open in CorelDRAW / Illustrator without fonts.
+
+## Rebuilding and checking
+
+Put `Marcellus.ttf`, `Jost500.ttf` (Jost Medium) and `Nastaliq600.ttf` (Noto Nastaliq Urdu SemiBold) in
+`source/fonts/`, then from `source/`:
+
+```
+pip install fonttools uharfbuzz      # plus Node with Playwright for rendering
+./build_all.sh                       # rebuilds every file into source/stage, the app, the guide and the presentation
+node qa.js stage                     # nothing painted outside any canvas (73 designs)
+python3 qa_text.py                   # every text line inside its canvas, no two lines' ink overlapping
+```
+
+Real photos for the default posts go in `source/photos/` (see the README there). Day to day, use the app instead.

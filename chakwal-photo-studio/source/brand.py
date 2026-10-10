@@ -85,17 +85,25 @@ _CLIP = [0]
 
 
 def mark(line, sun, sw=7, x=0, y=0, s=1.0, ridge_sw=None):
-    rs = ridge_sw or sw * 0.82
+    """The 'Darwaza camera': a camera whose top is the arched doorway of a
+    Punjabi home, with the sun rising over the Potohar ridge inside the lens."""
+    rs = ridge_sw or sw * 0.8
     _CLIP[0] += 1
-    cid = f"sunrise{_CLIP[0]}"
+    lens, sun_c = f"lens{_CLIP[0]}", f"sunrise{_CLIP[0]}"
+    lr = 41 - sw / 2  # inner radius of the lens ring
     t = f' transform="translate({fmt(x)} {fmt(y)}) scale({s:g})"' if (x or y or s != 1) else ""
     return f"""<g{t} fill="none" stroke="{line}" stroke-linecap="round" stroke-linejoin="round">
-  <clipPath id="{cid}"><polygon points="40 40 160 40 160 120 144 120 129 112 118 116 108 108 94 108 81 120 71 116 40 136"/></clipPath>
-  <path stroke-width="{fmt(sw)}" d="M16 50V16H50M150 16H184V50M184 150V184H150M50 184H16V150"/>
-  <path stroke-width="{fmt(sw)}" d="M56 162V98A44 44 0 0 1 144 98V162Z"/>
-  <path stroke-width="{fmt(rs)}" d="M56 133L71 123L81 127L94 115H108L118 123L129 119L144 127"/>
-  <path stroke-width="{fmt(rs)}" d="M56 149C75 141 93 147 110 144C123 142 133 139 144 141"/>
-  <circle cx="101" cy="107" r="19.5" fill="{sun}" stroke="none" clip-path="url(#{cid})"/>
+  <clipPath id="{lens}"><circle cx="100" cy="116" r="{fmt(lr)}"/></clipPath>
+  <clipPath id="{sun_c}"><polygon points="50 60 150 60 150 114 141 114 124 106 115 110 107 103 89 103 78 112 70 109 58 115 50 115"/></clipPath>
+  <path stroke-width="{fmt(sw)}" d="M36 60H70V54A30 30 0 0 1 130 54V60H164A20 20 0 0 1 184 80V150A20 20 0 0 1 164 170H36A20 20 0 0 1 16 150V80A20 20 0 0 1 36 60Z"/>
+  <path stroke-width="{fmt(sw)}" d="M30 60V51H52V60"/>
+  <circle cx="161" cy="83" r="{fmt(max(3.5, sw * 0.62))}" fill="{line}" stroke="none"/>
+  <circle cx="100" cy="116" r="41" stroke-width="{fmt(sw)}"/>
+  <g clip-path="url(#{lens})">
+    <g clip-path="url(#{sun_c})"><circle cx="98" cy="107" r="17" fill="{sun}" stroke="none"/></g>
+    <path stroke-width="{fmt(rs)}" d="M52 123L70 116L78 119L90 109H106L115 116L124 112L148 122"/>
+    <path stroke-width="{fmt(rs)}" d="M52 138C74 131 96 138 116 134C128 132 138 130 148 132"/>
+  </g>
 </g>"""
 
 
@@ -125,11 +133,17 @@ def horizontal(line, sun, word, sub, rule, bg=None, urdu=False):
         dx = w + 26
         body += f'<rect x="{fmt(dx)}" y="40" width="2.5" height="120" fill="{rule}"/>'
         ux = dx + 40
-        uw1 = F_URDU.width(URDU_NAME, 74)
-        uw2 = F_URDU.width(URDU_SUB, 40)
-        uw = max(uw1, uw2)
-        body += f'<path fill="{word}" d="{F_URDU.path(URDU_NAME, 74, ux + uw / 2, 108, anchor="middle")}"/>'
-        body += f'<path fill="{sub}" d="{F_URDU.path(URDU_SUB, 40, ux + uw / 2, 166, anchor="middle")}"/>'
+        # stack the two Nastaliq lines by their real ink height so nothing leaves the 200-unit canvas
+        n1, n2, gap, top, room = 74.0, 40.0, 6.0, 8.0, 184.0
+        b1, b2 = F_URDU.bounds(URDU_NAME, n1, 0, 0), F_URDU.bounds(URDU_SUB, n2, 0, 0)
+        k = min(1.0, room / ((b1[3] - b1[1]) + gap + (b2[3] - b2[1])))
+        n1, n2 = n1 * k, n2 * k
+        b1, b2 = F_URDU.bounds(URDU_NAME, n1, 0, 0), F_URDU.bounds(URDU_SUB, n2, 0, 0)
+        y1 = top - b1[1]
+        y2 = y1 + b1[3] + gap - b2[1]
+        uw = max(F_URDU.width(URDU_NAME, n1), F_URDU.width(URDU_SUB, n2))
+        body += f'<path fill="{word}" d="{F_URDU.path(URDU_NAME, n1, ux + uw / 2, y1, anchor="middle")}"/>'
+        body += f'<path fill="{sub}" d="{F_URDU.path(URDU_SUB, n2, ux + uw / 2, y2, anchor="middle")}"/>'
         w = ux + uw + 16
     return svg(w, 200, body, bg)
 

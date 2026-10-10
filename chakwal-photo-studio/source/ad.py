@@ -133,7 +133,10 @@ def services_block(x, y, col_w, row_h, items, en_size=26, ur_size=21):
         if new:
             tag, _ = new_tag(x + 30 + F_SUB.width(en, en_size, 0.01) + 12, yy - 2)
             out += tag
-        out += t(F_URDU, ur, ur_size, x + 30, yy + ur_size * 1.75, INK2, max_w=col_w - 30)
+        # Urdu line sits under the English ink with a fixed clear gap
+        uz = ur_size * min(1.0, (col_w - 30) / F_URDU.width(ur, ur_size))
+        en_bottom = F_SUB.bounds(en, en_size, x + 30, yy, 0.01)[3]
+        out += t(F_URDU, ur, uz, x + 30, en_bottom + 4 - F_URDU.bounds(ur, uz, 0, 0)[1], INK2)
     return out
 
 
@@ -164,44 +167,40 @@ def headline(cx, y, W):
 LOGO = horizontal(MALAI, SONA, MALAI, MALAI, SONA)
 
 
-def ad_post(photo=None):
-    """1080 x 1350 - Facebook / Instagram / WhatsApp feed."""
-    W, H = 1080, 1350
+def ad_layout(H, photo=None, uid="p"):
+    """1080 wide ad. H = 1350 feed post, 1527 A4 flyer, 1920 WhatsApp status.
+    Logo and headline sit at the top, staff band and contact at the bottom,
+    services and the photo arch share the space between; extra height goes
+    into larger type, row spacing and a taller arch."""
+    W = 1080
     cx = W / 2
+    extra = H - 1350
     body = frame(W, H)
-    lg, lh = place(LOGO, cx - 260, 76, 520)
+    y0 = 72 + extra * 0.08
+    lg, lh = place(LOGO, cx - 260 - extra * 0.04, y0, 520 + extra * 0.08)
     body += lg
-    body += headline(cx, 76 + lh + 66, W)
-    top = 76 + lh + 150
-    body += arch_window(W - 96 - 290, top + 30, 290, 440, photo, "p")
-    body += services_block(84, top + 34, 560, 75, SERVICES, 25, 18)
-    body += staff_band(cx, top + 572, W)
-    body += contact_block(cx, top + 706, W)
+    body += headline(cx, y0 + lh + 62 + extra * 0.02, W)
+    top = y0 + lh + 138 + extra * 0.07
+    contact_y = H - 311
+    staff_y = contact_y - 130
+    # services fill the space down to the staff band; type grows with the rows
+    row_h = max(77.0, min(150.0, (staff_y - 40 - (top + 34) - 60) / (len(SERVICES) - 1)))
+    k = min(1.25, (row_h / 77.0) ** 0.6)
+    en, ur = 25 * k, 18 * k
+    arch_h = staff_y - top - 100
+    body += arch_window(W - 96 - 290, top + 30, 290, arch_h, photo, uid)
+    body += services_block(84, top + 34, 560, row_h, SERVICES, en, ur)
+    body += staff_band(cx, staff_y, W)
+    body += contact_block(cx, contact_y, W)
     return svg(W, H, body)
+
+
+def ad_post(photo=None):
+    return ad_layout(1350, photo, "p")
 
 
 def ad_tall(H, photo=None, uid="t"):
-    """1080 wide, tall formats: WhatsApp status (1920) and A4 flyer (1527)."""
-    W = 1080
-    cx = W / 2
-    extra = H - 1527  # spare height distributed over the arch and gaps
-    body = frame(W, H)
-    lg, lh = place(LOGO, cx - 280, 70 + extra * .08, 560)
-    body += lg
-    y = 70 + extra * .08 + lh + 70 + extra * .04
-    body += headline(cx, y, W)
-    y += 100 + extra * .04
-    aw, ah = 330 + extra * .3, 270 + extra * .6
-    body += arch_window(cx - aw / 2, y + 26, aw, ah, photo, uid)
-    y += ah + 100 + extra * .05
-    half = (len(SERVICES) + 1) // 2
-    body += services_block(90, y, 440, 70, SERVICES[:half], 22, 17)
-    body += services_block(560, y, 440, 70, SERVICES[half:], 22, 17)
-    y += half * 70 + extra * .04
-    body += staff_band(cx, y, W)
-    y += 84 + 62 + extra * .04
-    body += contact_block(cx, y, W)
-    return svg(W, H, body)
+    return ad_layout(H, photo, uid)
 
 
 # ---- Business card: 3.5 x 2 in + 0.125 in bleed, 300 units per inch --------

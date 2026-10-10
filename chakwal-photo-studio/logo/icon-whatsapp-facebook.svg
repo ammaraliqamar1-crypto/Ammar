@@ -1,8 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#26231F"/><g transform="translate(71.7 71.7) scale(1.8432)" fill="none" stroke="#F4EDE0" stroke-linecap="round" stroke-linejoin="round">
-  <clipPath id="sunrise9"><polygon points="40 40 160 40 160 120 144 120 129 112 118 116 108 108 94 108 81 120 71 116 40 136"/></clipPath>
-  <path stroke-width="9" d="M16 50V16H50M150 16H184V50M184 150V184H150M50 184H16V150"/>
-  <path stroke-width="9" d="M56 162V98A44 44 0 0 1 144 98V162Z"/>
-  <path stroke-width="7.4" d="M56 133L71 123L81 127L94 115H108L118 123L129 119L144 127"/>
-  <path stroke-width="7.4" d="M56 149C75 141 93 147 110 144C123 142 133 139 144 141"/>
-  <circle cx="101" cy="107" r="19.5" fill="#B08D57" stroke="none" clip-path="url(#sunrise9)"/>
+  <clipPath id="lens9"><circle cx="100" cy="116" r="36.5"/></clipPath>
+  <clipPath id="sunrise9"><polygon points="50 60 150 60 150 114 141 114 124 106 115 110 107 103 89 103 78 112 70 109 58 115 50 115"/></clipPath>
+  <path stroke-width="9" d="M36 60H70V54A30 30 0 0 1 130 54V60H164A20 20 0 0 1 184 80V150A20 20 0 0 1 164 170H36A20 20 0 0 1 16 150V80A20 20 0 0 1 36 60Z"/>
+  <path stroke-width="9" d="M30 60V51H52V60"/>
+  <circle cx="161" cy="83" r="5.6" fill="#F4EDE0" stroke="none"/>
+  <circle cx="100" cy="116" r="41" stroke-width="9"/>
+  <g clip-path="url(#lens9)">
+    <g clip-path="url(#sunrise9)"><circle cx="98" cy="107" r="17" fill="#B08D57" stroke="none"/></g>
+    <path stroke-width="7.2" d="M52 123L70 116L78 119L90 109H106L115 116L124 112L148 122"/>
+    <path stroke-width="7.2" d="M52 138C74 131 96 138 116 134C128 132 138 130 148 132"/>
+  </g>
 </g></svg>
